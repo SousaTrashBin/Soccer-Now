@@ -13,6 +13,8 @@ if ! command -v java >/dev/null 2>&1; then
   fi
 fi
 
+python3 -m venv myvenv
+source myvenv/bin/activate
 pip install pre-commit
 export PATH="$HOME/.local/bin:$PATH"
-pre-commit install
+pre-commit install --install-hooks
