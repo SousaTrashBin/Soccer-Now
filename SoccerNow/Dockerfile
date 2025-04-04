@@ -1,10 +1,10 @@
-FROM docker.io/maven:latest as builder
+FROM maven:3.9.9-amazoncorretto-17 as builder
 ADD pom.xml .
 RUN mvn dependency:go-offline
 COPY . .
 RUN mvn clean package
 
-FROM docker.io/eclipse-temurin:17
+FROM amazoncorretto:17
 VOLUME /tmp
 RUN mkdir -p /app/
 RUN mkdir -p /app/logs/
