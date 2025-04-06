@@ -20,7 +20,7 @@ public class Stats {
   private Integer teamTwoGoals;
 
   @OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true)
-  @JoinColumn(name = "GIVEN_CARDS_ID", nullable = false)
+  @JoinColumn(name = "STATS_ID", nullable = false)
   private Set<Card> givenCards = new LinkedHashSet<>();
 
   public Set<Card> getGivenCards() {

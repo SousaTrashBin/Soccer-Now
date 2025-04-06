@@ -7,7 +7,7 @@ import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.util.CardType;
 
 @Entity
-@Table(name = "CARD")
+@Table(name = "CARDS")
 public class Card {
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE)

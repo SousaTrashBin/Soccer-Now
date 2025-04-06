@@ -9,7 +9,7 @@ import pt.ul.fc.css.soccernow.domain.entities.tournament.Tournament;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 
 @Entity
-@Table(name = "TEAM")
+@Table(name = "TEAMS")
 public class Team {
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE)

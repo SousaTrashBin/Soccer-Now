@@ -6,9 +6,12 @@ import jakarta.validation.constraints.Size;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
+import pt.ul.fc.css.soccernow.domain.entities.games.TournamentGame;
 
 @Entity
-@Table(name = "TOURNAMENT")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "TOURNAMENT_TYPE", discriminatorType = DiscriminatorType.STRING)
+@Table(name = "TOURNAMENTS")
 public abstract class Tournament {
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -23,6 +26,17 @@ public abstract class Tournament {
       joinColumns = @JoinColumn(name = "TOURNAMENT_ID"),
       inverseJoinColumns = @JoinColumn(name = "TEAMS_ID"))
   private Set<Team> teams = new LinkedHashSet<>();
+
+  @OneToMany(mappedBy = "tournament", cascade = CascadeType.PERSIST, orphanRemoval = true)
+  private Set<TournamentGame> tournamentGames = new LinkedHashSet<>();
+
+  public Set<TournamentGame> getTournamentGames() {
+    return tournamentGames;
+  }
+
+  public void setTournamentGames(Set<TournamentGame> tournamentGames) {
+    this.tournamentGames = tournamentGames;
+  }
 
   public Set<Team> getTeams() {
     return teams;

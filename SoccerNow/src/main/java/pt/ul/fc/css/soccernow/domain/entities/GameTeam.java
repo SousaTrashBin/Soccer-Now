@@ -1,10 +1,13 @@
 package pt.ul.fc.css.soccernow.domain.entities;
 
 import jakarta.persistence.*;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import pt.ul.fc.css.soccernow.domain.entities.games.Game;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 
 @Entity
-@Table(name = "GAME_TEAM")
+@Table(name = "GAME_TEAMS")
 public class GameTeam {
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -34,6 +37,17 @@ public class GameTeam {
   @ManyToOne(cascade = CascadeType.PERSIST, optional = false)
   @JoinColumn(name = "FORWARD_ID", nullable = false, unique = true)
   private Player forward;
+
+  @OneToMany(mappedBy = "gameTeamOne", cascade = CascadeType.PERSIST, orphanRemoval = true)
+  private Set<Game> games = new LinkedHashSet<>();
+
+  public Set<Game> getGames() {
+    return games;
+  }
+
+  public void setGames(Set<Game> games) {
+    this.games = games;
+  }
 
   public Player getForward() {
     return forward;
