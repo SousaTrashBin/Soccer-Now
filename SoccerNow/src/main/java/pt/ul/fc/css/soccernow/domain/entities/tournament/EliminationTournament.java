@@ -4,5 +4,5 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
 @Entity
-@DiscriminatorValue("PointTournament")
-public class PointTournament extends Tournament {}
+@DiscriminatorValue("EliminationTournament")
+public class EliminationTournament extends Tournament {}
