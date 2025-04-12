@@ -1,6 +1,6 @@
 package pt.ul.fc.css.soccernow.util;
 
-public enum CardType {
+public enum CardEnum {
   YELLOW,
   RED
 }

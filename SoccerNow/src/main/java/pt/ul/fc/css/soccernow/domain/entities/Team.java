@@ -1,59 +1,42 @@
 package pt.ul.fc.css.soccernow.domain.entities;
 
 import jakarta.persistence.*;
-import java.util.LinkedHashSet;
-import java.util.Objects;
-import java.util.Set;
-import org.hibernate.proxy.HibernateProxy;
-import pt.ul.fc.css.soccernow.domain.entities.tournament.Tournament;
+import java.util.*;
+import pt.ul.fc.css.soccernow.domain.entities.game.GameTeam;
+import pt.ul.fc.css.soccernow.domain.entities.tournament.Placement;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 
 @Entity
-@Table(name = "TEAMS")
+@Table(name = "team")
 public class Team {
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE)
-  @Column(name = "ID", nullable = false)
-  private Long id;
+  @GeneratedValue(strategy = GenerationType.UUID)
+  @Column(name = "id", nullable = false)
+  private UUID id;
 
-  @Column(name = "NAME", nullable = false, unique = true)
+  @ManyToMany
+  @JoinTable(
+      name = "team_players",
+      joinColumns = @JoinColumn(name = "team_id"),
+      inverseJoinColumns = @JoinColumn(name = "player_id"))
+  private List<Player> players = new ArrayList<>();
+
+  @OneToMany(orphanRemoval = true)
+  @JoinColumn(name = "team_id")
+  private List<Placement> placements = new ArrayList<>();
+
+  @Column(name = "name", nullable = false)
   private String name;
 
-  @ManyToMany(cascade = CascadeType.PERSIST)
-  @JoinTable(
-      name = "TEAM_PLAYERS",
-      joinColumns = @JoinColumn(name = "TEAM_ID"),
-      inverseJoinColumns = @JoinColumn(name = "PLAYERS_ID"))
-  private Set<Player> players = new LinkedHashSet<>();
+  @OneToMany(mappedBy = "team", orphanRemoval = true)
+  private List<GameTeam> gameTeams = new ArrayList<>();
 
-  @ManyToMany(mappedBy = "teams", cascade = CascadeType.PERSIST)
-  private Set<Tournament> tournaments = new LinkedHashSet<>();
-
-  @OneToMany(mappedBy = "team", cascade = CascadeType.PERSIST, orphanRemoval = true)
-  private Set<GameTeam> gameTeams = new LinkedHashSet<>();
-
-  public Set<GameTeam> getGameTeams() {
+  public List<GameTeam> getGameTeams() {
     return gameTeams;
   }
 
-  public void setGameTeams(Set<GameTeam> gameTeams) {
+  public void setGameTeams(List<GameTeam> gameTeams) {
     this.gameTeams = gameTeams;
-  }
-
-  public Set<Tournament> getTournaments() {
-    return tournaments;
-  }
-
-  public void setTournaments(Set<Tournament> tournaments) {
-    this.tournaments = tournaments;
-  }
-
-  public Set<Player> getPlayers() {
-    return players;
-  }
-
-  public void setPlayers(Set<Player> players) {
-    this.players = players;
   }
 
   public String getName() {
@@ -64,35 +47,27 @@ public class Team {
     this.name = name;
   }
 
-  public Long getId() {
+  public List<Placement> getPlacements() {
+    return placements;
+  }
+
+  public void setPlacements(List<Placement> placements) {
+    this.placements = placements;
+  }
+
+  public List<Player> getPlayers() {
+    return players;
+  }
+
+  public void setPlayers(List<Player> players) {
+    this.players = players;
+  }
+
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
-  }
-
-  @Override
-  public final boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null) return false;
-    Class<?> oEffectiveClass =
-        o instanceof HibernateProxy
-            ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass()
-            : o.getClass();
-    Class<?> thisEffectiveClass =
-        this instanceof HibernateProxy
-            ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass()
-            : this.getClass();
-    if (thisEffectiveClass != oEffectiveClass) return false;
-    Team team = (Team) o;
-    return getId() != null && Objects.equals(getId(), team.getId());
-  }
-
-  @Override
-  public final int hashCode() {
-    return this instanceof HibernateProxy
-        ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode()
-        : getClass().hashCode();
   }
 }

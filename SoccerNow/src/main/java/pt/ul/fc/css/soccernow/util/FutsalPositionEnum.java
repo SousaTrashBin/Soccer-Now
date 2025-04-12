@@ -1,6 +1,6 @@
 package pt.ul.fc.css.soccernow.util;
 
-public enum FutsalPosition {
+public enum FutsalPositionEnum {
   GOALIE,
   SWEEPER,
   LEFT_WINGER,

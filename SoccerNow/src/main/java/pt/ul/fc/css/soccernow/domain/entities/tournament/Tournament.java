@@ -1,56 +1,46 @@
 package pt.ul.fc.css.soccernow.domain.entities.tournament;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import java.util.LinkedHashSet;
-import java.util.Set;
-import pt.ul.fc.css.soccernow.domain.entities.Team;
-import pt.ul.fc.css.soccernow.domain.entities.games.TournamentGame;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import pt.ul.fc.css.soccernow.domain.entities.game.Game;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "TOURNAMENT_TYPE", discriminatorType = DiscriminatorType.STRING)
-@Table(name = "TOURNAMENTS")
+@Table(name = "tournament")
 public abstract class Tournament {
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE)
-  @Column(name = "ID", nullable = false)
-  private Long id;
+  @GeneratedValue(strategy = GenerationType.UUID)
+  @Column(name = "id", nullable = false)
+  private UUID id;
 
-  @NotNull
-  @Size(min = 8)
-  @ManyToMany(cascade = {CascadeType.PERSIST})
-  @JoinTable(
-      name = "TOURNAMENT_TEAMS",
-      joinColumns = @JoinColumn(name = "TOURNAMENT_ID"),
-      inverseJoinColumns = @JoinColumn(name = "TEAMS_ID"))
-  private Set<Team> teams = new LinkedHashSet<>();
+  @Column(name = "is_finished", nullable = false)
+  private Boolean isFinished = false;
 
-  @OneToMany(mappedBy = "tournament", cascade = CascadeType.PERSIST, orphanRemoval = true)
-  private Set<TournamentGame> tournamentGames = new LinkedHashSet<>();
+  @OneToMany(mappedBy = "tournament", orphanRemoval = true)
+  private List<Game> games = new ArrayList<>();
 
-  public Set<TournamentGame> getTournamentGames() {
-    return tournamentGames;
+  public List<Game> getGames() {
+    return games;
   }
 
-  public void setTournamentGames(Set<TournamentGame> tournamentGames) {
-    this.tournamentGames = tournamentGames;
+  public void setGames(List<Game> games) {
+    this.games = games;
   }
 
-  public Set<Team> getTeams() {
-    return teams;
+  public Boolean getIsFinished() {
+    return isFinished;
   }
 
-  public void setTeams(Set<Team> teams) {
-    this.teams = teams;
+  public void setIsFinished(Boolean isFinished) {
+    this.isFinished = isFinished;
   }
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 }

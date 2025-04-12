@@ -1,18 +1,17 @@
 package pt.ul.fc.css.soccernow.domain.entities.user;
 
 import jakarta.persistence.*;
+import java.util.UUID;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "USER_TYPE", discriminatorType = DiscriminatorType.STRING)
-@Table(name = "USERS")
+@Table(name = "user")
 public abstract class User {
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE)
-  @Column(name = "ID", nullable = false)
-  private Long id;
+  @GeneratedValue(strategy = GenerationType.UUID)
+  @Column(name = "id", nullable = false)
+  private UUID id;
 
-  @Column(name = "NAME", nullable = false)
+  @Column(name = "name", nullable = false)
   private String name;
 
   public String getName() {
@@ -23,11 +22,11 @@ public abstract class User {
     this.name = name;
   }
 
-  public Long getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 }

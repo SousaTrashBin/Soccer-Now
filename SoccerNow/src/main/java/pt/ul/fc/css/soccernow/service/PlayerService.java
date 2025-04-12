@@ -1,3 +1,3 @@
 package pt.ul.fc.css.soccernow.service;
 
-public interface UserService {}
+public interface PlayerService {}

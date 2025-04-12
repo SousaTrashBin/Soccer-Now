@@ -1,37 +1,37 @@
 package pt.ul.fc.css.soccernow.domain.entities.user;
 
-import jakarta.persistence.*;
-import java.util.LinkedHashSet;
-import java.util.Objects;
-import java.util.Set;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import java.util.*;
 import org.hibernate.proxy.HibernateProxy;
-import pt.ul.fc.css.soccernow.domain.entities.games.Game;
+import pt.ul.fc.css.soccernow.domain.entities.game.Game;
 
 @Entity
-@DiscriminatorValue("Referee")
 public class Referee extends User {
-  @Column(name = "HAS_CERTIFICATE", nullable = false)
+  @Column(name = "has_certificate")
   private Boolean hasCertificate = false;
 
-  @OneToMany(mappedBy = "primaryReferee", cascade = CascadeType.PERSIST, orphanRemoval = true)
-  private Set<Game> primaryRefereeGames = new LinkedHashSet<>();
+  @OneToMany(mappedBy = "primaryReferee", orphanRemoval = true)
+  private List<Game> primaryRefereeGames = new ArrayList<>();
 
-  @ManyToMany(mappedBy = "secondaryReferees", cascade = CascadeType.PERSIST)
-  private Set<Game> secondaryRefereeGames = new LinkedHashSet<>();
+  @ManyToMany(mappedBy = "secondaryReferees")
+  private List<Game> secondaryRefereeGames = new ArrayList<>();
 
-  public Set<Game> getSecondaryRefereeGames() {
+  public List<Game> getSecondaryRefereeGames() {
     return secondaryRefereeGames;
   }
 
-  public void setSecondaryRefereeGames(Set<Game> secondaryRefereeGames) {
+  public void setSecondaryRefereeGames(List<Game> secondaryRefereeGames) {
     this.secondaryRefereeGames = secondaryRefereeGames;
   }
 
-  public Set<Game> getPrimaryRefereeGames() {
+  public List<Game> getPrimaryRefereeGames() {
     return primaryRefereeGames;
   }
 
-  public void setPrimaryRefereeGames(Set<Game> primaryRefereeGames) {
+  public void setPrimaryRefereeGames(List<Game> primaryRefereeGames) {
     this.primaryRefereeGames = primaryRefereeGames;
   }
 
