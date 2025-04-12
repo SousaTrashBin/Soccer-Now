@@ -35,12 +35,31 @@ public class PlayerRepositoryTest {
   }
 
   @Test
-  public void testThatMultipleBooksCanBeCreatedAndRecalled() {
+  public void testThatMultiplePlayersCanBeCreatedAndRecalled() {
     Player playerA = PlayerTestDataUtil.getPlayers().get(0);
     Player playerB = PlayerTestDataUtil.getPlayers().get(1);
     Player playerC = PlayerTestDataUtil.getPlayers().get(2);
 
     underTest.saveAll(List.of(playerA, playerB, playerC));
     assertThat(underTest.findAll()).hasSize(3).containsExactly(playerA, playerB, playerC);
+  }
+
+  @Test
+  public void testThatPlayerCanBeUpdated() {
+    Player player = PlayerTestDataUtil.getPlayers().get(0);
+    underTest.save(player);
+
+    player.setName("UPDATED");
+    underTest.save(player);
+
+    Optional<Player> result = underTest.findById(player.getId());
+    assertThat(result).isPresent();
+
+    assertThat(result.get())
+        .matches(
+            resultPlayer ->
+                resultPlayer.getName().equals("UPDATED")
+                    && resultPlayer.getPreferredPosition().equals(player.getPreferredPosition())
+                    && resultPlayer.getId().equals(player.getId()));
   }
 }
