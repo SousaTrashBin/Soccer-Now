@@ -4,6 +4,6 @@ public enum PlacementEnum {
   FIRST,
   SECOND,
   THIRD,
-  PARTICIPATED,
-  PENDING
+  PENDING,
+  PARTICIPATED;
 }
