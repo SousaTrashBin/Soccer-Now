@@ -13,9 +13,8 @@ public class SoftDeleteEntity {
     return deletedAt;
   }
 
-  public SoftDeleteEntity setDeletedAt(LocalDateTime deletedAt) {
+  public void setDeletedAt(LocalDateTime deletedAt) {
     this.deletedAt = deletedAt;
-    return this;
   }
 
   public void delete() {
