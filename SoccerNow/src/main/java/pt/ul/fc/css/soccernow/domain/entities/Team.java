@@ -7,7 +7,7 @@ import pt.ul.fc.css.soccernow.domain.entities.tournament.Placement;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 
 @Entity
-@Table(name = "team")
+@Table(name = "teams")
 public class Team {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -19,11 +19,12 @@ public class Team {
       name = "team_players",
       joinColumns = @JoinColumn(name = "team_id"),
       inverseJoinColumns = @JoinColumn(name = "player_id"))
-  private List<Player> players = new ArrayList<>();
+  @OrderBy("name")
+  private Set<Player> players = new LinkedHashSet<>();
 
   @OneToMany(orphanRemoval = true)
   @JoinColumn(name = "team_id")
-  private List<Placement> placements = new ArrayList<>();
+  private Set<Placement> placements = new LinkedHashSet<>();
 
   @Column(name = "name", nullable = false)
   private String name;
@@ -47,20 +48,20 @@ public class Team {
     this.name = name;
   }
 
-  public List<Placement> getPlacements() {
+  public Set<Placement> getPlacements() {
     return placements;
   }
 
-  public void setPlacements(List<Placement> placements) {
-    this.placements = placements;
+  public void setPlacements(Set<Placement> placements) {
+    this.placements = new LinkedHashSet<>(placements);
   }
 
-  public List<Player> getPlayers() {
+  public Set<Player> getPlayers() {
     return players;
   }
 
   public void setPlayers(List<Player> players) {
-    this.players = players;
+    this.players = new LinkedHashSet<>(players);
   }
 
   public UUID getId() {

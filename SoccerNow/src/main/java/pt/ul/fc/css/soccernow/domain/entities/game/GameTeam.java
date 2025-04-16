@@ -1,14 +1,14 @@
 package pt.ul.fc.css.soccernow.domain.entities.game;
 
 import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
 import pt.ul.fc.css.soccernow.domain.entities.tournament.GamePlayer;
 
 @Entity
-@Table(name = "game_team")
+@Table(name = "game_teams")
 public class GameTeam {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -17,7 +17,7 @@ public class GameTeam {
 
   @OneToMany(orphanRemoval = true)
   @JoinColumn(name = "game_team_id")
-  private List<GamePlayer> gamePlayers = new ArrayList<>();
+  private Set<GamePlayer> gamePlayers = new HashSet<>();
 
   @ManyToOne(optional = false)
   @JoinColumn(name = "team_id", nullable = false)
@@ -43,11 +43,11 @@ public class GameTeam {
     this.team = team;
   }
 
-  public List<GamePlayer> getGamePlayers() {
+  public Set<GamePlayer> getGamePlayers() {
     return gamePlayers;
   }
 
-  public void setGamePlayers(List<GamePlayer> gamePlayers) {
+  public void setGamePlayers(Set<GamePlayer> gamePlayers) {
     this.gamePlayers = gamePlayers;
   }
 

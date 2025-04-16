@@ -2,13 +2,15 @@ package pt.ul.fc.css.soccernow.domain.entities.game;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 import pt.ul.fc.css.soccernow.domain.entities.Address;
 import pt.ul.fc.css.soccernow.domain.entities.tournament.Tournament;
 import pt.ul.fc.css.soccernow.domain.entities.user.Referee;
 
 @Entity
-@Table(name = "game")
+@Table(name = "games")
 public class Game {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -34,7 +36,7 @@ public class Game {
       name = "game_secondaryReferees",
       joinColumns = @JoinColumn(name = "game_id"),
       inverseJoinColumns = @JoinColumn(name = "secondaryReferees_id"))
-  private List<Referee> secondaryReferees = new LinkedList<>();
+  private Set<Referee> secondaryReferees = new HashSet<>();
 
   @ManyToOne(optional = false)
   @JoinColumn(name = "located_in_id", nullable = false)
@@ -82,11 +84,11 @@ public class Game {
     this.locatedIn = locatedIn;
   }
 
-  public List<Referee> getSecondaryReferees() {
+  public Set<Referee> getSecondaryReferees() {
     return secondaryReferees;
   }
 
-  public void setSecondaryReferees(List<Referee> secondaryReferees) {
+  public void setSecondaryReferees(Set<Referee> secondaryReferees) {
     this.secondaryReferees = secondaryReferees;
   }
 

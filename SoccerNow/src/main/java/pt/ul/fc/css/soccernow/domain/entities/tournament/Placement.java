@@ -5,7 +5,7 @@ import java.util.UUID;
 import pt.ul.fc.css.soccernow.util.PlacementEnum;
 
 @Entity
-@Table(name = "placement")
+@Table(name = "placements")
 public class Placement {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)

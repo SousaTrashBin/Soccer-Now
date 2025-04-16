@@ -7,7 +7,8 @@ import java.util.UUID;
 import pt.ul.fc.css.soccernow.domain.entities.game.Game;
 
 @Entity
-@Table(name = "tournament")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Table(name = "tournaments")
 public abstract class Tournament {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -18,6 +19,7 @@ public abstract class Tournament {
   private Boolean isFinished = false;
 
   @OneToMany(mappedBy = "tournament", orphanRemoval = true)
+  @OrderBy("happensIn")
   private List<Game> games = new ArrayList<>();
 
   public List<Game> getGames() {

@@ -1,15 +1,24 @@
 package pt.ul.fc.css.soccernow.domain.entities.user;
 
 import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
 import pt.ul.fc.css.soccernow.domain.entities.game.PlayerGameStats;
 import pt.ul.fc.css.soccernow.util.FutsalPositionEnum;
 
 @Entity
 public class Player extends User {
+  @Enumerated(EnumType.STRING)
+  @Column(name = "preferred_position")
+  private FutsalPositionEnum preferredPosition;
+
+  @ManyToMany(mappedBy = "players")
+  @OrderBy("name")
+  private Set<Team> teams = new LinkedHashSet<>();
+
+  @OneToMany(orphanRemoval = true)
+  private List<PlayerGameStats> playerGameStats = new ArrayList<>();
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -25,16 +34,6 @@ public class Player extends User {
     return Objects.hash(getId(), getName(), getPreferredPosition());
   }
 
-  @Enumerated(EnumType.STRING)
-  @Column(name = "preferred_position")
-  private FutsalPositionEnum preferredPosition;
-
-  @ManyToMany(mappedBy = "players")
-  private List<Team> teams = new ArrayList<>();
-
-  @OneToMany(orphanRemoval = true)
-  private List<PlayerGameStats> playerGameStats = new ArrayList<>();
-
   public List<PlayerGameStats> getPlayerGameStats() {
     return playerGameStats;
   }
@@ -43,12 +42,12 @@ public class Player extends User {
     this.playerGameStats = playerGameStats;
   }
 
-  public List<Team> getTeams() {
+  public Set<Team> getTeams() {
     return teams;
   }
 
-  public void setTeams(List<Team> teams) {
-    this.teams = teams;
+  public void setTeams(Set<Team> teams) {
+    this.teams = new LinkedHashSet<>(teams);
   }
 
   public FutsalPositionEnum getPreferredPosition() {

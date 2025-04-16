@@ -4,7 +4,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 import org.hibernate.proxy.HibernateProxy;
 import pt.ul.fc.css.soccernow.domain.entities.game.Game;
 
@@ -14,24 +16,24 @@ public class Referee extends User {
   private Boolean hasCertificate = false;
 
   @OneToMany(mappedBy = "primaryReferee", orphanRemoval = true)
-  private List<Game> primaryRefereeGames = new ArrayList<>();
+  private Set<Game> primaryRefereeGames = new HashSet<>();
 
   @ManyToMany(mappedBy = "secondaryReferees")
-  private List<Game> secondaryRefereeGames = new ArrayList<>();
+  private Set<Game> secondaryRefereeGames = new HashSet<>();
 
-  public List<Game> getSecondaryRefereeGames() {
+  public Set<Game> getSecondaryRefereeGames() {
     return secondaryRefereeGames;
   }
 
-  public void setSecondaryRefereeGames(List<Game> secondaryRefereeGames) {
+  public void setSecondaryRefereeGames(Set<Game> secondaryRefereeGames) {
     this.secondaryRefereeGames = secondaryRefereeGames;
   }
 
-  public List<Game> getPrimaryRefereeGames() {
+  public Set<Game> getPrimaryRefereeGames() {
     return primaryRefereeGames;
   }
 
-  public void setPrimaryRefereeGames(List<Game> primaryRefereeGames) {
+  public void setPrimaryRefereeGames(Set<Game> primaryRefereeGames) {
     this.primaryRefereeGames = primaryRefereeGames;
   }
 

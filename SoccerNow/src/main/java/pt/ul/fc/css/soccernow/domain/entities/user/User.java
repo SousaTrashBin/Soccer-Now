@@ -2,10 +2,11 @@ package pt.ul.fc.css.soccernow.domain.entities.user;
 
 import jakarta.persistence.*;
 import java.util.UUID;
+import pt.ul.fc.css.soccernow.util.SoftDeleteBluePrint;
 
 @Entity
-@Table(name = "user")
-public abstract class User {
+@Table(name = "users")
+public abstract class User extends SoftDeleteBluePrint {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   @Column(name = "id", nullable = false)

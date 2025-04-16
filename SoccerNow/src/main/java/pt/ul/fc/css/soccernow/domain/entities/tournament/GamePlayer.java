@@ -6,7 +6,7 @@ import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.util.FutsalPositionEnum;
 
 @Entity
-@Table(name = "game_player")
+@Table(name = "game_players")
 public class GamePlayer {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)

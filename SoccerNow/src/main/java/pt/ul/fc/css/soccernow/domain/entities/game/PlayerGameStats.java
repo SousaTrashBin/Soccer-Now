@@ -14,7 +14,7 @@ public class PlayerGameStats {
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  @Enumerated
+  @Enumerated(EnumType.STRING)
   @Column(name = "given_card")
   private CardEnum givenCard;
 
