@@ -1,6 +1,5 @@
 package pt.ul.fc.css.soccernow.service;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static pt.ul.fc.css.soccernow.PlayerTestDataUtil.getPlayers;
 
 import java.util.Objects;
@@ -27,6 +26,6 @@ public class PlayerServiceIntegrationTest {
         && addedPlayer.getName().equals(player.getName())
         && Objects.equals(addedPlayer.getPreferredPosition(), player.getPreferredPosition());
 
-    assert underTest.exists(addedPlayer.getId());
+    assert underTest.existsById(addedPlayer.getId());
   }
 }
