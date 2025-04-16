@@ -1,14 +1,20 @@
 package pt.ul.fc.css.soccernow.service;
 
+import org.springframework.transaction.annotation.Transactional;
+import pt.ul.fc.css.soccernow.domain.entities.Team;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface PlayerService {
-    boolean exists(UUID playerId);
+    boolean existsById(UUID playerId);
+    @Transactional
     Player add(Player player);
     Player getById(UUID playerId);
-    Player getByName(String name);
+    List<Player> getByName(String playerName);
+    @Transactional
     Player update(Player player);
-    Player remove(UUID playerId);
+    @Transactional
+    void remove(UUID playerId);
 }
