@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class PlayerRepositoryTest {
+public class PlayerRepositoryIntegrationTests {
 
   @Autowired private PlayerRepository underTest;
 
@@ -42,6 +43,11 @@ public class PlayerRepositoryTest {
 
     underTest.saveAll(List.of(playerA, playerB, playerC));
     assertThat(underTest.findAll()).hasSize(3).containsExactly(playerA, playerB, playerC);
+
+    playerA.delete();
+    underTest.save(playerA);
+
+    assertThat(underTest.findAllActivePlayers()).hasSize(2).containsExactly(playerB, playerC);
   }
 
   @Test
@@ -52,7 +58,8 @@ public class PlayerRepositoryTest {
     player.setName("UPDATED");
     underTest.save(player);
 
-    Optional<Player> result = underTest.findById(player.getId());
+    UUID playerId = player.getId();
+    Optional<Player> result = underTest.findById(playerId);
     assertThat(result).isPresent();
 
     assertThat(result.get())
@@ -60,6 +67,6 @@ public class PlayerRepositoryTest {
             resultPlayer ->
                 resultPlayer.getName().equals("UPDATED")
                     && resultPlayer.getPreferredPosition().equals(player.getPreferredPosition())
-                    && resultPlayer.getId().equals(player.getId()));
+                    && resultPlayer.getId().equals(playerId));
   }
 }
