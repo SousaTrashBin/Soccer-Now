@@ -44,7 +44,6 @@ public class PlayerTestDataUtil {
 
     player.setName(randomName);
     player.setPreferredPosition(randomPosition);
-
     return player;
   }
 
@@ -57,7 +56,8 @@ public class PlayerTestDataUtil {
 
   public static FutsalPositionEnum getRandomFutsalPosition() {
     FutsalPositionEnum[] values = FutsalPositionEnum.values();
-    return values[RANDOM.nextInt(values.length)];
+    int randomValue = RANDOM.nextInt(values.length + 1);
+    return randomValue == values.length ? null : values[randomValue];
   }
 
   public static List<Player> getPlayers() {
