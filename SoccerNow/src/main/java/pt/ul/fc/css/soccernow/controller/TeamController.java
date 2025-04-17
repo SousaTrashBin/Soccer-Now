@@ -10,9 +10,9 @@ import pt.ul.fc.css.soccernow.service.TeamService;
 @RequestMapping("/api/teams/")
 public class TeamController {
 
-  private final TeamService teamService;
+    private final TeamService teamService;
 
-  public TeamController(TeamService teamService) {
-    this.teamService = teamService;
-  }
+    public TeamController(TeamService teamService) {
+        this.teamService = teamService;
+    }
 }

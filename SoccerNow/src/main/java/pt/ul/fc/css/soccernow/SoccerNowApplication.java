@@ -9,15 +9,15 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class SoccerNowApplication {
 
-  public static void main(String[] args) {
-    SpringApplication.run(SoccerNowApplication.class, args);
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(SoccerNowApplication.class, args);
+    }
 
-  @Bean
-  @Transactional
-  public CommandLineRunner demo() {
-    return (args) -> {
-      System.out.println("do some sanity tests here");
-    };
-  }
+    @Bean
+    @Transactional
+    public CommandLineRunner demo() {
+        return (args) -> {
+            System.out.println("do some sanity tests here");
+        };
+    }
 }

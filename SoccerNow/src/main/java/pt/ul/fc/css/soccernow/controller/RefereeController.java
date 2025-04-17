@@ -10,9 +10,9 @@ import pt.ul.fc.css.soccernow.service.RefereeService;
 @RequestMapping("/api/referee/")
 public class RefereeController {
 
-  private final RefereeService refereeService;
+    private final RefereeService refereeService;
 
-  public RefereeController(RefereeService refereeService) {
-    this.refereeService = refereeService;
-  }
+    public RefereeController(RefereeService refereeService) {
+        this.refereeService = refereeService;
+    }
 }

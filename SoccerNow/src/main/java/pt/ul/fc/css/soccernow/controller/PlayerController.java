@@ -10,9 +10,9 @@ import pt.ul.fc.css.soccernow.service.PlayerService;
 @RequestMapping("/api/players/")
 public class PlayerController {
 
-  private final PlayerService playerService;
+    private final PlayerService playerService;
 
-  public PlayerController(PlayerService playerService) {
-    this.playerService = playerService;
-  }
+    public PlayerController(PlayerService playerService) {
+        this.playerService = playerService;
+    }
 }

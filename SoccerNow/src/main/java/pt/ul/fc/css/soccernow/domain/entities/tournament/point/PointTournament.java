@@ -4,22 +4,23 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.validation.constraints.Size;
+import pt.ul.fc.css.soccernow.domain.entities.tournament.Tournament;
+
 import java.util.ArrayList;
 import java.util.List;
-import pt.ul.fc.css.soccernow.domain.entities.tournament.Tournament;
 
 @Entity
 public class PointTournament extends Tournament {
-  @Size(min = 8)
-  @OneToMany(orphanRemoval = true)
-  @OrderBy("currentPoints")
-  private List<TeamPoints> teamPoints = new ArrayList<>();
+    @Size(min = 8)
+    @OneToMany(orphanRemoval = true)
+    @OrderBy("currentPoints")
+    private List<TeamPoints> teamPoints = new ArrayList<>();
 
-  public List<TeamPoints> getTeamPoints() {
-    return teamPoints;
-  }
+    public List<TeamPoints> getTeamPoints() {
+        return teamPoints;
+    }
 
-  public void setTeamPoints(List<TeamPoints> teamPoints) {
-    this.teamPoints = teamPoints;
-  }
+    public void setTeamPoints(List<TeamPoints> teamPoints) {
+        this.teamPoints = teamPoints;
+    }
 }
