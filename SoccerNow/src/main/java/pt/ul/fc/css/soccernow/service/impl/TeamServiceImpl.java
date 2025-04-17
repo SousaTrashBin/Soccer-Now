@@ -2,48 +2,55 @@ package pt.ul.fc.css.soccernow.service.impl;
 
 import org.springframework.stereotype.Service;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
+import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.service.TeamService;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
 public class TeamServiceImpl implements TeamService {
     @Override
-    public boolean existsById(UUID teamId) {
+    public void removePlayerFromTeam(Player savedPlayer, Team team) {
+
+    }
+
+    @Override
+    public void addPlayerToTeam(Player savedPlayer, Team team) {
+
+    }
+
+    @Override
+    public boolean doesPlayerHaveAPendingGame(Player player, Team team) {
         return false;
     }
 
     @Override
-    public boolean existsByName(String teamName) {
-        return false;
-    }
-
-    @Override
-    public Team add(Team team) {
+    public Team add(Team entity) {
         return null;
     }
 
     @Override
-    public Team getById(UUID teamId) {
+    public Team update(Team entity) {
         return null;
     }
 
     @Override
-    public Team getByName(String teamName) {
+    public void softDelete(UUID entityId) {
+    }
+
+    @Override
+    public List<Team> findAllNotDeleted() {
+        return List.of();
+    }
+
+    @Override
+    public Team findById(UUID entityId) {
         return null;
     }
 
     @Override
-    public Team update(Team team) {
+    public Team findNotDeletedById(UUID entityId) {
         return null;
-    }
-
-    @Override
-    public void remove(UUID teamId) {
-    }
-
-    @Override
-    public boolean willTeamPlay(Team team) {
-        return false;
     }
 }

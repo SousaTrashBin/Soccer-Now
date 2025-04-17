@@ -10,36 +10,31 @@ import java.util.UUID;
 @Service
 public class RefereeServiceImpl implements RefereeService {
     @Override
-    public boolean existsById(UUID refereeId) {
-        return false;
-    }
-
-    @Override
-    public boolean existsByName(String refereeName) {
-        return false;
-    }
-
-    @Override
-    public Referee add(Referee referee) {
+    public Referee add(Referee entity) {
         return null;
     }
 
     @Override
-    public Referee getById(UUID refereeId) {
+    public Referee update(Referee entity) {
         return null;
     }
 
     @Override
-    public List<Referee> getByName(String refereeName) {
+    public void softDelete(UUID entityId) {
+    }
+
+    @Override
+    public List<Referee> findAllNotDeleted() {
         return List.of();
     }
 
     @Override
-    public Referee update(Referee referee) {
+    public Referee findById(UUID entityId) {
         return null;
     }
 
     @Override
-    public void remove(UUID refereeId) {
+    public Referee findNotDeletedById(UUID entityId) {
+        return null;
     }
 }
