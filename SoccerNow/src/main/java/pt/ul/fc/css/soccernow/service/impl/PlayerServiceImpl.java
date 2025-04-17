@@ -3,7 +3,6 @@ package pt.ul.fc.css.soccernow.service.impl;
 import org.springframework.stereotype.Service;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
-import pt.ul.fc.css.soccernow.exception.ResourceAlreadyExistsException;
 import pt.ul.fc.css.soccernow.exception.ResourceCouldNotBeDeletedException;
 import pt.ul.fc.css.soccernow.exception.ResourceDoesNotExistException;
 import pt.ul.fc.css.soccernow.repository.PlayerRepository;
@@ -11,7 +10,9 @@ import pt.ul.fc.css.soccernow.service.PlayerService;
 import pt.ul.fc.css.soccernow.service.TeamService;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class PlayerServiceImpl implements PlayerService {
@@ -24,11 +25,6 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public boolean existsById(UUID playerId) {
-        return playerRepository.existsById(playerId);
-    }
-
-    @Override
     public Player add(Player player) {
         Player newPlayer = new Player();
         newPlayer.setName(player.getName());
@@ -37,25 +33,76 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Player getById(UUID playerId) {
-        return playerRepository.findById(playerId).orElseThrow(() -> new ResourceDoesNotExistException("Player", "id", playerId));
+    public Player findNotDeletedById(UUID playerId) {
+        Player player = findById(playerId);
+        if (player.isDeleted()) {
+            throw new ResourceDoesNotExistException("Player", "id", playerId);
+        }
+        return player;
     }
 
     @Override
-    public List<Player> getByName(String name) {
-        return playerRepository.findByName(name);
+    public Player findById(UUID playerId) {
+        return playerRepository.findById(playerId)
+                               .orElseThrow(() -> new ResourceDoesNotExistException("Player", "id", playerId));
+    }
+
+    @Override
+    public List<Player> findAllNotDeleted() {
+        return playerRepository.findAllNotDeleted();
     }
 
     @Override
     public Player update(Player player) {
-        return null;
+        Player savedPlayer = findNotDeletedById(player.getId());
+        if (player.getTeams() != null) {
+            Set<Team> teamsToBeAdded = player.getTeams()
+                                             .stream()
+                                             .filter(team -> savedPlayer.getTeams()
+                                                                        .contains(team))
+                                             .collect(Collectors.toSet());
+            savedPlayer.getTeams()
+                       .stream()
+                       .filter(team -> !teamsToBeAdded.contains(team))
+                       .forEach(team -> {
+                           removeTeamFromPlayer(team, savedPlayer);
+                           teamService.removePlayerFromTeam(savedPlayer, team);
+                       });
+            teamsToBeAdded.forEach(team -> {
+                addTeamToPlayer(team, savedPlayer);
+                teamService.addPlayerToTeam(savedPlayer, team);
+            });
+        }
+        if (player.getName() != null) {
+            savedPlayer.setName(player.getName());
+        }
+        if (player.getPreferredPosition() != null) {
+            savedPlayer.setPreferredPosition(player.getPreferredPosition());
+        }
+        return playerRepository.save(savedPlayer);
+    }
+
+    public void addTeamToPlayer(Team team, Player savedPlayer) {
+        if (team.isDeleted()) {
+            throw new ResourceDoesNotExistException("Team", "id", team.getId());
+        }
+        savedPlayer.addTeam(team);
+    }
+
+    public void removeTeamFromPlayer(Team team, Player savedPlayer) {
+        if (teamService.doesPlayerHaveAPendingGame(savedPlayer, team)) {
+            throw new ResourceCouldNotBeDeletedException("Team", "id", team.getId());
+        }
+        savedPlayer.removeTeam(team);
     }
 
     @Override
-    public void remove(UUID playerId) {
-        Player player = getById(playerId);
-        boolean canBeRemoved = !player.isDeleted() && player.getTeams().stream().noneMatch(teamService::willTeamPlay);
-        if (!canBeRemoved){
+    public void softDelete(UUID playerId) {
+        Player player = findNotDeletedById(playerId);
+        boolean canBeRemoved = player.getTeams()
+                                     .stream()
+                                     .noneMatch(team -> teamService.doesPlayerHaveAPendingGame(player, team));
+        if (!canBeRemoved) {
             throw new ResourceCouldNotBeDeletedException("Player", "id", playerId);
         }
         player.delete();
