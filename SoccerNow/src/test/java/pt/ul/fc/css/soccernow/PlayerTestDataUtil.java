@@ -4,55 +4,22 @@ import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.util.FutsalPositionEnum;
 
 import java.util.List;
-import java.util.Random;
 import java.util.stream.IntStream;
 
+import static pt.ul.fc.css.soccernow.UserTestDataUtil.RANDOM;
+import static pt.ul.fc.css.soccernow.UserTestDataUtil.getRandomUserName;
+
 public class PlayerTestDataUtil {
-    private static final long SEED = 42L;
-    private static final Random RANDOM = new Random(SEED);
-
-    private static final List<String> SAMPLE_NAMES =
-            List.of(
-                    "Renan",
-                    "Cristiano",
-                    "Wellington",
-                    "Xavier",
-                    "Pedro",
-                    "Erling",
-                    "Luka",
-                    "João",
-                    "Bruno",
-                    "Diogo");
-
-    private static final List<String> SAMPLE_SURNAMES =
-            List.of(
-                    "Silva",
-                    "Ferreira",
-                    "Oliveira",
-                    "Angelo",
-                    "Rodrigues",
-                    "Costa",
-                    "Martins",
-                    "Sousa",
-                    "Reia",
-                    "Almeida");
 
     public static Player createRandomPlayerEntity() {
         Player player = new Player();
 
-        String randomName = getRandomPlayerName();
+        String randomName = getRandomUserName();
         FutsalPositionEnum randomPosition = getRandomFutsalPosition();
 
         player.setName(randomName);
         player.setPreferredPosition(randomPosition);
         return player;
-    }
-
-    public static String getRandomPlayerName() {
-        return "%s %s"
-                .formatted(
-                        SAMPLE_NAMES.get(RANDOM.nextInt(SAMPLE_NAMES.size())),
-                        SAMPLE_SURNAMES.get(RANDOM.nextInt(SAMPLE_SURNAMES.size())));
     }
 
     public static FutsalPositionEnum getRandomFutsalPosition() {
