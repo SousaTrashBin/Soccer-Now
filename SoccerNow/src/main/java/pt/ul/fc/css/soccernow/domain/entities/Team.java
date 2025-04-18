@@ -73,4 +73,8 @@ public class Team extends SoftDeleteEntity {
     public void setId(UUID id) {
         this.id = id;
     }
+
+    public boolean hasPlayer(Player player) {
+        return players.contains(player);
+    }
 }
