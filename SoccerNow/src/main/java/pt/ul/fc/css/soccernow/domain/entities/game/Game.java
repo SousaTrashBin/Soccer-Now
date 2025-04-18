@@ -19,10 +19,10 @@ public class Game extends SoftDeleteEntity {
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @OneToOne(mappedBy = "game", orphanRemoval = true, optional = false)
+    @OneToOne(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
     private GameTeam gameTeamOne;
 
-    @OneToOne(mappedBy = "game", orphanRemoval = true, optional = false)
+    @OneToOne(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
     private GameTeam gameTeamTwo;
 
     @OneToOne(orphanRemoval = true)
@@ -40,7 +40,7 @@ public class Game extends SoftDeleteEntity {
             inverseJoinColumns = @JoinColumn(name = "secondaryReferees_id"))
     private Set<Referee> secondaryReferees = new HashSet<>();
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "located_in_id", nullable = false)
     private Address locatedIn;
 
@@ -132,5 +132,9 @@ public class Game extends SoftDeleteEntity {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public boolean isFinished() {
+        return isDeleted() || isFinished;
     }
 }
