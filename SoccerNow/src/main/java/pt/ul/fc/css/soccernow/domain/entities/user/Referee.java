@@ -10,6 +10,7 @@ import pt.ul.fc.css.soccernow.domain.entities.game.Game;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Predicate;
 
 @Entity
 public class Referee extends User {
@@ -78,5 +79,12 @@ public class Referee extends User {
                                         .getPersistentClass()
                                         .hashCode()
                : getClass().hashCode();
+    }
+
+    public boolean hasAnyPendingGames() {
+        return primaryRefereeGames.stream()
+                                  .anyMatch(Predicate.not(Game::isFinished))
+               || secondaryRefereeGames.stream()
+                                       .anyMatch(Predicate.not(Game::isFinished));
     }
 }
