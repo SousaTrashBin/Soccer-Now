@@ -10,6 +10,4 @@ public interface TeamService extends CrudService<Team> {
 
     @Transactional
     void addPlayerToTeam(Player savedPlayer, Team team);
-
-    boolean doesPlayerHaveAPendingGame(Player player, Team team);
 }

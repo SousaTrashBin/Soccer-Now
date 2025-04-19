@@ -4,7 +4,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
-import pt.ul.fc.css.soccernow.domain.entities.user.Referee;
 import pt.ul.fc.css.soccernow.exception.BadRequestException;
 import pt.ul.fc.css.soccernow.exception.ResourceDoesNotExistException;
 import pt.ul.fc.css.soccernow.repository.PlayerRepository;
@@ -12,8 +11,8 @@ import pt.ul.fc.css.soccernow.repository.TeamRepository;
 import pt.ul.fc.css.soccernow.service.PlayerService;
 import pt.ul.fc.css.soccernow.service.TeamService;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class TeamServiceImpl implements TeamService {
@@ -54,11 +53,6 @@ public class TeamServiceImpl implements TeamService {
         } else {
             throw new BadRequestException(savedPlayer.getName() + " is already on team " + team.getName());
         }
-    }
-
-    @Override
-    public boolean doesPlayerHaveAPendingGame(Player player, Team team) {
-        return false;
     }
 
     @Override
