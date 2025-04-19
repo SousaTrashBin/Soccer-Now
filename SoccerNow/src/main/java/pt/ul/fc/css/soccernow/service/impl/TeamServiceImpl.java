@@ -19,8 +19,8 @@ public class TeamServiceImpl implements TeamService {
     private final PlayerService playerService;
 
     public TeamServiceImpl(
-        TeamRepository teamRepository,
-        @Lazy PlayerService playerService
+            TeamRepository teamRepository,
+            @Lazy PlayerService playerService
     ) {
         this.teamRepository = teamRepository;
         this.playerService = playerService;
@@ -28,27 +28,23 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public void removePlayerFromTeam(Player savedPlayer, Team team) {
-        if (team.hasPlayer(savedPlayer)) {
-            team.getPlayers().remove(savedPlayer);
-            teamRepository.save(team);
-            playerService.add(savedPlayer);
-        } else {
+        if (!team.hasPlayer(savedPlayer)) {
             throw new BadRequestException(savedPlayer.getName() + " is not on team " + team.getName());
         }
+        team.removePlayer(savedPlayer);
+        teamRepository.save(team);
     }
 
     @Override
     public void addPlayerToTeam(Player savedPlayer, Team team) {
         boolean validTransaction = !savedPlayer.hasTeam(team) && !team.hasPlayer(savedPlayer);
-
-        if (validTransaction) {
-            team.addPlayer(savedPlayer);
-            savedPlayer.addTeam(team);
-            teamRepository.save(team);
-
-        } else {
+        if (!validTransaction) {
             throw new BadRequestException(savedPlayer.getName() + " is already on team " + team.getName());
         }
+
+        team.addPlayer(savedPlayer);
+        savedPlayer.addTeam(team);
+        teamRepository.save(team);
     }
 
     @Override
@@ -88,11 +84,9 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public Team findNotDeletedById(UUID entityId) {
         Team team = findById(entityId);
-
         if (team.isDeleted()) {
             throw new ResourceDoesNotExistException("Team", "id", entityId);
         }
-
         return team;
     }
 }
