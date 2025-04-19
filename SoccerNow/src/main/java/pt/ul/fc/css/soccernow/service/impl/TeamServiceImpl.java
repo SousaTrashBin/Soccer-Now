@@ -6,7 +6,6 @@ import pt.ul.fc.css.soccernow.domain.entities.Team;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.exception.BadRequestException;
 import pt.ul.fc.css.soccernow.exception.ResourceDoesNotExistException;
-import pt.ul.fc.css.soccernow.repository.PlayerRepository;
 import pt.ul.fc.css.soccernow.repository.TeamRepository;
 import pt.ul.fc.css.soccernow.service.PlayerService;
 import pt.ul.fc.css.soccernow.service.TeamService;
@@ -17,16 +16,13 @@ import java.util.UUID;
 @Service
 public class TeamServiceImpl implements TeamService {
     private final TeamRepository teamRepository;
-    private final PlayerRepository playerRepository;
     private final PlayerService playerService;
 
     public TeamServiceImpl(
         TeamRepository teamRepository,
-        PlayerRepository playerRepository,
         @Lazy PlayerService playerService
     ) {
         this.teamRepository = teamRepository;
-        this.playerRepository = playerRepository;
         this.playerService = playerService;
     }
 
@@ -35,7 +31,7 @@ public class TeamServiceImpl implements TeamService {
         if (team.hasPlayer(savedPlayer)) {
             team.getPlayers().remove(savedPlayer);
             teamRepository.save(team);
-            playerRepository.save(savedPlayer);
+            playerService.add(savedPlayer);
         } else {
             throw new BadRequestException(savedPlayer.getName() + " is not on team " + team.getName());
         }
