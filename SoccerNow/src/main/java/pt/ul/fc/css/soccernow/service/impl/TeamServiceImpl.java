@@ -62,12 +62,7 @@ public class TeamServiceImpl implements TeamService {
                                             .toList();
 
         newTeam.setPlayers(newTeamPlayers);
-        Team savedTeam = teamRepository.save(newTeam);
-
-        for (Player player : savedTeam.getPlayers())
-            playerService.addTeamToPlayer(savedTeam, player);
-
-        return savedTeam;
+        return teamRepository.save(newTeam);
     }
 
     @Override
