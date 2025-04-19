@@ -37,11 +37,9 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public void addPlayerToTeam(Player savedPlayer, Team team) {
-        boolean validTransaction = !savedPlayer.hasTeam(team) && !team.hasPlayer(savedPlayer);
-        if (!validTransaction) {
+        if (team.hasPlayer(savedPlayer)) {
             throw new BadRequestException(savedPlayer.getName() + " is already on team " + team.getName());
         }
-
         team.addPlayer(savedPlayer);
         savedPlayer.addTeam(team);
         teamRepository.save(team);
