@@ -68,4 +68,8 @@ public class Player extends User {
     public void removeTeam(Team team) {
         teams.remove(team);
     }
+
+    public boolean hasTeam(Team team) {
+        return teams.contains(team);
+    }
 }

@@ -77,4 +77,8 @@ public class Team extends SoftDeleteEntity {
     public boolean hasPlayer(Player player) {
         return players.contains(player);
     }
+
+    public void addPlayer(Player player) {
+        players.add(player);
+    }
 }
