@@ -46,7 +46,6 @@ public class TeamServiceImpl implements TeamService {
             throw new BadRequestException(savedPlayer.getName() + " is already on team " + team.getName());
         }
         team.addPlayer(savedPlayer);
-        savedPlayer.addTeam(team);
         teamRepository.save(team);
     }
 
