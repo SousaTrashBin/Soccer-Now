@@ -7,8 +7,10 @@ import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.exception.BadRequestException;
 import pt.ul.fc.css.soccernow.exception.ResourceDoesNotExistException;
 import pt.ul.fc.css.soccernow.repository.TeamRepository;
+import pt.ul.fc.css.soccernow.service.GameService;
 import pt.ul.fc.css.soccernow.service.PlayerService;
 import pt.ul.fc.css.soccernow.service.TeamService;
+import pt.ul.fc.css.soccernow.util.PlacementEnum;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,13 +19,16 @@ import java.util.UUID;
 public class TeamServiceImpl implements TeamService {
     private final TeamRepository teamRepository;
     private final PlayerService playerService;
+    private final GameService gameService;
 
     public TeamServiceImpl(
             TeamRepository teamRepository,
-            @Lazy PlayerService playerService
+            @Lazy PlayerService playerService,
+            @Lazy GameService gameService
     ) {
         this.teamRepository = teamRepository;
         this.playerService = playerService;
+        this.gameService = gameService;
     }
 
     @Override
