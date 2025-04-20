@@ -72,4 +72,10 @@ public class Player extends User {
     public boolean hasTeam(Team team) {
         return teams.contains(team);
     }
+
+    public boolean hasPendingGames() {
+        return getTeams()
+                .stream()
+                .anyMatch(team -> team.hasPendingGamesWithPlayer(this));
+    }
 }

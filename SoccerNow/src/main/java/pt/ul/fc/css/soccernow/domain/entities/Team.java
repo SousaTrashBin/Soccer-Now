@@ -7,6 +7,9 @@ import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.util.SoftDeleteEntity;
 
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Entity
 @Table(name = "teams")
@@ -62,7 +65,7 @@ public class Team extends SoftDeleteEntity {
         return players;
     }
 
-    public void setPlayers(List<Player> players) {
+    public void setPlayers(Set<Player> players) {
         this.players = new LinkedHashSet<>(players);
     }
 
@@ -80,9 +83,34 @@ public class Team extends SoftDeleteEntity {
 
     public void addPlayer(Player player) {
         players.add(player);
+        player.addTeam(this);
     }
 
     public void removePlayer(Player player) {
         players.remove(player);
+        player.removeTeam(this);
+    }
+
+    private Stream<GameTeam> getPendingGamesStream() {
+        return this.getGameTeams()
+                .stream()
+                .filter(Predicate.not(GameTeam::isFinished));
+    }
+
+    public List<GameTeam> getPendingGames() {
+        return getPendingGamesStream().collect(Collectors.toList());
+    }
+
+    public boolean hasPendingGames() {
+        return getPendingGamesStream().findAny().isPresent();
+    }
+
+    public boolean hasPendingGamesWithPlayer(Player player) {
+        return getPendingGamesStream()
+                .anyMatch(gameTeam -> gameTeam.hasPlayer(player));
+    }
+
+    public boolean hasPendingTournaments() {
+        return getPlacements().stream().anyMatch(Predicate.not(Placement::isFinished));
     }
 }

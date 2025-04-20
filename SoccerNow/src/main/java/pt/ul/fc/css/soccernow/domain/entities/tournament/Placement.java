@@ -44,4 +44,8 @@ public class Placement {
     public void setId(UUID id) {
         this.id = id;
     }
+
+    public boolean isFinished() {
+        return value != PlacementEnum.PENDING;
+    }
 }

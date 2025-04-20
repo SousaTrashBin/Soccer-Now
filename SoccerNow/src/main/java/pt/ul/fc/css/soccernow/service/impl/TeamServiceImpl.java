@@ -7,100 +7,107 @@ import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.exception.BadRequestException;
 import pt.ul.fc.css.soccernow.exception.ResourceDoesNotExistException;
 import pt.ul.fc.css.soccernow.repository.TeamRepository;
-import pt.ul.fc.css.soccernow.service.GameService;
 import pt.ul.fc.css.soccernow.service.PlayerService;
 import pt.ul.fc.css.soccernow.service.TeamService;
-import pt.ul.fc.css.soccernow.util.PlacementEnum;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Service
 public class TeamServiceImpl implements TeamService {
     private final TeamRepository teamRepository;
     private final PlayerService playerService;
-    private final GameService gameService;
 
     public TeamServiceImpl(
             TeamRepository teamRepository,
-            @Lazy PlayerService playerService,
-            @Lazy GameService gameService
+            @Lazy PlayerService playerService
     ) {
         this.teamRepository = teamRepository;
         this.playerService = playerService;
-        this.gameService = gameService;
     }
 
     @Override
-    public void removePlayerFromTeam(Player savedPlayer, Team team) {
-        if (!team.hasPlayer(savedPlayer)) {
-            throw new BadRequestException(savedPlayer.getName() + " is not on team " + team.getName());
+    public void removePlayerFromTeam(Player player, Team team) {
+        if (!team.hasPlayer(player)) {
+            throw new BadRequestException(player.getName() + " is not on team " + team.getName());
         }
-        team.removePlayer(savedPlayer);
+        team.removePlayer(player);
         teamRepository.save(team);
     }
 
     @Override
-    public void addPlayerToTeam(Player savedPlayer, Team team) {
-        if (team.hasPlayer(savedPlayer)) {
-            throw new BadRequestException(savedPlayer.getName() + " is already on team " + team.getName());
+    public void addPlayerToTeam(Player player, Team team) {
+        if (team.hasPlayer(player)) {
+            throw new BadRequestException(player.getName() + " is already on team " + team.getName());
         }
-        team.addPlayer(savedPlayer);
+        team.addPlayer(player);
         teamRepository.save(team);
     }
 
     @Override
-    public Team add(Team entity) {
+    public Team add(Team teamData) {
         Team newTeam = new Team();
-        newTeam.setName(entity.getName());
+        newTeam.setName(teamData.getName());
 
-        List<Player> newTeamPlayers = getNewTeamPlayers(entity);
+        Set<Player> fullPlayerData = fetchPlayersWithCompleteData(teamData.getPlayers());
+        newTeam.setPlayers(fullPlayerData);
 
-        newTeam.setPlayers(newTeamPlayers);
         return teamRepository.save(newTeam);
     }
 
     @Override
-    public Team update(Team entity) {
-        Team team = findNotDeletedById(entity.getId());
+    public Team update(Team updatedTeam) {
+        Team existingTeam = findNotDeletedById(updatedTeam.getId());
 
-        if (entity.getName() != null) {
-            team.setName(entity.getName());
+        if (updatedTeam.getName() != null) {
+            existingTeam.setName(updatedTeam.getName());
         }
 
-        if (!entity.getPlayers().isEmpty()) {
-            List<Player> newTeamPlayers = getNewTeamPlayers(entity);
+        if (updatedTeam.getPlayers() != null) {
+            Set<Player> newPlayers = fetchPlayersWithCompleteData(updatedTeam.getPlayers());
+            Set<Player> playersToAdd = new HashSet<>();
+            Set<Player> playersToRemove = new HashSet<>();
 
-            for (Player player : team.getPlayers() ) {
-                if (!newTeamPlayers.contains(player) && gameService.hasPendingGame(player, team)) {
-                    throw new BadRequestException("Player " + player.getName() + " has pending games");
+            newPlayers.stream()
+                    .filter(Predicate.not(existingTeam::hasPlayer))
+                    .forEach(playersToAdd::add);
+
+            existingTeam.getPlayers()
+                    .stream()
+                    .filter(Predicate.not(newPlayers::contains))
+                    .forEach(playersToRemove::add);
+
+            for (Player playerToRemove : playersToRemove) {
+                if (existingTeam.hasPendingGamesWithPlayer(playerToRemove)) {
+                    throw new BadRequestException("Player " + playerToRemove.getName() + " has pending games with team " + existingTeam.getName());
                 }
+                existingTeam.removePlayer(playerToRemove);
             }
 
-            team.setPlayers(newTeamPlayers);
+            for (Player playerToAdd : playersToAdd) {
+                existingTeam.addPlayer(playerToAdd);
+            }
         }
 
-        return teamRepository.save(team);
+        return teamRepository.save(existingTeam);
     }
 
-    private List<Player> getNewTeamPlayers(Team entity) {
-        return entity.getPlayers()
-                     .stream()
-                     .map(p -> playerService.findNotDeletedById(p.getId()))
-                     .toList();
+    private Set<Player> fetchPlayersWithCompleteData(Set<Player> playerReferences) {
+        return playerReferences.stream()
+                .map(playerRef -> playerService.findNotDeletedById(playerRef.getId()))
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     @Override
-    public void softDelete(UUID entityId) {
-        Team team = findNotDeletedById(entityId);
-        boolean canBeRemoved = !gameService.teamHasPendingGame(team) && !teamHasAnyPendingTournament(team);
-
-        if (!canBeRemoved) {
-            throw new BadRequestException("Team " + team.getName() + " has pending games");
+    public void softDelete(UUID teamId) {
+        Team teamToDelete = findNotDeletedById(teamId);
+        if (teamToDelete.hasPendingGames() || teamToDelete.hasPendingTournaments()) {
+            throw new BadRequestException("Team " + teamToDelete.getName() + " has pending games or tournaments");
         }
 
-        team.delete();
-        teamRepository.save(team);
+        teamToDelete.delete();
+        teamRepository.save(teamToDelete);
     }
 
     @Override
@@ -109,27 +116,17 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public Team findById(UUID entityId) {
-        return teamRepository.findById(entityId)
-                             .orElseThrow(() -> new ResourceDoesNotExistException("Team", "id", entityId));
+    public Team findById(UUID teamId) {
+        return teamRepository.findById(teamId)
+                .orElseThrow(() -> new ResourceDoesNotExistException("Team", "id", teamId));
     }
 
     @Override
-    public Team findNotDeletedById(UUID entityId) {
-        Team team = findById(entityId);
+    public Team findNotDeletedById(UUID teamId) {
+        Team team = findById(teamId);
         if (team.isDeleted()) {
-            throw new ResourceDoesNotExistException("Team", "id", entityId);
+            throw new ResourceDoesNotExistException("Team", "id", teamId);
         }
         return team;
-    }
-
-    // In case the team is in a tournament but has no schedule game,
-    // since the team is waiting for his next opponent
-
-    // (Since we do not have a TournamentService, this method stays here for now)
-    public boolean teamHasAnyPendingTournament(Team team) {
-        return team.getPlacements()
-                   .stream()
-                   .anyMatch(placement -> placement.getPlacementEnum() == PlacementEnum.PENDING);
     }
 }

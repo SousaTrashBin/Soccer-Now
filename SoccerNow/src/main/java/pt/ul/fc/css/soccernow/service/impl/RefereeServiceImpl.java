@@ -28,20 +28,20 @@ public class RefereeServiceImpl implements RefereeService {
     }
 
     @Override
-    public Referee update(Referee entity) {
-        Referee referee = findNotDeletedById(entity.getId());
+    public Referee update(Referee updatedReferee) {
+        Referee referee = findNotDeletedById(updatedReferee.getId());
         if (referee.getName() != null) {
-            referee.setName(entity.getName());
+            referee.setName(updatedReferee.getName());
         }
-        if (entity.getHasCertificate() != null) {
-            referee.setHasCertificate(entity.getHasCertificate());
+        if (updatedReferee.getHasCertificate() != null) {
+            referee.setHasCertificate(updatedReferee.getHasCertificate());
         }
         return refereeRepository.save(referee);
     }
 
     @Override
-    public void softDelete(UUID entityId) {
-        Referee referee = findNotDeletedById(entityId);
+    public void softDelete(UUID refereeId) {
+        Referee referee = findNotDeletedById(refereeId);
         if (referee.hasAnyPendingGames()) {
             throw new ResourceCouldNotBeDeletedException("Referee %s has pending games".formatted(referee.getName()));
         }
@@ -55,16 +55,16 @@ public class RefereeServiceImpl implements RefereeService {
     }
 
     @Override
-    public Referee findById(UUID entityId) {
-        return refereeRepository.findById(entityId)
-                                .orElseThrow(() -> new ResourceDoesNotExistException("Referee", "id", entityId));
+    public Referee findById(UUID refereeId) {
+        return refereeRepository.findById(refereeId)
+                .orElseThrow(() -> new ResourceDoesNotExistException("Referee", "id", refereeId));
     }
 
     @Override
-    public Referee findNotDeletedById(UUID entityId) {
-        Referee referee = findById(entityId);
+    public Referee findNotDeletedById(UUID refereeId) {
+        Referee referee = findById(refereeId);
         if (referee.isDeleted()) {
-            throw new ResourceDoesNotExistException("Referee", "id", entityId);
+            throw new ResourceDoesNotExistException("Referee", "id", refereeId);
         }
         return referee;
     }

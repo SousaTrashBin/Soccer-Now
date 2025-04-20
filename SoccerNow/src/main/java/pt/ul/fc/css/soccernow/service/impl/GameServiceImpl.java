@@ -1,6 +1,5 @@
 package pt.ul.fc.css.soccernow.service.impl;
 
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
 import pt.ul.fc.css.soccernow.domain.entities.game.Game;
@@ -28,7 +27,10 @@ public class GameServiceImpl implements GameService {
     private final TeamService teamService;
     private final RefereeService refereeService;
 
-    public GameServiceImpl(GameRepository gameRepository, @Lazy PlayerService playerService, TeamService teamService, RefereeService refereeService) {
+    public GameServiceImpl(GameRepository gameRepository,
+                           PlayerService playerService,
+                           TeamService teamService,
+                           RefereeService refereeService) {
         this.gameRepository = gameRepository;
         this.playerService = playerService;
         this.teamService = teamService;
@@ -134,23 +136,6 @@ public class GameServiceImpl implements GameService {
             throw new ResourceDoesNotExistException("Game", "id", entityId);
         }
         return game;
-    }
-
-    @Override
-    public boolean hasPendingGame(Player player, Team team) {
-        return team.getGameTeams()
-                   .stream()
-                   .filter(gameTeam -> !gameTeam.getGame()
-                                                .isFinished())
-                   .anyMatch(gameTeam -> gameTeam.hasPlayer(player));
-    }
-
-    @Override
-    public boolean teamHasPendingGame(Team team) {
-        return team.getGameTeams()
-                   .stream()
-                   .anyMatch(gameTeam -> !gameTeam.getGame()
-                                                             .isFinished());
     }
 
     private record UpdatedAndValidatedRefereesResult(Referee primaryReferee, Set<Referee> secondaryReferees) {

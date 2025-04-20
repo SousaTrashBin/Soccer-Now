@@ -82,9 +82,7 @@ public class Referee extends User {
     }
 
     public boolean hasAnyPendingGames() {
-        return primaryRefereeGames.stream()
-                                  .anyMatch(Predicate.not(Game::isFinished))
-               || secondaryRefereeGames.stream()
-                                       .anyMatch(Predicate.not(Game::isFinished));
+        return primaryRefereeGames.stream().anyMatch(Predicate.not(Game::isFinished))
+                || secondaryRefereeGames.stream().anyMatch(Predicate.not(Game::isFinished));
     }
 }

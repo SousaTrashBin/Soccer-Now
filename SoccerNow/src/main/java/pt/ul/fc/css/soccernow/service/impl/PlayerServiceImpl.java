@@ -7,7 +7,6 @@ import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.exception.ResourceCouldNotBeDeletedException;
 import pt.ul.fc.css.soccernow.exception.ResourceDoesNotExistException;
 import pt.ul.fc.css.soccernow.repository.PlayerRepository;
-import pt.ul.fc.css.soccernow.service.GameService;
 import pt.ul.fc.css.soccernow.service.PlayerService;
 import pt.ul.fc.css.soccernow.service.TeamService;
 
@@ -20,12 +19,10 @@ import java.util.stream.Collectors;
 public class PlayerServiceImpl implements PlayerService {
     private final PlayerRepository playerRepository;
     private final TeamService teamService;
-    private final GameService gameService;
 
-    public PlayerServiceImpl(PlayerRepository playerRepository, TeamService teamService, @Lazy GameService gameService) {
+    public PlayerServiceImpl(PlayerRepository playerRepository, @Lazy TeamService teamService) {
         this.playerRepository = playerRepository;
         this.teamService = teamService;
-        this.gameService = gameService;
     }
 
     @Override
@@ -57,42 +54,43 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Player update(Player player) {
-        Player savedPlayer = findNotDeletedById(player.getId());
-        if (player.getTeams() != null) {
-            Set<Team> incomingTeams = player.getTeams();
-            Set<Team> existingTeams = savedPlayer.getTeams();
+    public Player update(Player updatedPlayer) {
+        Player existingPlayer = findNotDeletedById(updatedPlayer.getId());
 
-            Set<Team> teamsToBeAdded = incomingTeams.stream()
-                                                    .filter(team -> !existingTeams.contains(team))
-                                                    .collect(Collectors.toSet());
-            for (Team teamToBeAdded : teamsToBeAdded) {
-                teamService.addPlayerToTeam(savedPlayer, teamToBeAdded);
+        if (updatedPlayer.getTeams() != null) {
+            Set<Team> newTeams = updatedPlayer.getTeams();
+            Set<Team> currentTeams = existingPlayer.getTeams();
+
+            Set<Team> teamsToAdd = newTeams.stream()
+                    .filter(team -> !currentTeams.contains(team))
+                    .collect(Collectors.toSet());
+            for (Team teamToAdd : teamsToAdd) {
+                teamService.addPlayerToTeam(existingPlayer, teamToAdd);
             }
 
-            Set<Team> teamsToBeRemoved = existingTeams.stream()
-                                                      .filter(team -> !incomingTeams.contains(team))
-                                                      .collect(Collectors.toSet());
-            for (Team teamToBeRemoved : teamsToBeRemoved) {
-                teamService.removePlayerFromTeam(savedPlayer, teamToBeRemoved);
+            Set<Team> teamsToRemove = currentTeams.stream()
+                    .filter(team -> !newTeams.contains(team))
+                    .collect(Collectors.toSet());
+            for (Team teamToRemove : teamsToRemove) {
+                teamService.removePlayerFromTeam(existingPlayer, teamToRemove);
             }
         }
-        if (player.getName() != null) {
-            savedPlayer.setName(player.getName());
+
+        if (updatedPlayer.getName() != null) {
+            existingPlayer.setName(updatedPlayer.getName());
         }
-        if (player.getPreferredPosition() != null) {
-            savedPlayer.setPreferredPosition(player.getPreferredPosition());
+
+        if (updatedPlayer.getPreferredPosition() != null) {
+            existingPlayer.setPreferredPosition(updatedPlayer.getPreferredPosition());
         }
-        return playerRepository.save(savedPlayer);
+
+        return playerRepository.save(existingPlayer);
     }
 
     @Override
     public void softDelete(UUID playerId) {
         Player player = findNotDeletedById(playerId);
-        boolean canBeRemoved = player.getTeams()
-                                     .stream()
-                                     .noneMatch(team -> gameService.hasPendingGame(player, team));
-        if (!canBeRemoved) {
+        if (player.hasPendingGames()) {
             throw new ResourceCouldNotBeDeletedException("Player", "id", playerId);
         }
         player.delete();

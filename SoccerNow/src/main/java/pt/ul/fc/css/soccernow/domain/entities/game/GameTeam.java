@@ -79,4 +79,8 @@ public class GameTeam {
     public boolean hasTheRightSize() {
         return getGamePlayers().size() == FUTSAL_TEAM_SIZE;
     }
+
+    public boolean isFinished() {
+        return getGame().isFinished();
+    }
 }
