@@ -12,8 +12,8 @@ import pt.ul.fc.css.soccernow.exception.ResourceDoesNotExistException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
-import static pt.ul.fc.css.soccernow.RefereeTestDataUtil.getCertificatedReferees;
-import static pt.ul.fc.css.soccernow.RefereeTestDataUtil.getUncertificatedReferees;
+import static pt.ul.fc.css.soccernow.utils.RefereeTestDataUtil.getCertificatedReferees;
+import static pt.ul.fc.css.soccernow.utils.RefereeTestDataUtil.getUncertificatedReferees;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)

@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
-import static pt.ul.fc.css.soccernow.PlayerTestDataUtil.getPlayers;
+import static pt.ul.fc.css.soccernow.utils.PlayerTestDataUtil.getPlayers;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
