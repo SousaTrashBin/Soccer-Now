@@ -145,6 +145,14 @@ public class GameServiceImpl implements GameService {
                    .anyMatch(gameTeam -> gameTeam.hasPlayer(player));
     }
 
+    @Override
+    public boolean teamHasPendingGame(Team team) {
+        return team.getGameTeams()
+                   .stream()
+                   .anyMatch(gameTeam -> !gameTeam.getGame()
+                                                             .isFinished());
+    }
+
     private record UpdatedAndValidatedRefereesResult(Referee primaryReferee, Set<Referee> secondaryReferees) {
     }
 }
