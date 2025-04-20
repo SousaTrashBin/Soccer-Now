@@ -1,4 +1,4 @@
-package pt.ul.fc.css.soccernow;
+package pt.ul.fc.css.soccernow.utils;
 
 import java.util.List;
 import java.util.Random;

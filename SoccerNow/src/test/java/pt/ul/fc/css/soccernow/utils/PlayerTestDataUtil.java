@@ -1,4 +1,4 @@
-package pt.ul.fc.css.soccernow;
+package pt.ul.fc.css.soccernow.utils;
 
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.util.FutsalPositionEnum;
@@ -6,8 +6,8 @@ import pt.ul.fc.css.soccernow.util.FutsalPositionEnum;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static pt.ul.fc.css.soccernow.UserTestDataUtil.RANDOM;
-import static pt.ul.fc.css.soccernow.UserTestDataUtil.getRandomUserName;
+import static pt.ul.fc.css.soccernow.utils.UserTestDataUtil.RANDOM;
+import static pt.ul.fc.css.soccernow.utils.UserTestDataUtil.getRandomUserName;
 
 public class PlayerTestDataUtil {
 

@@ -1,11 +1,11 @@
-package pt.ul.fc.css.soccernow;
+package pt.ul.fc.css.soccernow.utils;
 
 import pt.ul.fc.css.soccernow.domain.entities.user.Referee;
 
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static pt.ul.fc.css.soccernow.UserTestDataUtil.getRandomUserName;
+import static pt.ul.fc.css.soccernow.utils.UserTestDataUtil.getRandomUserName;
 
 public class RefereeTestDataUtil {
     public static Referee createRandomRefereeEntity(boolean hasCertificate) {
