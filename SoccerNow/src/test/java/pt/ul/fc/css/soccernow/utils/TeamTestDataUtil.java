@@ -3,8 +3,10 @@ package pt.ul.fc.css.soccernow.utils;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static pt.ul.fc.css.soccernow.utils.UserTestDataUtil.RANDOM;
 
@@ -44,4 +46,21 @@ public class TeamTestDataUtil {
         return RANDOM_TEAM_NAMES.get(randomIndex);
     }
 
+    public static List<Team> createTeams(Set<Player> players) {
+        List<Player> playerList = List.copyOf(players);
+        List<Team> teams = new ArrayList<>();
+
+        for (int i = 0; i < 20; i++) {
+            int subListSize = 5 + RANDOM.nextInt(Math.max(1, Math.min(11, playerList.size() - 5)));
+            Set<Player> randomPlayers = RANDOM.ints(0, playerList.size())
+                    .distinct()
+                    .limit(subListSize)
+                    .mapToObj(playerList::get)
+                    .collect(Collectors.toSet());
+
+            teams.add(createRandomTeam(randomPlayers));
+        }
+
+        return teams;
+    }
 }
