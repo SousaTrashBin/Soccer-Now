@@ -6,6 +6,7 @@ import pt.ul.fc.css.soccernow.domain.entities.game.PlayerGameStats;
 import pt.ul.fc.css.soccernow.util.FutsalPositionEnum;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 public class Player extends User {
@@ -70,7 +71,7 @@ public class Player extends User {
     }
 
     public boolean hasTeam(Team team) {
-        return teams.contains(team);
+        return teams.stream().anyMatch(t -> t.equals(team));
     }
 
     public boolean hasPendingGames() {
@@ -82,5 +83,16 @@ public class Player extends User {
     public void addGameStats(PlayerGameStats gameStats) {
         playerGameStats.add(gameStats);
         gameStats.setPlayer(this);
+    }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "name='" + getName() + '\'' +
+                ", id=" + getId() +
+                ", preferredPosition=" + preferredPosition +
+                ", teams=" + teams.stream().map(Team::getId).collect(Collectors.toSet()) +
+                ", playerGameStats=" + playerGameStats +
+                '}';
     }
 }
