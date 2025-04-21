@@ -1,6 +1,7 @@
 package pt.ul.fc.css.soccernow.domain.entities.game;
 
 import jakarta.persistence.*;
+import org.hibernate.proxy.HibernateProxy;
 import pt.ul.fc.css.soccernow.domain.entities.Address;
 import pt.ul.fc.css.soccernow.domain.entities.tournament.Tournament;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
@@ -151,19 +152,32 @@ public class Game extends SoftDeleteEntity {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
         Game game = (Game) o;
-        return Objects.equals(getId(), game.getId());
+        return getId() != null && Objects.equals(getId(), game.getId());
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(getId());
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
+                "gameTeamOne = " + gameTeamOne + ", " +
+                "gameTeamTwo = " + gameTeamTwo + ", " +
+                "gameStats = " + gameStats + ", " +
+                "primaryReferee = " + primaryReferee + ", " +
+                "locatedIn = " + locatedIn + ", " +
+                "happensIn = " + happensIn + ", " +
+                "isClosed = " + isClosed + ", " +
+                "tournament = " + tournament + ")";
     }
 }

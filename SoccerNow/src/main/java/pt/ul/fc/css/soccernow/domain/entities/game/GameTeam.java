@@ -1,12 +1,14 @@
 package pt.ul.fc.css.soccernow.domain.entities.game;
 
 import jakarta.persistence.*;
+import org.hibernate.proxy.HibernateProxy;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
 import pt.ul.fc.css.soccernow.domain.entities.tournament.GamePlayer;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.util.FutsalPositionEnum;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -73,7 +75,7 @@ public class GameTeam {
     public boolean hasExactlyOneGoalKeeper() {
         return getGamePlayers().stream()
                 .map(GamePlayer::getPlayedInPosition)
-                .map(futsalPosition -> futsalPosition.equals(FutsalPositionEnum.GOALIE))
+                .filter(futsalPosition -> futsalPosition.equals(FutsalPositionEnum.GOALIE))
                 .count() == 1;
     }
 
@@ -87,5 +89,33 @@ public class GameTeam {
 
     public Set<Player> getPlayers() {
         return gamePlayers.stream().map(GamePlayer::getPlayer).collect(Collectors.toSet());
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        GameTeam gameTeam = (GameTeam) o;
+        return getId() != null && Objects.equals(getId(), gameTeam.getId());
+    }
+
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
+                "team = " + team + ", " +
+                "game = " + game + ")";
+    }
+
+    public boolean hasAllPlayersOnTeam(Team team) {
+        return getPlayers().stream().allMatch(gamePlayer -> gamePlayer.hasTeam(team));
     }
 }

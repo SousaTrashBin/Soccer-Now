@@ -1,12 +1,12 @@
 package pt.ul.fc.css.soccernow.domain.entities.user;
 
 import jakarta.persistence.*;
+import org.hibernate.proxy.HibernateProxy;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
 import pt.ul.fc.css.soccernow.domain.entities.game.PlayerGameStats;
 import pt.ul.fc.css.soccernow.util.FutsalPositionEnum;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Entity
 public class Player extends User {
@@ -18,25 +18,8 @@ public class Player extends User {
     @OrderBy("name")
     private Set<Team> teams = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "player", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "player", orphanRemoval = true)
     private List<PlayerGameStats> playerGameStats = new ArrayList<>();
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Player player = (Player) o;
-        return Objects.equals(getId(), player.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId());
-    }
 
     public List<PlayerGameStats> getPlayerGameStats() {
         return playerGameStats;
@@ -71,7 +54,7 @@ public class Player extends User {
     }
 
     public boolean hasTeam(Team team) {
-        return teams.stream().anyMatch(t -> t.equals(team));
+        return teams.contains(team);
     }
 
     public boolean hasPendingGames() {
@@ -86,13 +69,26 @@ public class Player extends User {
     }
 
     @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Player player = (Player) o;
+        return getId() != null && Objects.equals(getId(), player.getId());
+    }
+
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+    }
+
+    @Override
     public String toString() {
-        return "Player{" +
-                "name='" + getName() + '\'' +
-                ", id=" + getId() +
-                ", preferredPosition=" + preferredPosition +
-                ", teams=" + teams.stream().map(Team::getId).collect(Collectors.toSet()) +
-                ", playerGameStats=" + playerGameStats +
-                '}';
+        return getClass().getSimpleName() + "(" +
+                "id = " + getId() + ", " +
+                "preferredPosition = " + getPreferredPosition() + ", " +
+                "name = " + getName() + ")";
     }
 }
