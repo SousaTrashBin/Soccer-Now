@@ -1,6 +1,7 @@
 package pt.ul.fc.css.soccernow.domain.entities;
 
 import jakarta.persistence.*;
+import org.hibernate.proxy.HibernateProxy;
 import pt.ul.fc.css.soccernow.domain.entities.game.GameTeam;
 import pt.ul.fc.css.soccernow.domain.entities.tournament.Placement;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
@@ -78,7 +79,7 @@ public class Team extends SoftDeleteEntity {
     }
 
     public boolean hasPlayer(Player player) {
-        return players.contains(player);
+        return player.hasTeam(this);
     }
 
     public void addPlayer(Player player) {
@@ -114,30 +115,21 @@ public class Team extends SoftDeleteEntity {
         return getPlacements().stream().anyMatch(Predicate.not(Placement::isFinished));
     }
 
-    public boolean containsAllPlayers(Set<Player> players) {
-        return this.players.containsAll(players);
-    }
 
     @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
         Team team = (Team) o;
-        return Objects.equals(getId(), team.getId());
+        return getId() != null && Objects.equals(getId(), team.getId());
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hashCode(getId());
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 
-    @Override
-    public String toString() {
-        return "Team{" +
-                "id=" + id +
-                ", players=" + players +
-                ", placements=" + placements +
-                ", name='" + name + '\'' +
-                ", gameTeams=" + gameTeams +
-                '}';
-    }
 }
