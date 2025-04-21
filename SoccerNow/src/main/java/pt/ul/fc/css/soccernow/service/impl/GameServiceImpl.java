@@ -6,10 +6,10 @@ import pt.ul.fc.css.soccernow.domain.entities.game.Game;
 import pt.ul.fc.css.soccernow.domain.entities.game.GameStats;
 import pt.ul.fc.css.soccernow.domain.entities.game.GameTeam;
 import pt.ul.fc.css.soccernow.domain.entities.game.PlayerGameStats;
-import pt.ul.fc.css.soccernow.domain.entities.tournament.GamePlayer;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.domain.entities.user.Referee;
 import pt.ul.fc.css.soccernow.exception.BadRequestException;
+import pt.ul.fc.css.soccernow.exception.ResourceCouldNotBeDeletedException;
 import pt.ul.fc.css.soccernow.exception.ResourceDoesNotExistException;
 import pt.ul.fc.css.soccernow.repository.GameRepository;
 import pt.ul.fc.css.soccernow.repository.PlayerRepository;
@@ -23,7 +23,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static pt.ul.fc.css.soccernow.domain.entities.game.Game.NUMBER_OF_PLAYERS_PER_TEAM;
+import static pt.ul.fc.css.soccernow.domain.entities.game.GameTeam.FUTSAL_TEAM_SIZE;
 
 @Service
 public class GameServiceImpl implements GameService {
@@ -50,14 +50,14 @@ public class GameServiceImpl implements GameService {
         UpdatedAndValidatedRefereesResult refereesResult = updatedAndValidatedReferees(entity);
         Referee primaryReferee = refereesResult.primaryReferee;
         Set<Referee> secondaryReferees = refereesResult.secondaryReferees;
+        entity.setPrimaryReferee(primaryReferee);
+        entity.setSecondaryReferees(secondaryReferees);
 
         GameTeam validatedGameTeamOne = prepareAndValidateGameTeam(entity.getGameTeamOne());
         GameTeam validateGameTeamTwo = prepareAndValidateGameTeam(entity.getGameTeamTwo());
-
         entity.setGameTeamOne(validatedGameTeamOne);
         entity.setGameTeamTwo(validateGameTeamTwo);
-        entity.setPrimaryReferee(primaryReferee);
-        entity.setSecondaryReferees(secondaryReferees);
+
         return gameRepository.save(entity);
     }
 
@@ -69,8 +69,7 @@ public class GameServiceImpl implements GameService {
                 .map(referee -> refereeService.findNotDeletedById(referee.getId()))
                 .collect(Collectors.toSet());
         boolean hasAtLeastOneRefereeWithCertificate = primaryReferee.getHasCertificate() ||
-                secondaryReferees.stream()
-                        .anyMatch(Referee::getHasCertificate);
+                secondaryReferees.stream().anyMatch(Referee::getHasCertificate);
         if (!hasAtLeastOneRefereeWithCertificate) {
             throw new BadRequestException("At least one referee needs to have a certificate");
         }
@@ -79,46 +78,28 @@ public class GameServiceImpl implements GameService {
 
     private GameTeam prepareAndValidateGameTeam(GameTeam gameTeam) {
         if (!gameTeam.hasTheRightSize()) {
-            throw new BadRequestException("Game teams must have %d elements".formatted(GameTeam.FUTSAL_TEAM_SIZE));
+            throw new BadRequestException("Game teams must have %d elements".formatted(FUTSAL_TEAM_SIZE));
         }
 
         if (!gameTeam.hasExactlyOneGoalKeeper()) {
             throw new BadRequestException("Game teams must contain exactly one goal keeper");
         }
 
-        Team team = teamService.findNotDeletedById(gameTeam.getTeam()
-                .getId());
-        Set<GamePlayer> savedPlayers = updateGameTeamPlayersWithSavedPlayers(gameTeam);
-
-        boolean allPlayersBelongToTeam = savedPlayers.stream()
-                .allMatch(gamePlayer -> team.hasPlayer(gamePlayer.getPlayer()));
-        if (!allPlayersBelongToTeam) {
+        Team team = teamService.findNotDeletedById(gameTeam.getTeam().getId());
+        if (team.containsAllPlayers(gameTeam.getPlayers())) {
             throw new BadRequestException("All players must be on team %s".formatted(team.getName()));
         }
 
+        gameTeam.getGamePlayers().forEach(gamePlayer -> gamePlayer.setPlayer(playerService.findNotDeletedById(gamePlayer.getPlayer().getId())));
         GameTeam newGameTeam = new GameTeam();
         newGameTeam.setTeam(team);
-        newGameTeam.setGamePlayers(savedPlayers);
+        newGameTeam.setGamePlayers(gameTeam.getGamePlayers());
         return newGameTeam;
-    }
-
-    private Set<GamePlayer> updateGameTeamPlayersWithSavedPlayers(GameTeam gameTeam) {
-        return gameTeam.getGamePlayers()
-                .stream()
-                .peek(gamePlayer -> {
-                    Player savedPlayer = playerService.findNotDeletedById(
-                            gamePlayer.getPlayer()
-                                    .getId()
-                    );
-                    gamePlayer.setPlayer(savedPlayer);
-                })
-                .collect(Collectors.toSet());
     }
 
     @Override
     public Game findById(UUID entityId) {
-        return gameRepository.findById(entityId)
-                .orElseThrow(() -> new ResourceDoesNotExistException("Game", "id", entityId));
+        return gameRepository.findById(entityId).orElseThrow(() -> new ResourceDoesNotExistException("Game", "id", entityId));
     }
 
 
@@ -129,12 +110,17 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void softDelete(UUID entityId) {
-
+        Game gameToDelete = findNotDeletedById(entityId);
+        if (!gameToDelete.isClosed()) {
+            throw new ResourceCouldNotBeDeletedException("Game", "id", entityId);
+        }
+        gameToDelete.delete();
+        gameRepository.save(gameToDelete);
     }
 
     @Override
     public List<Game> findAllNotDeleted() {
-        return List.of();
+        return gameRepository.findAllNotDeleted();
     }
 
     @Override
@@ -156,10 +142,10 @@ public class GameServiceImpl implements GameService {
     }
 
     private void validatePlayerCount(Set<PlayerGameStats> playerStats) {
-        if (playerStats.size() > NUMBER_OF_PLAYERS_PER_TEAM * 2) {
+        if (playerStats.size() > FUTSAL_TEAM_SIZE * 2) {
             throw new BadRequestException(
                     "There couldn't be more than %d players in the game"
-                            .formatted(NUMBER_OF_PLAYERS_PER_TEAM * 2)
+                            .formatted(FUTSAL_TEAM_SIZE * 2)
             );
         }
     }
