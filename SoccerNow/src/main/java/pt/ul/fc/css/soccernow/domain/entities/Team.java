@@ -120,18 +120,24 @@ public class Team extends SoftDeleteEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (o == null || getClass() != o.getClass()) return false;
         Team team = (Team) o;
         return Objects.equals(getId(), team.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId());
+        return Objects.hashCode(getId());
+    }
+
+    @Override
+    public String toString() {
+        return "Team{" +
+                "id=" + id +
+                ", players=" + players +
+                ", placements=" + placements +
+                ", name='" + name + '\'' +
+                ", gameTeams=" + gameTeams +
+                '}';
     }
 }
