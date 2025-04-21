@@ -3,6 +3,7 @@ package pt.ul.fc.css.soccernow.domain.entities.game;
 import jakarta.persistence.*;
 import pt.ul.fc.css.soccernow.domain.entities.Address;
 import pt.ul.fc.css.soccernow.domain.entities.tournament.Tournament;
+import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.domain.entities.user.Referee;
 import pt.ul.fc.css.soccernow.util.SoftDeleteEntity;
 
@@ -14,6 +15,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "games")
 public class Game extends SoftDeleteEntity {
+    public static int NUMBER_OF_PLAYERS_PER_TEAM = 5;
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
@@ -25,7 +27,7 @@ public class Game extends SoftDeleteEntity {
     @OneToOne(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
     private GameTeam gameTeamTwo;
 
-    @OneToOne(orphanRemoval = true)
+    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
     @JoinColumn(name = "game_stats_id")
     private GameStats gameStats;
 
@@ -47,8 +49,8 @@ public class Game extends SoftDeleteEntity {
     @Column(name = "happens_in", nullable = false)
     private LocalDateTime happensIn;
 
-    @Column(name = "is_finished", nullable = false)
-    private Boolean isFinished = false;
+    @Column(name = "is_closed", nullable = false)
+    private Boolean isClosed = false;
 
     @ManyToOne
     @JoinColumn(name = "tournament_id")
@@ -62,12 +64,12 @@ public class Game extends SoftDeleteEntity {
         this.tournament = tournament;
     }
 
-    public Boolean getIsFinished() {
-        return isFinished;
+    public Boolean getIsClosed() {
+        return isClosed;
     }
 
-    public void setIsFinished(Boolean isFinished) {
-        this.isFinished = isFinished;
+    public void setIsClosed(Boolean isClosed) {
+        this.isClosed = isClosed;
     }
 
     public LocalDateTime getHappensIn() {
@@ -134,7 +136,17 @@ public class Game extends SoftDeleteEntity {
         this.id = id;
     }
 
-    public boolean isFinished() {
-        return isDeleted() || isFinished;
+    public boolean isClosed() {
+        return isClosed;
+    }
+
+    public void close() {
+        this.isClosed = true;
+    }
+
+    public Set<Player> getPlayers() {
+        Set<Player> allPlayers = gameTeamOne.getPlayers();
+        allPlayers.addAll(getGameTeamTwo().getPlayers());
+        return allPlayers;
     }
 }
