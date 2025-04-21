@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.util.FutsalPositionEnum;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -44,5 +45,22 @@ public class GamePlayer {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        GamePlayer gamePlayer = (GamePlayer) o;
+        return Objects.equals(getId(), gamePlayer.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

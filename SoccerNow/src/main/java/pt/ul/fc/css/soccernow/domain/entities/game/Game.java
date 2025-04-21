@@ -9,13 +9,13 @@ import pt.ul.fc.css.soccernow.util.SoftDeleteEntity;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
 @Entity
 @Table(name = "games")
 public class Game extends SoftDeleteEntity {
-    public static int NUMBER_OF_PLAYERS_PER_TEAM = 5;
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
@@ -148,5 +148,22 @@ public class Game extends SoftDeleteEntity {
         Set<Player> allPlayers = gameTeamOne.getPlayers();
         allPlayers.addAll(getGameTeamTwo().getPlayers());
         return allPlayers;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Game game = (Game) o;
+        return Objects.equals(getId(), game.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

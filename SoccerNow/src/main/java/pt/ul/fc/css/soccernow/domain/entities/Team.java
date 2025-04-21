@@ -113,4 +113,25 @@ public class Team extends SoftDeleteEntity {
     public boolean hasPendingTournaments() {
         return getPlacements().stream().anyMatch(Predicate.not(Placement::isFinished));
     }
+
+    public boolean containsAllPlayers(Set<Player> players) {
+        return this.players.containsAll(players);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Team team = (Team) o;
+        return Objects.equals(getId(), team.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
 }

@@ -31,4 +31,5 @@ public abstract class User extends SoftDeleteEntity {
     public void setId(UUID id) {
         this.id = id;
     }
+
 }
