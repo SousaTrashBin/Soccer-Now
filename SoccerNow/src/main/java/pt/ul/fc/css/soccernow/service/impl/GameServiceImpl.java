@@ -12,15 +12,16 @@ import pt.ul.fc.css.soccernow.exception.BadRequestException;
 import pt.ul.fc.css.soccernow.exception.ResourceCouldNotBeDeletedException;
 import pt.ul.fc.css.soccernow.exception.ResourceDoesNotExistException;
 import pt.ul.fc.css.soccernow.repository.GameRepository;
-import pt.ul.fc.css.soccernow.repository.PlayerRepository;
 import pt.ul.fc.css.soccernow.service.GameService;
 import pt.ul.fc.css.soccernow.service.PlayerService;
 import pt.ul.fc.css.soccernow.service.RefereeService;
 import pt.ul.fc.css.soccernow.service.TeamService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static pt.ul.fc.css.soccernow.domain.entities.game.GameTeam.FUTSAL_TEAM_SIZE;
@@ -31,18 +32,15 @@ public class GameServiceImpl implements GameService {
     private final PlayerService playerService;
     private final TeamService teamService;
     private final RefereeService refereeService;
-    private final PlayerRepository playerRepository;
 
     public GameServiceImpl(GameRepository gameRepository,
                            PlayerService playerService,
                            TeamService teamService,
-                           RefereeService refereeService,
-                           PlayerRepository playerRepository) {
+                           RefereeService refereeService) {
         this.gameRepository = gameRepository;
         this.playerService = playerService;
         this.teamService = teamService;
         this.refereeService = refereeService;
-        this.playerRepository = playerRepository;
     }
 
     @Override
@@ -86,7 +84,7 @@ public class GameServiceImpl implements GameService {
         }
 
         Team team = teamService.findNotDeletedById(gameTeam.getTeam().getId());
-        if (team.containsAllPlayers(gameTeam.getPlayers())) {
+        if (!gameTeam.hasAllPlayersOnTeam(team)) {
             throw new BadRequestException("All players must be on team %s".formatted(team.getName()));
         }
 
@@ -126,7 +124,7 @@ public class GameServiceImpl implements GameService {
     @Override
     public Game findNotDeletedById(UUID entityId) {
         Game game = findById(entityId);
-        if (!game.isDeleted()) {
+        if (game.isDeleted()) {
             throw new ResourceDoesNotExistException("Game", "id", entityId);
         }
         return game;
@@ -162,14 +160,22 @@ public class GameServiceImpl implements GameService {
         GoalsScored goalsScored = new GoalsScored();
         GameStats gameStats = new GameStats();
         Set<Player> playersInGame = game.getPlayers();
+        Map<UUID, Player> playersById = playersInGame.stream()
+                .collect(Collectors.toMap(Player::getId, Function.identity()));
 
         for (PlayerGameStats playerStat : playerStats) {
-            Player player = playerService.findNotDeletedById(playerStat.getPlayer().getId());
+            Player saved = playersById.get(playerStat.getPlayer().getId());
+
+            PlayerGameStats playerGameStats = new PlayerGameStats();
             Integer scoredGoals = playerStat.getScoredGoals();
-            goalsScored = goalsScored.addGoalsToPlayer(player, game, scoredGoals);
-            gameStats.addPlayerGameStats(playerStat);
-            playersInGame.remove(player);
-            player.addGameStats(playerStat);
+            playerGameStats.setScoredGoals(scoredGoals);
+            playerGameStats.setGivenCard(playerStat.getGivenCard());
+
+            saved.addGameStats(playerGameStats);
+            gameStats.addPlayerGameStats(playerGameStats);
+
+            goalsScored = goalsScored.addGoalsToPlayer(saved, game, scoredGoals);
+            playersInGame.remove(saved);
         }
 
         for (Player player : playersInGame) {
@@ -180,7 +186,6 @@ public class GameServiceImpl implements GameService {
 
         gameStats.setTeamOneGoals(goalsScored.teamOneGoals());
         gameStats.setTeamTwoGoals(goalsScored.teamTwoGoals());
-        playerRepository.saveAll(game.getPlayers());
         return gameStats;
     }
 
