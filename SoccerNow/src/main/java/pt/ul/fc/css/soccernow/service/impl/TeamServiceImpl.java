@@ -51,7 +51,7 @@ public class TeamServiceImpl implements TeamService {
         newTeam.setName(teamData.getName());
 
         Set<Player> fullPlayerData = fetchPlayersWithCompleteData(teamData.getPlayers());
-        newTeam.setPlayers(fullPlayerData);
+        fullPlayerData.forEach(player -> addPlayerToTeam(player, newTeam));
 
         return teamRepository.save(newTeam);
     }
