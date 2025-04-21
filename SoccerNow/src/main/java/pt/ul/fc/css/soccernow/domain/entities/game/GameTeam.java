@@ -9,6 +9,7 @@ import pt.ul.fc.css.soccernow.util.FutsalPositionEnum;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "game_teams")
@@ -65,22 +66,26 @@ public class GameTeam {
 
     public boolean hasPlayer(Player player) {
         return getGamePlayers().stream()
-                               .map(GamePlayer::getPlayer)
-                               .anyMatch(player::equals);
+                .map(GamePlayer::getPlayer)
+                .anyMatch(player::equals);
     }
 
     public boolean hasExactlyOneGoalKeeper() {
         return getGamePlayers().stream()
-                               .map(GamePlayer::getPlayedInPosition)
-                               .map(futsalPosition -> futsalPosition.equals(FutsalPositionEnum.GOALIE))
-                               .count() == 1;
+                .map(GamePlayer::getPlayedInPosition)
+                .map(futsalPosition -> futsalPosition.equals(FutsalPositionEnum.GOALIE))
+                .count() == 1;
     }
 
     public boolean hasTheRightSize() {
         return getGamePlayers().size() == FUTSAL_TEAM_SIZE;
     }
 
-    public boolean isFinished() {
-        return getGame().isFinished();
+    public boolean isClosed() {
+        return getGame().isClosed();
+    }
+
+    public Set<Player> getPlayers() {
+        return gamePlayers.stream().map(GamePlayer::getPlayer).collect(Collectors.toSet());
     }
 }

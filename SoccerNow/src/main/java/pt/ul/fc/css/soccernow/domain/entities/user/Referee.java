@@ -57,14 +57,14 @@ public class Referee extends User {
         }
         Class<?> oEffectiveClass =
                 o instanceof HibernateProxy
-                ? ((HibernateProxy) o).getHibernateLazyInitializer()
-                                      .getPersistentClass()
-                : o.getClass();
+                        ? ((HibernateProxy) o).getHibernateLazyInitializer()
+                        .getPersistentClass()
+                        : o.getClass();
         Class<?> thisEffectiveClass =
                 this instanceof HibernateProxy
-                ? ((HibernateProxy) this).getHibernateLazyInitializer()
-                                         .getPersistentClass()
-                : this.getClass();
+                        ? ((HibernateProxy) this).getHibernateLazyInitializer()
+                        .getPersistentClass()
+                        : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) {
             return false;
         }
@@ -75,14 +75,14 @@ public class Referee extends User {
     @Override
     public final int hashCode() {
         return this instanceof HibernateProxy
-               ? ((HibernateProxy) this).getHibernateLazyInitializer()
-                                        .getPersistentClass()
-                                        .hashCode()
-               : getClass().hashCode();
+                ? ((HibernateProxy) this).getHibernateLazyInitializer()
+                .getPersistentClass()
+                .hashCode()
+                : getClass().hashCode();
     }
 
     public boolean hasAnyPendingGames() {
-        return primaryRefereeGames.stream().anyMatch(Predicate.not(Game::isFinished))
-                || secondaryRefereeGames.stream().anyMatch(Predicate.not(Game::isFinished));
+        return primaryRefereeGames.stream().anyMatch(Predicate.not(Game::isClosed))
+                || secondaryRefereeGames.stream().anyMatch(Predicate.not(Game::isClosed));
     }
 }

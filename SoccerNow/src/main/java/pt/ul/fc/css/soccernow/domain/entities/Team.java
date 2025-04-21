@@ -94,7 +94,7 @@ public class Team extends SoftDeleteEntity {
     private Stream<GameTeam> getPendingGamesStream() {
         return this.getGameTeams()
                 .stream()
-                .filter(Predicate.not(GameTeam::isFinished));
+                .filter(Predicate.not(GameTeam::isClosed));
     }
 
     public List<GameTeam> getPendingGames() {

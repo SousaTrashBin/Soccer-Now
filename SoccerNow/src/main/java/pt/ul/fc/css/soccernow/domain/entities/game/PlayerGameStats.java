@@ -2,6 +2,7 @@ package pt.ul.fc.css.soccernow.domain.entities.game;
 
 import jakarta.persistence.*;
 import org.hibernate.proxy.HibernateProxy;
+import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.util.CardEnum;
 
 import java.util.Objects;
@@ -17,14 +18,17 @@ public class PlayerGameStats {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "given_card")
-    private CardEnum givenCard;
+    private CardEnum givenCard = CardEnum.RED;
 
     @Column(name = "scored_goals", nullable = false)
-    private Integer scoredGoals;
+    private Integer scoredGoals = 0;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "game_stats_id", nullable = false)
     private GameStats gameStats;
+    @ManyToOne
+    @JoinColumn(name = "player_id")
+    private Player player;
 
     public GameStats getGameStats() {
         return gameStats;
@@ -68,14 +72,14 @@ public class PlayerGameStats {
         }
         Class<?> oEffectiveClass =
                 o instanceof HibernateProxy
-                ? ((HibernateProxy) o).getHibernateLazyInitializer()
-                                      .getPersistentClass()
-                : o.getClass();
+                        ? ((HibernateProxy) o).getHibernateLazyInitializer()
+                        .getPersistentClass()
+                        : o.getClass();
         Class<?> thisEffectiveClass =
                 this instanceof HibernateProxy
-                ? ((HibernateProxy) this).getHibernateLazyInitializer()
-                                         .getPersistentClass()
-                : this.getClass();
+                        ? ((HibernateProxy) this).getHibernateLazyInitializer()
+                        .getPersistentClass()
+                        : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) {
             return false;
         }
@@ -86,9 +90,17 @@ public class PlayerGameStats {
     @Override
     public final int hashCode() {
         return this instanceof HibernateProxy
-               ? ((HibernateProxy) this).getHibernateLazyInitializer()
-                                        .getPersistentClass()
-                                        .hashCode()
-               : getClass().hashCode();
+                ? ((HibernateProxy) this).getHibernateLazyInitializer()
+                .getPersistentClass()
+                .hashCode()
+                : getClass().hashCode();
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 }

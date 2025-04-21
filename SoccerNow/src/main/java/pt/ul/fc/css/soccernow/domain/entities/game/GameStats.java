@@ -33,6 +33,11 @@ public class GameStats {
         this.playerGameStats = playerGameStats;
     }
 
+    public void addPlayerGameStats(PlayerGameStats playerGameStats) {
+        this.playerGameStats.add(playerGameStats);
+        playerGameStats.setGameStats(this);
+    }
+
     public Integer getTeamTwoGoals() {
         return teamTwoGoals;
     }
@@ -56,4 +61,5 @@ public class GameStats {
     public void setId(UUID id) {
         this.id = id;
     }
+
 }
