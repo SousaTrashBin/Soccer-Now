@@ -17,7 +17,7 @@ public class Player extends User {
     @OrderBy("name")
     private Set<Team> teams = new LinkedHashSet<>();
 
-    @OneToMany(orphanRemoval = true)
+    @OneToMany(mappedBy = "player", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<PlayerGameStats> playerGameStats = new ArrayList<>();
 
     @Override
@@ -77,5 +77,10 @@ public class Player extends User {
         return getTeams()
                 .stream()
                 .anyMatch(team -> team.hasPendingGamesWithPlayer(this));
+    }
+
+    public void addGameStats(PlayerGameStats gameStats) {
+        playerGameStats.add(gameStats);
+        gameStats.setPlayer(this);
     }
 }
