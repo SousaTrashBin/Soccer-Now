@@ -67,9 +67,8 @@ public class GameTeam {
     }
 
     public boolean hasPlayer(Player player) {
-        return getGamePlayers().stream()
-                .map(GamePlayer::getPlayer)
-                .anyMatch(player::equals);
+        return getPlayers().stream()
+                .anyMatch(p -> p.equals(player));
     }
 
     public boolean hasExactlyOneGoalKeeper() {
@@ -116,6 +115,13 @@ public class GameTeam {
     }
 
     public boolean hasAllPlayersOnTeam(Team team) {
-        return getPlayers().stream().allMatch(gamePlayer -> gamePlayer.hasTeam(team));
+        return getPlayers().stream()
+                .allMatch(gamePlayer -> gamePlayer.hasTeam(team));
     }
+
+    public void registerTeam(Team team) {
+        this.team = team;
+        team.registerGameTeam(this);
+    }
+
 }

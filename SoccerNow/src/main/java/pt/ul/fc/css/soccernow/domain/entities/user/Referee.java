@@ -75,4 +75,12 @@ public class Referee extends User {
                 "hasCertificate = " + getHasCertificate() + ", " +
                 "name = " + getName() + ")";
     }
+
+    public void registerPrimaryRefereeGame(Game refereeGame) {
+        this.primaryRefereeGames.add(refereeGame);
+    }
+
+    public void registerSecondaryRefereeGame(Game refereeGame) {
+        this.secondaryRefereeGames.add(refereeGame);
+    }
 }

@@ -132,4 +132,7 @@ public class Team extends SoftDeleteEntity {
         return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 
+    public void registerGameTeam(GameTeam gameTeam) {
+        gameTeams.add(gameTeam);
+    }
 }

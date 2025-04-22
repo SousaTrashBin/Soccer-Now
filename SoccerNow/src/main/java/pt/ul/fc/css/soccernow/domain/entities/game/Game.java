@@ -32,11 +32,11 @@ public class Game extends SoftDeleteEntity {
     @JoinColumn(name = "game_stats_id")
     private GameStats gameStats;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "primary_referee_id", nullable = false)
     private Referee primaryReferee;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(
             name = "game_secondaryReferees",
             joinColumns = @JoinColumn(name = "game_id"),
@@ -179,5 +179,25 @@ public class Game extends SoftDeleteEntity {
                 "happensIn = " + happensIn + ", " +
                 "isClosed = " + isClosed + ", " +
                 "tournament = " + tournament + ")";
+    }
+
+    public void registerPrimaryReferee(Referee primaryReferee) {
+        this.primaryReferee = primaryReferee;
+        primaryReferee.registerPrimaryRefereeGame(this);
+    }
+
+    public void registerSecondaryReferee(Referee secondaryReferee) {
+        this.secondaryReferees.add(secondaryReferee);
+        secondaryReferee.registerSecondaryRefereeGame(this);
+    }
+
+    public void registerGameTeamOne(GameTeam validatedGameTeamOne) {
+        this.gameTeamOne = validatedGameTeamOne;
+        validatedGameTeamOne.setGame(this);
+    }
+
+    public void registerGameTeamTwo(GameTeam validatedGameTeamTwo) {
+        this.gameTeamTwo = validatedGameTeamTwo;
+        validatedGameTeamTwo.setGame(this);
     }
 }

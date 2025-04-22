@@ -35,7 +35,7 @@ public class GameStats {
         this.playerGameStats = playerGameStats;
     }
 
-    public void addPlayerGameStats(PlayerGameStats playerGameStats) {
+    public void registerPlayerGameStats(PlayerGameStats playerGameStats) {
         this.playerGameStats.add(playerGameStats);
         playerGameStats.setGameStats(this);
     }

@@ -63,7 +63,7 @@ public class Player extends User {
                 .anyMatch(team -> team.hasPendingGamesWithPlayer(this));
     }
 
-    public void addGameStats(PlayerGameStats gameStats) {
+    public void registerGameStats(PlayerGameStats gameStats) {
         playerGameStats.add(gameStats);
         gameStats.setPlayer(this);
     }
