@@ -48,13 +48,13 @@ public class GameServiceImpl implements GameService {
         UpdatedAndValidatedRefereesResult refereesResult = updatedAndValidatedReferees(entity);
         Referee primaryReferee = refereesResult.primaryReferee;
         Set<Referee> secondaryReferees = refereesResult.secondaryReferees;
-        entity.setPrimaryReferee(primaryReferee);
-        entity.setSecondaryReferees(secondaryReferees);
+        entity.registerPrimaryReferee(primaryReferee);
+        secondaryReferees.forEach(entity::registerSecondaryReferee);
 
         GameTeam validatedGameTeamOne = prepareAndValidateGameTeam(entity.getGameTeamOne());
-        GameTeam validateGameTeamTwo = prepareAndValidateGameTeam(entity.getGameTeamTwo());
-        entity.setGameTeamOne(validatedGameTeamOne);
-        entity.setGameTeamTwo(validateGameTeamTwo);
+        GameTeam validatedGameTeamTwo = prepareAndValidateGameTeam(entity.getGameTeamTwo());
+        entity.registerGameTeamOne(validatedGameTeamOne);
+        entity.registerGameTeamTwo(validatedGameTeamTwo);
 
         return gameRepository.save(entity);
     }
@@ -90,7 +90,7 @@ public class GameServiceImpl implements GameService {
 
         gameTeam.getGamePlayers().forEach(gamePlayer -> gamePlayer.setPlayer(playerService.findNotDeletedById(gamePlayer.getPlayer().getId())));
         GameTeam newGameTeam = new GameTeam();
-        newGameTeam.setTeam(team);
+        newGameTeam.registerTeam(team);
         newGameTeam.setGamePlayers(gameTeam.getGamePlayers());
         return newGameTeam;
     }
@@ -171,8 +171,8 @@ public class GameServiceImpl implements GameService {
             playerGameStats.setScoredGoals(scoredGoals);
             playerGameStats.setGivenCard(playerStat.getGivenCard());
 
-            saved.addGameStats(playerGameStats);
-            gameStats.addPlayerGameStats(playerGameStats);
+            saved.registerGameStats(playerGameStats);
+            gameStats.registerPlayerGameStats(playerGameStats);
 
             goalsScored = goalsScored.addGoalsToPlayer(saved, game, scoredGoals);
             playersInGame.remove(saved);
@@ -180,8 +180,8 @@ public class GameServiceImpl implements GameService {
 
         for (Player player : playersInGame) {
             PlayerGameStats defaultStats = new PlayerGameStats();
-            player.addGameStats(defaultStats);
-            gameStats.addPlayerGameStats(defaultStats);
+            player.registerGameStats(defaultStats);
+            gameStats.registerPlayerGameStats(defaultStats);
         }
 
         gameStats.setTeamOneGoals(goalsScored.teamOneGoals());

@@ -63,7 +63,6 @@ public class PlayerGameStats {
         this.id = id;
     }
 
-
     public Player getPlayer() {
         return player;
     }
