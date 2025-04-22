@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.exception.BadRequestException;
+import pt.ul.fc.css.soccernow.exception.ResourceCouldNotBeDeletedException;
 import pt.ul.fc.css.soccernow.exception.ResourceDoesNotExistException;
 import pt.ul.fc.css.soccernow.repository.TeamRepository;
 import pt.ul.fc.css.soccernow.service.PlayerService;
@@ -103,7 +104,7 @@ public class TeamServiceImpl implements TeamService {
     public void softDelete(UUID teamId) {
         Team teamToDelete = findNotDeletedById(teamId);
         if (teamToDelete.hasPendingGames() || teamToDelete.hasPendingTournaments()) {
-            throw new BadRequestException("Team " + teamToDelete.getName() + " has pending games or tournaments");
+            throw new ResourceCouldNotBeDeletedException("Referee", "id", teamId);
         }
 
         teamToDelete.delete();
