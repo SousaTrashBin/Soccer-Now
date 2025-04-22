@@ -14,6 +14,7 @@ import pt.ul.fc.css.soccernow.domain.entities.game.GameTeam;
 import pt.ul.fc.css.soccernow.domain.entities.game.PlayerGameStats;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.domain.entities.user.Referee;
+import pt.ul.fc.css.soccernow.exception.ResourceCouldNotBeDeletedException;
 import pt.ul.fc.css.soccernow.util.CardEnum;
 
 import java.time.LocalDateTime;
@@ -21,8 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static pt.ul.fc.css.soccernow.utils.GameTeamDataUtil.createAddress;
 import static pt.ul.fc.css.soccernow.utils.GameTeamDataUtil.createGameTeam;
 import static pt.ul.fc.css.soccernow.utils.PlayerTestDataUtil.getPlayers;
@@ -74,14 +74,12 @@ public class GameServiceIntegrationTest {
         GameTeam gameTeamTwo = createGameTeam(teams.get(1));
         game.setGameTeamTwo(gameTeamTwo);
 
-        game.setPrimaryReferee(uncertificatedReferees.get(7));
+        Referee primaryReferee = uncertificatedReferees.get(7);
+        game.setPrimaryReferee(primaryReferee);
         game.setSecondaryReferees(new HashSet<>(certificatedReferees.subList(0, 4)));
         game.setLocatedIn(createAddress());
         game.setHappensIn(LocalDateTime.now().plusYears(10));
         Game savedGame = underTest.add(game);
-        System.out.println(savedGame.getGameTeamTwo());
-        System.out.println(savedGame.getGameTeamOne().getGamePlayers().stream().findAny().get());
-        System.out.printf("Saved game %s\n", savedGame.getId());
 
         Set<PlayerGameStats> playerStats = new HashSet<>();
 
@@ -91,6 +89,10 @@ public class GameServiceIntegrationTest {
         teamOneStats.setGivenCard(CardEnum.YELLOW);
         teamOneStats.setScoredGoals(10);
         playerStats.add(teamOneStats);
+
+        assertThrows(ResourceCouldNotBeDeletedException.class, () -> teamService.softDelete(savedGame.getGameTeamOne().getTeam().getId()));
+        assertThrows(ResourceCouldNotBeDeletedException.class, () -> refereeService.softDelete(primaryReferee.getId()));
+        assertThrows(ResourceCouldNotBeDeletedException.class, () -> playerService.softDelete(teamOnePlayer.getId()));
 
         Player teamTwoPlayer = game.getGameTeamTwo().getPlayers().stream().findFirst().get();
         PlayerGameStats playerTwoStats = new PlayerGameStats();
@@ -102,8 +104,6 @@ public class GameServiceIntegrationTest {
         Game closedGame = underTest.closeGame(savedGame.getId(), playerStats);
 
         assertNotNull(closedGame.getGameStats());
-        System.out.println(closedGame.getGameStats().getPlayerGameStats());
         assertEquals(Integer.valueOf(25), closedGame.getGameStats().getTeamOneGoals() + closedGame.getGameStats().getTeamTwoGoals());
-        System.out.println(playerService.findById(game.getPlayers().stream().skip(0).findFirst().get().getId()).getPlayerGameStats());
     }
 }
