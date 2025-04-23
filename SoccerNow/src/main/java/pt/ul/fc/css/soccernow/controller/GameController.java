@@ -4,10 +4,12 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pt.ul.fc.css.soccernow.domain.dto.games.reference.GameDto;
+import pt.ul.fc.css.soccernow.domain.dto.PlayerGameStatsDTO;
+import pt.ul.fc.css.soccernow.domain.dto.games.GameDTO;
 import pt.ul.fc.css.soccernow.service.GameService;
 
 import java.util.List;
+import java.util.UUID;
 
 @Tag(name = "Game", description = "Game operations")
 @RestController
@@ -22,14 +24,14 @@ public class GameController {
 
     @PostMapping
     @ApiOperation(value = "Register a game", notes = "Returns the game registered")
-    public ResponseEntity<GameDto> registerGame(@RequestBody GameDto game) {
+    public ResponseEntity<GameDTO> registerGame(@RequestBody GameDTO game) {
         // TODO
         return null;
     }
 
     @PostMapping("/{gameId}/result")
     @ApiOperation(value = "Register the result of a game with given ID", notes = "Returns the updated game")
-    public ResponseEntity<GameDto> setGameResultById(@PathVariable("gameId") long gameId, @RequestBody GameDto game) {
+    public ResponseEntity<GameDTO> closeGameById(@PathVariable("gameId") UUID gameId, @RequestBody List<PlayerGameStatsDTO> game) {
         // TODO
         return null;
     }
