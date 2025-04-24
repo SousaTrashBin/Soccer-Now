@@ -170,6 +170,7 @@ public class GameServiceImpl implements GameService {
             Integer scoredGoals = playerStat.getScoredGoals();
             playerGameStats.setScoredGoals(scoredGoals);
             playerGameStats.setGivenCard(playerStat.getGivenCard());
+            playerGameStats.setGame(game);
 
             saved.registerGameStats(playerGameStats);
             gameStats.registerPlayerGameStats(playerGameStats);

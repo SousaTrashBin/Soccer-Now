@@ -24,7 +24,7 @@ public class GameStats {
     private Integer teamTwoGoals = 0;
 
     @Size(min = 10, max = 10)
-    @OneToMany(mappedBy = "gameStats", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<PlayerGameStats> playerGameStats = new LinkedHashSet<>();
 
     public Set<PlayerGameStats> getPlayerGameStats() {
@@ -37,7 +37,6 @@ public class GameStats {
 
     public void registerPlayerGameStats(PlayerGameStats playerGameStats) {
         this.playerGameStats.add(playerGameStats);
-        playerGameStats.setGameStats(this);
     }
 
     public Integer getTeamTwoGoals() {

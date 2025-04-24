@@ -17,26 +17,26 @@ public class PlayerGameStats {
     private UUID id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "given_card")
+    @Column(name = "given_card", nullable = false)
     private CardEnum givenCard = CardEnum.NONE;
 
     @Column(name = "scored_goals", nullable = false)
     private Integer scoredGoals = 0;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
-    @JoinColumn(name = "game_stats_id", nullable = false)
-    private GameStats gameStats;
-
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "player_id")
     private Player player;
 
-    public GameStats getGameStats() {
-        return gameStats;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "game_id", nullable = false)
+    private Game game;
+
+    public Game getGame() {
+        return game;
     }
 
-    public void setGameStats(GameStats gameStats) {
-        this.gameStats = gameStats;
+    public void setGame(Game game) {
+        this.game = game;
     }
 
     public Integer getScoredGoals() {
@@ -93,7 +93,6 @@ public class PlayerGameStats {
                 "id = " + id + ", " +
                 "givenCard = " + givenCard + ", " +
                 "scoredGoals = " + scoredGoals + ", " +
-                "gameStats = " + gameStats + ", " +
                 "player = " + player + ")";
     }
 }
