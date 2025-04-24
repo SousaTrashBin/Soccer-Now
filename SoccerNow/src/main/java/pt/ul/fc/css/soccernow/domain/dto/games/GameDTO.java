@@ -16,6 +16,7 @@ import java.util.*;
  * DTO for {@link pt.ul.fc.css.soccernow.domain.entities.game.Game}
  */
 public class GameDTO implements Serializable {
+    private TournamentInfoDTO tournament;
     private UUID id;
     private GameTeamInfoDTO gameTeamOne;
     private GameTeamInfoDTO gameTeamTwo;
@@ -26,12 +27,13 @@ public class GameDTO implements Serializable {
     private LocalDateTime happensIn;
     @NotNull
     private Boolean isClosed = false;
-    private TournamentInfoDTO tournament;
 
     public GameDTO() {
     }
 
-    public GameDTO(UUID id, GameTeamInfoDTO gameTeamOne, GameTeamInfoDTO gameTeamTwo, GameStatsInfoDTO gameStats, RefereeInfoDTO primaryReferee, Set<RefereeInfoDTO> secondaryReferees, AddressDTO locatedIn, LocalDateTime happensIn, Boolean isClosed, TournamentInfoDTO tournament) {
+    public GameDTO(
+            UUID tournamentId,
+            Boolean tournamentIsFinished, UUID id, GameTeamInfoDTO gameTeamOne, GameTeamInfoDTO gameTeamTwo, GameStatsInfoDTO gameStats, RefereeInfoDTO primaryReferee, Set<RefereeInfoDTO> secondaryReferees, AddressDTO locatedIn, LocalDateTime happensIn, Boolean isClosed) {
         this.id = id;
         this.gameTeamOne = gameTeamOne;
         this.gameTeamTwo = gameTeamTwo;
@@ -41,7 +43,6 @@ public class GameDTO implements Serializable {
         this.locatedIn = locatedIn;
         this.happensIn = happensIn;
         this.isClosed = isClosed;
-        this.tournament = tournament;
     }
 
     public UUID getId() {
@@ -125,15 +126,6 @@ public class GameDTO implements Serializable {
         return this;
     }
 
-    public TournamentInfoDTO getTournament() {
-        return tournament;
-    }
-
-    public GameDTO setTournament(TournamentInfoDTO tournament) {
-        this.tournament = tournament;
-        return this;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -147,13 +139,12 @@ public class GameDTO implements Serializable {
                 Objects.equals(this.secondaryReferees, entity.secondaryReferees) &&
                 Objects.equals(this.locatedIn, entity.locatedIn) &&
                 Objects.equals(this.happensIn, entity.happensIn) &&
-                Objects.equals(this.isClosed, entity.isClosed) &&
-                Objects.equals(this.tournament, entity.tournament);
+                Objects.equals(this.isClosed, entity.isClosed);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, gameTeamOne, gameTeamTwo, gameStats, primaryReferee, secondaryReferees, locatedIn, happensIn, isClosed, tournament);
+        return Objects.hash(id, gameTeamOne, gameTeamTwo, gameStats, primaryReferee, secondaryReferees, locatedIn, happensIn, isClosed);
     }
 
     @Override
@@ -167,8 +158,16 @@ public class GameDTO implements Serializable {
                 "secondaryReferees = " + secondaryReferees + ", " +
                 "locatedIn = " + locatedIn + ", " +
                 "happensIn = " + happensIn + ", " +
-                "isClosed = " + isClosed + ", " +
-                "tournament = " + tournament + ")";
+                "isClosed = " + isClosed + ", )";
+    }
+
+    public TournamentInfoDTO getTournament() {
+        return tournament;
+    }
+
+    public GameDTO setTournament(TournamentInfoDTO tournament) {
+        this.tournament = tournament;
+        return this;
     }
 
     /**
@@ -748,7 +747,6 @@ public class GameDTO implements Serializable {
      */
     public static class TournamentInfoDTO implements Serializable {
         private UUID id;
-        @NotNull
         private Boolean isFinished = false;
 
         public TournamentInfoDTO() {
@@ -763,18 +761,16 @@ public class GameDTO implements Serializable {
             return id;
         }
 
-        public TournamentInfoDTO setId(UUID id) {
+        public void setId(UUID id) {
             this.id = id;
-            return this;
         }
 
         public Boolean getIsFinished() {
             return isFinished;
         }
 
-        public TournamentInfoDTO setIsFinished(Boolean isFinished) {
+        public void setIsFinished(Boolean isFinished) {
             this.isFinished = isFinished;
-            return this;
         }
 
         @Override
