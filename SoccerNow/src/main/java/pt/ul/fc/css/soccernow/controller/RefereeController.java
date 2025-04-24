@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pt.ul.fc.css.soccernow.domain.dto.user.RefereeDTO;
+import pt.ul.fc.css.soccernow.mapper.RefereeMapper;
 import pt.ul.fc.css.soccernow.service.RefereeService;
 
 import java.util.List;
@@ -16,9 +17,12 @@ import java.util.UUID;
 public class RefereeController {
 
     private final RefereeService refereeService;
+    private final RefereeMapper refereeMapper;
 
-    public RefereeController(RefereeService refereeService) {
+    public RefereeController(RefereeService refereeService,
+                             RefereeMapper refereeMapper) {
         this.refereeService = refereeService;
+        this.refereeMapper = refereeMapper;
     }
 
     @PostMapping

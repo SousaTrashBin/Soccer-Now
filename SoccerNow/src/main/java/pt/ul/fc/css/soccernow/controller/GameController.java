@@ -4,8 +4,9 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pt.ul.fc.css.soccernow.domain.dto.PlayerGameStatsDTO;
 import pt.ul.fc.css.soccernow.domain.dto.games.GameDTO;
+import pt.ul.fc.css.soccernow.domain.dto.games.PlayerGameStatsDTO;
+import pt.ul.fc.css.soccernow.mapper.PlayerGameStatsMapper;
 import pt.ul.fc.css.soccernow.service.GameService;
 
 import java.util.List;
@@ -17,9 +18,12 @@ import java.util.UUID;
 public class GameController {
 
     private final GameService gameService;
+    private final PlayerGameStatsMapper playerGameStatsMapper;
 
-    public GameController(GameService gameService) {
+    public GameController(GameService gameService,
+                          PlayerGameStatsMapper playerGameStatsMapper) {
         this.gameService = gameService;
+        this.playerGameStatsMapper = playerGameStatsMapper;
     }
 
     @PostMapping
@@ -31,7 +35,7 @@ public class GameController {
 
     @PostMapping("/{gameId}/result")
     @ApiOperation(value = "Register the result of a game with given ID", notes = "Returns the updated game")
-    public ResponseEntity<GameDTO> closeGameById(@PathVariable("gameId") UUID gameId, @RequestBody List<PlayerGameStatsDTO> game) {
+    public ResponseEntity<GameDTO> closeGameById(@PathVariable("gameId") UUID gameId, @RequestBody List<PlayerGameStatsDTO> playerGameStatsDTOS) {
         // TODO
         return null;
     }

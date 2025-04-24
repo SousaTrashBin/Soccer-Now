@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pt.ul.fc.css.soccernow.domain.dto.TeamDTO;
+import pt.ul.fc.css.soccernow.mapper.TeamMapper;
 import pt.ul.fc.css.soccernow.service.TeamService;
 
 import java.util.List;
@@ -16,9 +17,11 @@ import java.util.UUID;
 public class TeamController {
 
     private final TeamService teamService;
+    private final TeamMapper teamMapper;
 
-    public TeamController(TeamService teamService) {
+    public TeamController(TeamService teamService, TeamMapper teamMapper) {
         this.teamService = teamService;
+        this.teamMapper = teamMapper;
     }
 
     @PostMapping
