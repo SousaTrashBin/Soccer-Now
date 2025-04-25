@@ -2,6 +2,7 @@ package pt.ul.fc.css.soccernow.controller;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import pt.ul.fc.css.soccernow.service.TeamService;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 @Tag(name = "Team", description = "Team operations")
 @RestController
@@ -56,10 +58,15 @@ public class TeamController {
 
     @GetMapping
     @ApiOperation(value = "Get all teams", notes = "Returns a list of all teams")
-    public ResponseEntity<List<TeamDTO>> getAllTeams() {
+    public ResponseEntity<List<TeamDTO>> getAllTeams(@RequestParam(name = "maxPlayers", required = false) @Min(0) Integer maxPlayers) {
+        Predicate<TeamDTO> filterPredicate = maxPlayers == null
+                ? team -> true
+                : team -> team.getPlayers().size() <= maxPlayers;
+
         List<TeamDTO> teams = teamService.findAllNotDeleted()
                                          .stream()
                                          .map(teamMapper::toDTO)
+                .filter(filterPredicate)
                                          .toList();
         return ResponseEntity.ok(teams);
     }
@@ -85,14 +92,14 @@ public class TeamController {
 
     @DeleteMapping("/{teamId}/players/{playerId}")
     @ApiOperation(value = "Removes a player from a team")
-    public ResponseEntity<TeamDTO> removePlayerFromTeam(
+    public ResponseEntity<String> removePlayerFromTeam(
             @PathVariable("teamId") @NotNull UUID teamId,
             @PathVariable("playerId") @NotNull UUID playerId
     ) {
         Team team = teamService.findNotDeletedById(teamId);
         Player player = playerService.findNotDeletedById(playerId);
         teamService.removePlayerFromTeam(player, team);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Player removed from team successfully.");
     }
 
     @GetMapping("/{teamId}/players")
