@@ -2,7 +2,9 @@ package pt.ul.fc.css.soccernow.controller;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pt.ul.fc.css.soccernow.domain.dto.games.GameDTO;
 import pt.ul.fc.css.soccernow.domain.dto.games.PlayerGameStatsDTO;
@@ -28,14 +30,17 @@ public class GameController {
 
     @PostMapping
     @ApiOperation(value = "Register a game", notes = "Returns the game registered")
-    public ResponseEntity<GameDTO> registerGame(@RequestBody GameDTO game) {
+    public ResponseEntity<GameDTO> registerGame(@RequestBody @Validated @NotNull GameDTO game) {
         // TODO
         return null;
     }
 
     @PostMapping("/{gameId}/result")
     @ApiOperation(value = "Register the result of a game with given ID", notes = "Returns the updated game")
-    public ResponseEntity<GameDTO> closeGameById(@PathVariable("gameId") UUID gameId, @RequestBody List<PlayerGameStatsDTO> playerGameStatsDTOS) {
+    public ResponseEntity<GameDTO> closeGameById(
+            @PathVariable("gameId") @NotNull UUID gameId,
+            @RequestBody @Validated @NotNull List<PlayerGameStatsDTO> playerGameStatsDTOS
+    ) {
         // TODO
         return null;
     }

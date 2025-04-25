@@ -33,7 +33,7 @@ public class RefereeController {
 
     @PostMapping
     @ApiOperation(value = "Register a referee", notes = "Returns the referee registered")
-    public ResponseEntity<RefereeDTO> registerReferee(@RequestBody RefereeDTO refereeDTO) {
+    public ResponseEntity<RefereeDTO> registerReferee(@RequestBody @Validated @NotNull RefereeDTO refereeDTO) {
         if (refereeDTO.getName() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -44,7 +44,7 @@ public class RefereeController {
 
     @GetMapping("/{refereeId}")
     @ApiOperation(value = "Get referee by ID", notes = "Returns a referee by its ID")
-    public ResponseEntity<RefereeDTO> getRefereeById(@PathVariable("refereeId") UUID refereeId) {
+    public ResponseEntity<RefereeDTO> getRefereeById(@PathVariable("refereeId") @NotNull UUID refereeId) {
         Referee referee = refereeService.findNotDeletedById(refereeId);
         return ResponseEntity.ok(refereeMapper.toDTO(referee));
     }
@@ -61,7 +61,7 @@ public class RefereeController {
 
     @DeleteMapping("/{refereeId}")
     @ApiOperation(value = "Delete a referee with given ID", notes = "Returns the deleted referee")
-    public ResponseEntity<RefereeDTO> deleteRefereeById(@PathVariable("refereeId") UUID refereeId) {
+    public ResponseEntity<RefereeDTO> deleteRefereeById(@PathVariable("refereeId") @NotNull UUID refereeId) {
         Referee referee = refereeService.findNotDeletedById(refereeId);
         refereeService.softDelete(refereeId);
         return ResponseEntity.ok(refereeMapper.toDTO(referee));
@@ -70,7 +70,7 @@ public class RefereeController {
     @PutMapping("/{refereeId}")
     @ApiOperation(value = "Update a referee with given ID", notes = "Returns the updated referee")
     public ResponseEntity<RefereeDTO> updateRefereeById(
-            @PathVariable("refereeId") UUID refereeId,
+            @PathVariable("refereeId") @NotNull UUID refereeId,
             @RequestBody @Validated @NotNull RefereeDTO refereeDTO
     ) {
         Referee referee = refereeMapper.toEntity(refereeDTO);

@@ -50,7 +50,7 @@ public class PlayerController {
 
     @GetMapping("/{playerId}")
     @ApiOperation(value = "Get player by ID", notes = "Returns a player by its ID")
-    public ResponseEntity<PlayerDTO> getPlayerById(@PathVariable("playerId") UUID playerId) {
+    public ResponseEntity<PlayerDTO> getPlayerById(@PathVariable("playerId") @NotNull UUID playerId) {
         Player player = playerService.findNotDeletedById(playerId);
         return ResponseEntity.ok(playerMapper.toDTO(player));
     }
@@ -67,7 +67,7 @@ public class PlayerController {
 
     @DeleteMapping("/{playerId}")
     @ApiOperation(value = "Delete a player with given ID", notes = "Returns the deleted player")
-    public ResponseEntity<PlayerDTO> deletePlayerById(@PathVariable("playerId") UUID playerId) {
+    public ResponseEntity<PlayerDTO> deletePlayerById(@PathVariable("playerId") @NotNull UUID playerId) {
         Player player = playerService.findNotDeletedById(playerId);
         playerService.softDelete(playerId);
         return ResponseEntity.ok(playerMapper.toDTO(player));
@@ -76,7 +76,7 @@ public class PlayerController {
     @PutMapping("/{playerId}")
     @ApiOperation(value = "Update a player with given ID", notes = "Returns the updated player")
     public ResponseEntity<PlayerDTO> updatePlayerById(
-            @PathVariable("playerId") UUID playerId,
+            @PathVariable("playerId") @NotNull UUID playerId,
             @RequestBody @Validated @NotNull PlayerDTO playerDTO
     ) {
         Player player = playerMapper.toEntity(playerDTO);
@@ -86,7 +86,7 @@ public class PlayerController {
 
     @GetMapping("/{playerId}/stats")
     @ApiOperation(value = "Get player's stats", notes = "Returns a player's stats")
-    public ResponseEntity<List<PlayerGameStatsDTO>> getPlayerStats(@PathVariable("playerId") UUID playerId) {
+    public ResponseEntity<List<PlayerGameStatsDTO>> getPlayerStats(@PathVariable("playerId") @NotNull UUID playerId) {
         Player player = playerService.findNotDeletedById(playerId);
         List<PlayerGameStatsDTO> stats = player.getPlayerGameStats()
                                                .stream()
@@ -97,7 +97,7 @@ public class PlayerController {
 
     @GetMapping("/{playerId}/teams")
     @ApiOperation(value = "Get player's teams", notes = "Returns a player's teams")
-    public ResponseEntity<List<TeamDTO>> getPlayerTeams(@PathVariable("playerId") UUID playerId) {
+    public ResponseEntity<List<TeamDTO>> getPlayerTeams(@PathVariable("playerId") @NotNull UUID playerId) {
         Player player = playerService.findNotDeletedById(playerId);
         List<TeamDTO> teams = player.getTeams()
                                     .stream()

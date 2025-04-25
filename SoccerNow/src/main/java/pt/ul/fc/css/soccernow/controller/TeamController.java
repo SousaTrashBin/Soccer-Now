@@ -38,7 +38,7 @@ public class TeamController {
 
     @PostMapping
     @ApiOperation(value = "Register a team", notes = "Returns the team registered")
-    public ResponseEntity<TeamDTO> registerTeam(@RequestBody TeamDTO teamDTO) {
+    public ResponseEntity<TeamDTO> registerTeam(@RequestBody @Validated @NotNull TeamDTO teamDTO) {
         if (teamDTO.getName() == null){
             return ResponseEntity.badRequest().build();
         }
@@ -49,7 +49,7 @@ public class TeamController {
 
     @GetMapping("/{teamId}")
     @ApiOperation(value = "Get team by ID", notes = "Returns a team by its ID")
-    public ResponseEntity<TeamDTO> getTeamById(@PathVariable("teamId") UUID teamId) {
+    public ResponseEntity<TeamDTO> getTeamById(@PathVariable("teamId") @NotNull UUID teamId) {
         Team team = teamService.findNotDeletedById(teamId);
         return ResponseEntity.ok(teamMapper.toDTO(team));
     }
@@ -66,7 +66,7 @@ public class TeamController {
 
     @DeleteMapping("/{teamId}")
     @ApiOperation(value = "Delete a team with given ID", notes = "Returns the deleted team")
-    public ResponseEntity<TeamDTO> deleteTeamById(@PathVariable("teamId") UUID teamId) {
+    public ResponseEntity<TeamDTO> deleteTeamById(@PathVariable("teamId") @NotNull UUID teamId) {
         Team team = teamService.findNotDeletedById(teamId);
         teamService.softDelete(teamId);
         return ResponseEntity.ok(teamMapper.toDTO(team));
@@ -75,7 +75,7 @@ public class TeamController {
     @PutMapping("/{teamId}")
     @ApiOperation(value = "Update a team with given ID", notes = "Returns the updated team")
     public ResponseEntity<TeamDTO> updateTeamById(
-            @PathVariable("teamId") UUID teamId,
+            @PathVariable("teamId") @NotNull UUID teamId,
             @RequestBody @Validated @NotNull TeamDTO teamDTO
     ) {
         Team team = teamMapper.toEntity(teamDTO);
@@ -86,8 +86,8 @@ public class TeamController {
     @DeleteMapping("/{teamId}/players/{playerId}")
     @ApiOperation(value = "Removes a player from a team")
     public ResponseEntity<TeamDTO> removePlayerFromTeam(
-            @PathVariable("teamId") UUID teamId,
-            @PathVariable("playerId") UUID playerId
+            @PathVariable("teamId") @NotNull UUID teamId,
+            @PathVariable("playerId") @NotNull UUID playerId
     ) {
         Team team = teamService.findNotDeletedById(teamId);
         Player player = playerService.findNotDeletedById(playerId);
@@ -97,7 +97,7 @@ public class TeamController {
 
     @GetMapping("/{teamId}/players")
     @ApiOperation(value = "Get the players from a team by ID", notes = "Returns the players from a team by its ID")
-    public ResponseEntity<List<PlayerDTO>> getTeamPlayers(@PathVariable("teamId") UUID teamId) {
+    public ResponseEntity<List<PlayerDTO>> getTeamPlayers(@PathVariable("teamId") @NotNull UUID teamId) {
         Team team = teamService.findNotDeletedById(teamId);
         List<PlayerDTO> players = team.getPlayers()
                                       .stream()
@@ -108,7 +108,7 @@ public class TeamController {
 
 //    @GetMapping("/{teamId}/placements")
 //    @ApiOperation(value = "Get the placements from a team by ID", notes = "Returns the placements from a team by its ID")
-//    public ResponseEntity<List<PlacementsDTO>> getTeamPlayers(@PathVariable("teamId") UUID teamId) {
+//    public ResponseEntity<List<PlacementsDTO>> getTeamPlayers(@PathVariable("teamId") @NotNull UUID teamId) {
 //        Team team = teamService.findNotDeletedById(teamId);
 //        List<PlacementsDTO> placements = team.getPlacements()
 //                .stream()
