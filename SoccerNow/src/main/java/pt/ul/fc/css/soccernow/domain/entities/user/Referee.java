@@ -10,6 +10,7 @@ import pt.ul.fc.css.soccernow.domain.entities.game.Game;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 @Entity
@@ -50,6 +51,11 @@ public class Referee extends User {
     public boolean hasAnyPendingGames() {
         return primaryRefereeGames.stream().anyMatch(Predicate.not(Game::isClosed))
                 || secondaryRefereeGames.stream().anyMatch(Predicate.not(Game::isClosed));
+    }
+
+    public long getClosedGamesCount() {
+        Function<Set<Game>, Long> getClosedGames = set -> set.stream().filter(Game::isClosed).count();
+        return getClosedGames.apply(primaryRefereeGames) + getClosedGames.apply(secondaryRefereeGames);
     }
 
     @Override
