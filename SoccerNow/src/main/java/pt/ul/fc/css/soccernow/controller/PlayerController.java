@@ -2,6 +2,7 @@ package pt.ul.fc.css.soccernow.controller;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,15 +11,16 @@ import org.springframework.web.bind.annotation.*;
 import pt.ul.fc.css.soccernow.domain.dto.TeamDTO;
 import pt.ul.fc.css.soccernow.domain.dto.games.PlayerGameStatsDTO;
 import pt.ul.fc.css.soccernow.domain.dto.user.PlayerDTO;
-import pt.ul.fc.css.soccernow.domain.entities.Team;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.mapper.PlayerGameStatsMapper;
 import pt.ul.fc.css.soccernow.mapper.PlayerMapper;
 import pt.ul.fc.css.soccernow.mapper.TeamMapper;
 import pt.ul.fc.css.soccernow.service.PlayerService;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Tag(name = "Player", description = "Player operations")
 @RestController
@@ -57,11 +59,23 @@ public class PlayerController {
 
     @GetMapping
     @ApiOperation(value = "Get all players", notes = "Returns a list of all players")
-    public ResponseEntity<List<PlayerDTO>> getAllPlayers() {
-        List<PlayerDTO> players = playerService.findAllNotDeleted()
-                                               .stream()
-                                               .map(playerMapper::toDTO)
-                                               .toList();
+    public ResponseEntity<List<PlayerDTO>> getAllPlayers(@RequestParam(name = "size", required = false) @Min(0) Integer size,
+                                                         @RequestParam(name = "order", required = false) String order) {
+        Comparator<Player> redCardComparator = Comparator.comparing(Player::getRedCardCount);
+        Comparator<Player> playerComparator = switch (order) {
+            case "asc" -> redCardComparator.reversed();
+            case "dsc" -> redCardComparator;
+            default -> null;
+        };
+
+        Stream<Player> playerStream = playerService.findAllNotDeleted().stream();
+        if (playerComparator != null) {
+            playerStream = playerStream.sorted(playerComparator);
+        }
+
+        Stream<PlayerDTO> playerDTOStream = playerStream.map(playerMapper::toDTO);
+        List<PlayerDTO> players = size != null ? playerDTOStream.limit(size).toList() : playerDTOStream.toList();
+
         return ResponseEntity.ok(players);
     }
 
