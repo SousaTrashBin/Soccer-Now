@@ -79,6 +79,7 @@ public class PlayerController {
             @PathVariable("playerId") @NotNull UUID playerId,
             @RequestBody @Validated @NotNull PlayerDTO playerDTO
     ) {
+        playerDTO.setId(playerId);
         Player player = playerMapper.toEntity(playerDTO);
         Player savedPlayer = playerService.update(player);
         return ResponseEntity.ok(playerMapper.toDTO(savedPlayer));

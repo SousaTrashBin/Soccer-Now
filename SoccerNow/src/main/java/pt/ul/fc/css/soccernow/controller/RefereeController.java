@@ -73,6 +73,7 @@ public class RefereeController {
             @PathVariable("refereeId") @NotNull UUID refereeId,
             @RequestBody @Validated @NotNull RefereeDTO refereeDTO
     ) {
+        refereeDTO.setId(refereeId);
         Referee referee = refereeMapper.toEntity(refereeDTO);
         Referee savedReferee = refereeService.update(referee);
         return ResponseEntity.ok(refereeMapper.toDTO(savedReferee));

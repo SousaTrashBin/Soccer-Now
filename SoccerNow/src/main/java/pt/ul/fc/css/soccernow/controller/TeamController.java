@@ -78,6 +78,7 @@ public class TeamController {
             @PathVariable("teamId") @NotNull UUID teamId,
             @RequestBody @Validated @NotNull TeamDTO teamDTO
     ) {
+        teamDTO.setId(teamId);
         Team team = teamMapper.toEntity(teamDTO);
         Team savedTeam = teamService.update(team);
         return ResponseEntity.ok(teamMapper.toDTO(savedTeam));
