@@ -7,7 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import pt.ul.fc.css.soccernow.domain.dto.TeamDTO;
 import pt.ul.fc.css.soccernow.domain.dto.user.PlayerDTO;
+import pt.ul.fc.css.soccernow.domain.entities.Team;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.mapper.PlayerMapper;
 import pt.ul.fc.css.soccernow.service.PlayerService;
@@ -42,28 +44,36 @@ public class PlayerController {
     @GetMapping("/{playerId}")
     @ApiOperation(value = "Get player by ID", notes = "Returns a player by its ID")
     public ResponseEntity<PlayerDTO> getPlayerById(@PathVariable("playerId") UUID playerId) {
-        // TODO
-        return null;
+        Player player = playerService.findNotDeletedById(playerId);
+        return ResponseEntity.ok(playerMapper.toDTO(player));
     }
 
     @GetMapping
     @ApiOperation(value = "Get all players", notes = "Returns a list of all players")
     public ResponseEntity<List<PlayerDTO>> getAllPlayers() {
-        // TODO
-        return null;
+        List<PlayerDTO> players = playerService.findAllNotDeleted()
+                                               .stream()
+                                               .map(playerMapper::toDTO)
+                                               .toList();
+        return ResponseEntity.ok(players);
     }
 
     @DeleteMapping("/{playerId}")
     @ApiOperation(value = "Delete a player with given ID", notes = "Returns the deleted player")
     public ResponseEntity<PlayerDTO> deletePlayerById(@PathVariable("playerId") UUID playerId) {
-        // TODO
-        return null;
+        Player player = playerService.findNotDeletedById(playerId);
+        playerService.softDelete(playerId);
+        return ResponseEntity.ok(playerMapper.toDTO(player));
     }
 
     @PutMapping("/{playerId}")
     @ApiOperation(value = "Update a player with given ID", notes = "Returns the updated player")
-    public ResponseEntity<PlayerDTO> updatePlayerById(@PathVariable("playerId") UUID playerId) {
-        // TODO
-        return null;
+    public ResponseEntity<PlayerDTO> updatePlayerById(
+            @PathVariable("playerId") UUID playerId,
+            @RequestBody @Validated @NotNull PlayerDTO playerDTO
+    ) {
+        Player player = playerMapper.toEntity(playerDTO);
+        Player savedPlayer = playerService.update(player);
+        return ResponseEntity.ok(playerMapper.toDTO(savedPlayer));
     }
 }
