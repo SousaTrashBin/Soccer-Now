@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.hibernate.proxy.HibernateProxy;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
 import pt.ul.fc.css.soccernow.domain.entities.game.PlayerGameStats;
+import pt.ul.fc.css.soccernow.util.CardEnum;
 import pt.ul.fc.css.soccernow.util.FutsalPositionEnum;
 
 import java.util.*;
@@ -66,6 +67,18 @@ public class Player extends User {
     public void registerGameStats(PlayerGameStats gameStats) {
         playerGameStats.add(gameStats);
         gameStats.setPlayer(this);
+    }
+
+    public long getRedCardCount() {
+        return playerGameStats.stream().filter(playerStats -> playerStats.getGivenCard() == CardEnum.RED).count();
+    }
+
+    public long getYellowCardCount() {
+        return playerGameStats.stream().filter(playerStats -> playerStats.getGivenCard() == CardEnum.YELLOW).count();
+    }
+
+    public long getCardCount() {
+        return 2 * getRedCardCount() + getYellowCardCount();
     }
 
     @Override
