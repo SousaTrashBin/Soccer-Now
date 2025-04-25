@@ -2,20 +2,22 @@ package pt.ul.fc.css.soccernow.controller;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import pt.ul.fc.css.soccernow.domain.dto.user.PlayerDTO;
 import pt.ul.fc.css.soccernow.domain.dto.user.RefereeDTO;
-import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.domain.entities.user.Referee;
 import pt.ul.fc.css.soccernow.mapper.RefereeMapper;
 import pt.ul.fc.css.soccernow.service.RefereeService;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @Tag(name = "Referee", description = "Referee operations")
 @RestController
@@ -51,11 +53,22 @@ public class RefereeController {
 
     @GetMapping
     @ApiOperation(value = "Get all referees", notes = "Returns a list of all referees")
-    public ResponseEntity<List<RefereeDTO>> getAllReferees() {
-        List<RefereeDTO> referees = refereeService.findAllNotDeleted()
-                                                  .stream()
-                                                  .map(refereeMapper::toDTO)
-                                                  .toList();
+    public ResponseEntity<List<RefereeDTO>> getAllReferees(@RequestParam(name = "size", required = false) @Min(0) Integer size,
+                                                           @RequestParam(name = "order", required = false) String order) {
+        Comparator<Referee> officiatedGamesComparator = Comparator.comparing(Referee::getClosedGamesCount);
+        Optional<Comparator<Referee>> optionalRefereeComparator = switch (order) {
+            case "asc" -> Optional.of(officiatedGamesComparator.reversed());
+            case "dsc" -> Optional.of(officiatedGamesComparator);
+            default -> Optional.empty();
+        };
+
+        Stream<Referee> refereeStream = refereeService.findAllNotDeleted().stream();
+        if (optionalRefereeComparator.isPresent()) {
+            refereeStream = refereeStream.sorted(optionalRefereeComparator.get());
+        }
+
+        Stream<RefereeDTO> refereeDTOStream = refereeStream.map(refereeMapper::toDTO);
+        List<RefereeDTO> referees = size != null ? refereeDTOStream.limit(size).toList() : refereeDTOStream.toList();
         return ResponseEntity.ok(referees);
     }
 
