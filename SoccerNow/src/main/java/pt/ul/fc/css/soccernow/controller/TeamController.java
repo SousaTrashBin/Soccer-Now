@@ -65,11 +65,10 @@ public class TeamController {
     }
 
     @DeleteMapping("/{teamId}")
-    @ApiOperation(value = "Delete a team with given ID", notes = "Returns the deleted team")
-    public ResponseEntity<TeamDTO> deleteTeamById(@PathVariable("teamId") @NotNull UUID teamId) {
-        Team team = teamService.findNotDeletedById(teamId);
+    @ApiOperation(value = "Delete a team with given ID")
+    public ResponseEntity<String> deleteTeamById(@PathVariable("teamId") @NotNull UUID teamId) {
         teamService.softDelete(teamId);
-        return ResponseEntity.ok(teamMapper.toDTO(team));
+        return ResponseEntity.ok("Team deleted successfully");
     }
 
     @PutMapping("/{teamId}")

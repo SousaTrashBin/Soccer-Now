@@ -60,11 +60,10 @@ public class RefereeController {
     }
 
     @DeleteMapping("/{refereeId}")
-    @ApiOperation(value = "Delete a referee with given ID", notes = "Returns the deleted referee")
-    public ResponseEntity<RefereeDTO> deleteRefereeById(@PathVariable("refereeId") @NotNull UUID refereeId) {
-        Referee referee = refereeService.findNotDeletedById(refereeId);
+    @ApiOperation(value = "Delete a referee with given ID")
+    public ResponseEntity<String> deleteRefereeById(@PathVariable("refereeId") @NotNull UUID refereeId) {
         refereeService.softDelete(refereeId);
-        return ResponseEntity.ok(refereeMapper.toDTO(referee));
+        return ResponseEntity.ok("Referee deleted successfully");
     }
 
     @PutMapping("/{refereeId}")

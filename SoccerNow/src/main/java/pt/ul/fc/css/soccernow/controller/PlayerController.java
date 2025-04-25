@@ -66,11 +66,10 @@ public class PlayerController {
     }
 
     @DeleteMapping("/{playerId}")
-    @ApiOperation(value = "Delete a player with given ID", notes = "Returns the deleted player")
-    public ResponseEntity<PlayerDTO> deletePlayerById(@PathVariable("playerId") @NotNull UUID playerId) {
-        Player player = playerService.findNotDeletedById(playerId);
+    @ApiOperation(value = "Delete a player with given ID")
+    public ResponseEntity<String> deletePlayerById(@PathVariable("playerId") @NotNull UUID playerId) {
         playerService.softDelete(playerId);
-        return ResponseEntity.ok(playerMapper.toDTO(player));
+        return ResponseEntity.ok("Player deleted successfully");
     }
 
     @PutMapping("/{playerId}")
