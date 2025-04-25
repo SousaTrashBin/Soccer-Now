@@ -19,6 +19,7 @@ import pt.ul.fc.css.soccernow.service.PlayerService;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -43,7 +44,7 @@ public class PlayerController {
     @ApiOperation(value = "Register a player", notes = "Returns the player registered")
     public ResponseEntity<PlayerDTO> registerPlayer(@RequestBody @Validated @NotNull PlayerDTO playerDTO) {
         if (playerDTO.getName() == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // exception
         }
         Player player = playerMapper.toEntity(playerDTO);
         Player savedPlayer = playerService.add(player);
@@ -62,20 +63,19 @@ public class PlayerController {
     public ResponseEntity<List<PlayerDTO>> getAllPlayers(@RequestParam(name = "size", required = false) @Min(0) Integer size,
                                                          @RequestParam(name = "order", required = false) String order) {
         Comparator<Player> redCardComparator = Comparator.comparing(Player::getRedCardCount);
-        Comparator<Player> playerComparator = switch (order) {
-            case "asc" -> redCardComparator.reversed();
-            case "dsc" -> redCardComparator;
-            default -> null;
+        Optional<Comparator<Player>> optionalPlayerComparator = switch (order) {
+            case "asc" -> Optional.of(redCardComparator.reversed());
+            case "dsc" -> Optional.of(redCardComparator);
+            default -> Optional.empty();
         };
 
         Stream<Player> playerStream = playerService.findAllNotDeleted().stream();
-        if (playerComparator != null) {
-            playerStream = playerStream.sorted(playerComparator);
+        if (optionalPlayerComparator.isPresent()) {
+            playerStream = playerStream.sorted(optionalPlayerComparator.get());
         }
 
         Stream<PlayerDTO> playerDTOStream = playerStream.map(playerMapper::toDTO);
         List<PlayerDTO> players = size != null ? playerDTOStream.limit(size).toList() : playerDTOStream.toList();
-
         return ResponseEntity.ok(players);
     }
 
