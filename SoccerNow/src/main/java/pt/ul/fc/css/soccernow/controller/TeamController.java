@@ -8,8 +8,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pt.ul.fc.css.soccernow.domain.dto.TeamDTO;
+import pt.ul.fc.css.soccernow.domain.dto.user.PlayerDTO;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
+import pt.ul.fc.css.soccernow.domain.entities.user.Player;
+import pt.ul.fc.css.soccernow.mapper.PlayerMapper;
 import pt.ul.fc.css.soccernow.mapper.TeamMapper;
+import pt.ul.fc.css.soccernow.service.PlayerService;
 import pt.ul.fc.css.soccernow.service.TeamService;
 
 import java.util.List;
@@ -22,10 +26,14 @@ public class TeamController {
 
     private final TeamService teamService;
     private final TeamMapper teamMapper;
+    private final PlayerService playerService;
+    private final PlayerMapper playerMapper;
 
-    public TeamController(TeamService teamService, TeamMapper teamMapper) {
+    public TeamController(TeamService teamService, TeamMapper teamMapper, PlayerService playerService, PlayerMapper playerMapper) {
         this.teamService = teamService;
         this.teamMapper = teamMapper;
+        this.playerService = playerService;
+        this.playerMapper = playerMapper;
     }
 
     @PostMapping
@@ -74,4 +82,38 @@ public class TeamController {
         Team savedTeam = teamService.update(team);
         return ResponseEntity.ok(teamMapper.toDTO(savedTeam));
     }
+
+    @DeleteMapping("/{teamId}/players/{playerId}")
+    @ApiOperation(value = "Removes a player from a team")
+    public ResponseEntity<TeamDTO> removePlayerFromTeam(
+            @PathVariable("teamId") UUID teamId,
+            @PathVariable("playerId") UUID playerId
+    ) {
+        Team team = teamService.findNotDeletedById(teamId);
+        Player player = playerService.findNotDeletedById(playerId);
+        teamService.removePlayerFromTeam(player, team);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{teamId}/players")
+    @ApiOperation(value = "Get the players from a team by ID", notes = "Returns the players from a team by its ID")
+    public ResponseEntity<List<PlayerDTO>> getTeamPlayers(@PathVariable("teamId") UUID teamId) {
+        Team team = teamService.findNotDeletedById(teamId);
+        List<PlayerDTO> players = team.getPlayers()
+                                      .stream()
+                                      .map(playerMapper::toDTO)
+                                      .toList();
+        return ResponseEntity.ok(players);
+    }
+
+//    @GetMapping("/{teamId}/placements")
+//    @ApiOperation(value = "Get the placements from a team by ID", notes = "Returns the placements from a team by its ID")
+//    public ResponseEntity<List<PlacementsDTO>> getTeamPlayers(@PathVariable("teamId") UUID teamId) {
+//        Team team = teamService.findNotDeletedById(teamId);
+//        List<PlacementsDTO> placements = team.getPlacements()
+//                .stream()
+//                .map(placementMapper::toDTO)
+//                .toList();
+//        return ResponseEntity.ok(placements);
+//    }
 }

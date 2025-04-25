@@ -9,4 +9,6 @@ import pt.ul.fc.css.soccernow.domain.entities.game.PlayerGameStats;
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
 public interface PlayerGameStatsMapper {
     PlayerGameStats toEntity(PlayerGameStatsDTO playerGameStatsDTO);
+
+    PlayerGameStatsDTO toDTO(PlayerGameStats playerGameStats);
 }

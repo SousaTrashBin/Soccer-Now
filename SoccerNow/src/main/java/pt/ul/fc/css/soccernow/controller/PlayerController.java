@@ -8,10 +8,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pt.ul.fc.css.soccernow.domain.dto.TeamDTO;
+import pt.ul.fc.css.soccernow.domain.dto.games.PlayerGameStatsDTO;
 import pt.ul.fc.css.soccernow.domain.dto.user.PlayerDTO;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
+import pt.ul.fc.css.soccernow.mapper.PlayerGameStatsMapper;
 import pt.ul.fc.css.soccernow.mapper.PlayerMapper;
+import pt.ul.fc.css.soccernow.mapper.TeamMapper;
 import pt.ul.fc.css.soccernow.service.PlayerService;
 
 import java.util.List;
@@ -24,10 +27,14 @@ public class PlayerController {
 
     private final PlayerService playerService;
     private final PlayerMapper playerMapper;
+    private final PlayerGameStatsMapper playerGameStatsMapper;
+    private final TeamMapper teamMapper;
 
-    public PlayerController(PlayerService playerService, PlayerMapper playerMapper) {
+    public PlayerController(PlayerService playerService, PlayerMapper playerMapper, PlayerGameStatsMapper playerGameStatsMapper, TeamMapper teamMapper) {
         this.playerService = playerService;
         this.playerMapper = playerMapper;
+        this.playerGameStatsMapper = playerGameStatsMapper;
+        this.teamMapper = teamMapper;
     }
 
     @PostMapping
@@ -75,5 +82,27 @@ public class PlayerController {
         Player player = playerMapper.toEntity(playerDTO);
         Player savedPlayer = playerService.update(player);
         return ResponseEntity.ok(playerMapper.toDTO(savedPlayer));
+    }
+
+    @GetMapping("/{playerId}/stats")
+    @ApiOperation(value = "Get player's stats", notes = "Returns a player's stats")
+    public ResponseEntity<List<PlayerGameStatsDTO>> getPlayerStats(@PathVariable("playerId") UUID playerId) {
+        Player player = playerService.findNotDeletedById(playerId);
+        List<PlayerGameStatsDTO> stats = player.getPlayerGameStats()
+                                               .stream()
+                                               .map(playerGameStatsMapper::toDTO)
+                                               .toList();
+        return ResponseEntity.ok(stats);
+    }
+
+    @GetMapping("/{playerId}/teams")
+    @ApiOperation(value = "Get player's teams", notes = "Returns a player's teams")
+    public ResponseEntity<List<TeamDTO>> getPlayerTeams(@PathVariable("playerId") UUID playerId) {
+        Player player = playerService.findNotDeletedById(playerId);
+        List<TeamDTO> teams = player.getTeams()
+                                    .stream()
+                                    .map(teamMapper::toDTO)
+                                    .toList();
+        return ResponseEntity.ok(teams);
     }
 }
