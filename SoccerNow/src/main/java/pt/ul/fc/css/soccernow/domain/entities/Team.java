@@ -2,6 +2,7 @@ package pt.ul.fc.css.soccernow.domain.entities;
 
 import jakarta.persistence.*;
 import org.hibernate.proxy.HibernateProxy;
+import pt.ul.fc.css.soccernow.domain.entities.game.Game;
 import pt.ul.fc.css.soccernow.domain.entities.game.GameTeam;
 import pt.ul.fc.css.soccernow.domain.entities.tournament.Placement;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
@@ -113,6 +114,19 @@ public class Team extends SoftDeleteEntity {
 
     public boolean hasPendingTournaments() {
         return getPlacements().stream().anyMatch(Predicate.not(Placement::isFinished));
+    }
+
+    public long getPlayersCardCount() {
+        return players.stream().map(Player::getCardCount).reduce(0L, Long::sum);
+    }
+
+    public long getVictoryCount() {
+        return gameTeams.stream()
+                .map(GameTeam::getGame)
+                .map(Game::whoWonId)
+                .filter(Objects::nonNull)
+                .filter(id -> id.equals(getId()))
+                .count();
     }
 
 

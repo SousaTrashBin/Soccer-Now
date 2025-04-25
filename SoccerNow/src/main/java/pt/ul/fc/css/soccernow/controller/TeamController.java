@@ -17,7 +17,9 @@ import pt.ul.fc.css.soccernow.mapper.TeamMapper;
 import pt.ul.fc.css.soccernow.service.PlayerService;
 import pt.ul.fc.css.soccernow.service.TeamService;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
 
@@ -58,10 +60,26 @@ public class TeamController {
 
     @GetMapping
     @ApiOperation(value = "Get all teams", notes = "Returns a list of all teams")
-    public ResponseEntity<List<TeamDTO>> getAllTeams(@RequestParam(name = "maxPlayers", required = false) @Min(0) Integer maxPlayers) {
+    public ResponseEntity<List<TeamDTO>> getAllTeams(@RequestParam(name = "maxPlayers", required = false) @Min(0) Integer maxPlayers,
+                                                     @RequestParam(name = "order", required = false) String order,
+                                                     @RequestParam(name = "sortBy", required = false) String sortBy) {
+        Comparator<Team> cardComparator = Comparator.comparing(Team::getPlayersCardCount);
+        Comparator<Team> victoryComparator = Comparator.comparing(Team::getVictoryCount);
         Predicate<TeamDTO> filterPredicate = maxPlayers == null
                 ? team -> true
                 : team -> team.getPlayers().size() <= maxPlayers;
+
+        Optional<Comparator<Team>> comparator = switch (sortBy) {
+            case "playerCards" -> Optional.of(cardComparator);
+            case "victories" -> Optional.of(victoryComparator);
+            default -> Optional.empty();
+        };
+
+        Optional<Comparator<Team>> optionalTeamComparator = switch (order) {
+            case "asc" -> Optional.of(victoryComparator.reversed());
+            case "dsc" -> Optional.of(victoryComparator);
+            default -> Optional.empty();
+        };
 
         List<TeamDTO> teams = teamService.findAllNotDeleted()
                                          .stream()

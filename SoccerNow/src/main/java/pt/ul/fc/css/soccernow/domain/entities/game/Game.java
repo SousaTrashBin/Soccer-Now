@@ -6,6 +6,7 @@ import pt.ul.fc.css.soccernow.domain.entities.Address;
 import pt.ul.fc.css.soccernow.domain.entities.tournament.Tournament;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.domain.entities.user.Referee;
+import pt.ul.fc.css.soccernow.util.GameResultEnum;
 import pt.ul.fc.css.soccernow.util.SoftDeleteEntity;
 
 import java.time.LocalDateTime;
@@ -149,6 +150,18 @@ public class Game extends SoftDeleteEntity {
         Set<Player> allPlayers = gameTeamOne.getPlayers();
         allPlayers.addAll(getGameTeamTwo().getPlayers());
         return allPlayers;
+    }
+
+    public GameResultEnum getResult() {
+        return gameStats != null ? gameStats.getResult() : GameResultEnum.PENDING;
+    }
+
+    public UUID whoWonId() {
+        return switch (gameStats.getResult()) {
+            case DRAW, PENDING -> null;
+            case TEAM_1_WON -> getGameTeamOne().getId();
+            case TEAM_2_WON -> getGameTeamTwo().getId();
+        };
     }
 
     @Override

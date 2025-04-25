@@ -3,6 +3,7 @@ package pt.ul.fc.css.soccernow.domain.entities.game;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import org.hibernate.proxy.HibernateProxy;
+import pt.ul.fc.css.soccernow.util.GameResultEnum;
 
 import java.util.LinkedHashSet;
 import java.util.Objects;
@@ -61,6 +62,14 @@ public class GameStats {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public GameResultEnum getResult() {
+        if (teamOneGoals > teamTwoGoals) {
+            return GameResultEnum.TEAM_1_WON;
+        } else if (teamOneGoals < teamTwoGoals) {
+            return GameResultEnum.TEAM_2_WON;
+        } else return GameResultEnum.DRAW;
     }
 
     @Override
