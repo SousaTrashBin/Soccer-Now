@@ -106,12 +106,21 @@ class GameControllerIntegrationTest {
     }
 
     @Test
-    public void testIfValidGameCanBeCreated() throws Exception {
-        String jsonResponse = mockMvc.perform(
+    public void testIfSetupIsWorking() throws Exception {
+        String teamsResponse = mockMvc.perform(
                 MockMvcRequestBuilders.get("/api/teams/")
         ).andReturn().getResponse().getContentAsString();
+        System.out.println(teamsResponse);
 
-        System.out.println(jsonResponse);
+        String playersResponse = mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/players/")
+        ).andReturn().getResponse().getContentAsString();
+        System.out.println(playersResponse);
+
+        String refereeResponse = mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/referees/")
+        ).andReturn().getResponse().getContentAsString();
+        System.out.println(refereeResponse);
     }
 
 }
