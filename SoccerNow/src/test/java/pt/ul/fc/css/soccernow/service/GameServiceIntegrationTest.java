@@ -28,7 +28,6 @@ import static pt.ul.fc.css.soccernow.utils.GameTeamDataUtil.createGameTeam;
 import static pt.ul.fc.css.soccernow.utils.PlayerTestDataUtil.getPlayers;
 import static pt.ul.fc.css.soccernow.utils.RefereeTestDataUtil.getCertificatedReferees;
 import static pt.ul.fc.css.soccernow.utils.RefereeTestDataUtil.getUncertificatedReferees;
-import static pt.ul.fc.css.soccernow.utils.TeamTestDataUtil.createTeams;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
@@ -59,8 +58,6 @@ public class GameServiceIntegrationTest {
         certificatedReferees = getCertificatedReferees();
         certificatedReferees = certificatedReferees.stream().map(refereeService::add).toList();
 
-        teams = createTeams(new HashSet<>(players));
-        teams = teams.stream().map(teamService::add).toList();
     }
 
     @Test

@@ -26,9 +26,9 @@ class PlayerControllerIntegrationTest {
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public PlayerControllerIntegrationTest(MockMvc mockMvc) {
+    public PlayerControllerIntegrationTest(MockMvc mockMvc, ObjectMapper objectMapper) {
         this.mockMvc = mockMvc;
-        this.objectMapper = new ObjectMapper();
+        this.objectMapper = objectMapper;
     }
 
     @Test

@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.exception.ResourceDoesNotExistException;
+import pt.ul.fc.css.soccernow.mapper.TeamMapper;
 import pt.ul.fc.css.soccernow.utils.TeamTestDataUtil;
 
 import java.util.ArrayList;
@@ -34,6 +35,8 @@ class TeamServiceIntegrationTest {
 
     @Autowired
     private PlayerService playerService;
+    @Autowired
+    private TeamMapper teamMapper;
 
     @BeforeEach
     void setUp() {
@@ -46,10 +49,12 @@ class TeamServiceIntegrationTest {
     public void testIfTeamCanBeCreatedAndRecalled() {
         Set<Player> teamPlayers = players.stream().limit(10)
                 .collect(Collectors.toSet());
-        Team randomTeam = TeamTestDataUtil.createRandomTeam(teamPlayers);
+        Team randomTeam = TeamTestDataUtil.createRandomTeam();
         Team savedTeam = underTest.add(randomTeam);
         assert savedTeam.getPlayers().stream().allMatch(player -> player.hasTeam(savedTeam));
         assert underTest.findNotDeletedById(savedTeam.getId()).equals(savedTeam);
+        teamPlayers.forEach(player -> underTest.addPlayerToTeam(player, savedTeam));
+        System.out.println(teamMapper.toDTO(savedTeam));
     }
 
     @Test
@@ -58,7 +63,7 @@ class TeamServiceIntegrationTest {
         Player player = new Player();
         player.setId(UUID.randomUUID());
         Set<Player> teamPlayers = Set.of(player);
-        Team randomTeam = TeamTestDataUtil.createRandomTeam(teamPlayers);
+        Team randomTeam = TeamTestDataUtil.createRandomTeam();
         assertThrows(ResourceDoesNotExistException.class, () -> underTest.add(randomTeam));
     }
 
@@ -67,7 +72,7 @@ class TeamServiceIntegrationTest {
     public void testIfTeamCanBeUpdatedAndRecalled() {
         Set<Player> teamPlayers = players.stream().limit(10)
                 .collect(Collectors.toSet());
-        Team randomTeam = TeamTestDataUtil.createRandomTeam(teamPlayers);
+        Team randomTeam = TeamTestDataUtil.createRandomTeam();
         Team savedTeam = underTest.add(randomTeam);
 
         Team teamToUpdate = new Team();
@@ -87,7 +92,7 @@ class TeamServiceIntegrationTest {
                 .collect(Collectors.toSet());
         List<Team> savedTeams = new ArrayList<>();
         IntStream.range(0, 3).forEach(index -> {
-            Team randomTeam = TeamTestDataUtil.createRandomTeam(teamPlayers);
+            Team randomTeam = TeamTestDataUtil.createRandomTeam();
             savedTeams.add(underTest.add(randomTeam));
         });
         assert underTest.findAllNotDeleted().size() == 3;
