@@ -1,6 +1,5 @@
 package pt.ul.fc.css.soccernow.service.impl;
 
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
@@ -8,24 +7,18 @@ import pt.ul.fc.css.soccernow.exception.BadRequestException;
 import pt.ul.fc.css.soccernow.exception.ResourceCouldNotBeDeletedException;
 import pt.ul.fc.css.soccernow.exception.ResourceDoesNotExistException;
 import pt.ul.fc.css.soccernow.repository.TeamRepository;
-import pt.ul.fc.css.soccernow.service.PlayerService;
 import pt.ul.fc.css.soccernow.service.TeamService;
 
-import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class TeamServiceImpl implements TeamService {
     private final TeamRepository teamRepository;
-    private final PlayerService playerService;
 
     public TeamServiceImpl(
-            TeamRepository teamRepository,
-            @Lazy PlayerService playerService
-    ) {
+            TeamRepository teamRepository) {
         this.teamRepository = teamRepository;
-        this.playerService = playerService;
     }
 
     @Override
@@ -50,10 +43,6 @@ public class TeamServiceImpl implements TeamService {
     public Team add(Team teamData) {
         Team newTeam = new Team();
         newTeam.setName(teamData.getName());
-
-        Set<Player> fullPlayerData = fetchPlayersWithCompleteData(teamData.getPlayers());
-        fullPlayerData.forEach(player -> addPlayerToTeam(player, newTeam));
-
         return teamRepository.save(newTeam);
     }
 
@@ -65,42 +54,9 @@ public class TeamServiceImpl implements TeamService {
             existingTeam.setName(updatedTeam.getName());
         }
 
-        if (updatedTeam.getPlayers() != null) {
-            Set<Player> newPlayers = fetchPlayersWithCompleteData(updatedTeam.getPlayers());
-            Set<Player> playersToAdd = new HashSet<>();
-            Set<Player> playersToRemove = new HashSet<>();
-
-            newPlayers.stream()
-                    .filter(Predicate.not(existingTeam::hasPlayer))
-                    .forEach(playersToAdd::add);
-
-            existingTeam.getPlayers()
-                    .stream()
-                    .filter(Predicate.not(newPlayers::contains))
-                    .forEach(playersToRemove::add);
-
-            for (Player playerToRemove : playersToRemove) {
-                if (existingTeam.hasPendingGamesWithPlayer(playerToRemove)) {
-                    throw new BadRequestException("Player " + playerToRemove.getName() + " has pending games with team " + existingTeam.getName());
-                }
-                existingTeam.removePlayer(playerToRemove);
-            }
-
-            for (Player playerToAdd : playersToAdd) {
-                existingTeam.addPlayer(playerToAdd);
-            }
-        }
-
         return teamRepository.save(existingTeam);
     }
 
-    private Set<Player> fetchPlayersWithCompleteData(Set<Player> playerReferences) {
-        return playerReferences.stream()
-                .map(playerRef -> playerService.findNotDeletedById(playerRef.getId()))
-                .collect(Collectors.toCollection(LinkedHashSet::new));
-    }
-
-    @Override
     public void softDelete(UUID teamId) {
         Team teamToDelete = findNotDeletedById(teamId);
         if (teamToDelete.hasPendingGames() || teamToDelete.hasPendingTournaments()) {

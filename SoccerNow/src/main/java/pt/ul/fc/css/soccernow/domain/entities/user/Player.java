@@ -104,4 +104,11 @@ public class Player extends User {
                 "preferredPosition = " + getPreferredPosition() + ", " +
                 "name = " + getName() + ")";
     }
+
+    public Integer getAverageGoals() {
+        return getPlayerGameStats()
+                .stream()
+                .map(PlayerGameStats::getScoredGoals)
+                .reduce(0, Integer::sum);
+    }
 }

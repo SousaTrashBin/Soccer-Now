@@ -8,41 +8,47 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pt.ul.fc.css.soccernow.domain.dto.games.GameDTO;
 import pt.ul.fc.css.soccernow.domain.dto.games.PlayerGameStatsDTO;
+import pt.ul.fc.css.soccernow.domain.entities.game.Game;
+import pt.ul.fc.css.soccernow.domain.entities.game.PlayerGameStats;
+import pt.ul.fc.css.soccernow.mapper.GameMapper;
 import pt.ul.fc.css.soccernow.mapper.PlayerGameStatsMapper;
 import pt.ul.fc.css.soccernow.service.GameService;
 
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Tag(name = "Game", description = "Game operations")
 @RestController
 @RequestMapping("/api/games/")
 public class GameController {
-
     private final GameService gameService;
     private final PlayerGameStatsMapper playerGameStatsMapper;
+    private final GameMapper gameMapper;
 
     public GameController(GameService gameService,
-                          PlayerGameStatsMapper playerGameStatsMapper) {
+                          PlayerGameStatsMapper playerGameStatsMapper,
+                          GameMapper gameMapper) {
         this.gameService = gameService;
         this.playerGameStatsMapper = playerGameStatsMapper;
+        this.gameMapper = gameMapper;
     }
 
     @PostMapping
     @ApiOperation(value = "Register a game", notes = "Returns the game registered")
     public ResponseEntity<GameDTO> registerGame(@RequestBody @Validated @NotNull GameDTO game) {
-        // TODO
         return null;
     }
 
-    @PostMapping("/{gameId}/result")
+    @PostMapping("{gameId}/result")
     @ApiOperation(value = "Register the result of a game with given ID", notes = "Returns the updated game")
     public ResponseEntity<GameDTO> closeGameById(
             @PathVariable("gameId") @NotNull UUID gameId,
-            @RequestBody @Validated @NotNull List<PlayerGameStatsDTO> playerGameStatsDTOS
+            @RequestBody @Validated @NotNull Set<PlayerGameStatsDTO> playerGameStatsDTOs
     ) {
-        // TODO
-        return null;
+        Set<PlayerGameStats> playerGameStats = playerGameStatsDTOs.stream().map(playerGameStatsMapper::toEntity).collect(Collectors.toSet());
+        Game closedGame = gameService.closeGame(gameId, playerGameStats);
+        return ResponseEntity.ok(gameMapper.toDTO(closedGame));
     }
 
 //    @PutMapping("/{gameId}")

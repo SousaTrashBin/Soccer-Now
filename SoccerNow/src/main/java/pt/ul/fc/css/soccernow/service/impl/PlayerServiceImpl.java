@@ -1,6 +1,5 @@
 package pt.ul.fc.css.soccernow.service.impl;
 
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
@@ -20,7 +19,7 @@ public class PlayerServiceImpl implements PlayerService {
     private final PlayerRepository playerRepository;
     private final TeamService teamService;
 
-    public PlayerServiceImpl(PlayerRepository playerRepository, @Lazy TeamService teamService) {
+    public PlayerServiceImpl(PlayerRepository playerRepository, TeamService teamService) {
         this.playerRepository = playerRepository;
         this.teamService = teamService;
     }

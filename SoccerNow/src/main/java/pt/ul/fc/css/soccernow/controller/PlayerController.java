@@ -51,11 +51,18 @@ public class PlayerController {
         return ResponseEntity.status(HttpStatus.CREATED).body(playerMapper.toDTO(savedPlayer));
     }
 
-    @GetMapping("/{playerId}")
+    @GetMapping("{playerId}")
     @ApiOperation(value = "Get player by ID", notes = "Returns a player by its ID")
     public ResponseEntity<PlayerDTO> getPlayerById(@PathVariable("playerId") @NotNull UUID playerId) {
         Player player = playerService.findNotDeletedById(playerId);
         return ResponseEntity.ok(playerMapper.toDTO(player));
+    }
+
+    @GetMapping("{playerId}/average-goals")
+    @ApiOperation(value = "Get average player goals by ID", notes = "Returns a player by its ID")
+    public ResponseEntity<Integer> getAverageGoalsById(@PathVariable("playerId") @NotNull UUID playerId) {
+        Player player = playerService.findNotDeletedById(playerId);
+        return ResponseEntity.ok(player.getAverageGoals());
     }
 
     @GetMapping
@@ -63,11 +70,11 @@ public class PlayerController {
     public ResponseEntity<List<PlayerDTO>> getAllPlayers(@RequestParam(name = "size", required = false) @Min(0) Integer size,
                                                          @RequestParam(name = "order", required = false) String order) {
         Comparator<Player> redCardComparator = Comparator.comparing(Player::getRedCardCount);
-        Optional<Comparator<Player>> optionalPlayerComparator = switch (order) {
-            case "asc" -> Optional.of(redCardComparator.reversed());
-            case "dsc" -> Optional.of(redCardComparator);
-            default -> Optional.empty();
-        };
+        Optional<Comparator<Player>> optionalPlayerComparator = Optional.ofNullable(order).map(
+                orderValue -> orderValue.equals("asc")
+                        ? redCardComparator
+                        : redCardComparator.reversed()
+        );
 
         Stream<Player> playerStream = playerService.findAllNotDeleted().stream();
         if (optionalPlayerComparator.isPresent()) {
@@ -79,14 +86,14 @@ public class PlayerController {
         return ResponseEntity.ok(players);
     }
 
-    @DeleteMapping("/{playerId}")
+    @DeleteMapping("{playerId}")
     @ApiOperation(value = "Delete a player with given ID")
     public ResponseEntity<String> deletePlayerById(@PathVariable("playerId") @NotNull UUID playerId) {
         playerService.softDelete(playerId);
         return ResponseEntity.ok("Player deleted successfully");
     }
 
-    @PutMapping("/{playerId}")
+    @PutMapping("{playerId}")
     @ApiOperation(value = "Update a player with given ID", notes = "Returns the updated player")
     public ResponseEntity<PlayerDTO> updatePlayerById(
             @PathVariable("playerId") @NotNull UUID playerId,
@@ -98,7 +105,7 @@ public class PlayerController {
         return ResponseEntity.ok(playerMapper.toDTO(savedPlayer));
     }
 
-    @GetMapping("/{playerId}/stats")
+    @GetMapping("{playerId}/stats")
     @ApiOperation(value = "Get player's stats", notes = "Returns a player's stats")
     public ResponseEntity<List<PlayerGameStatsDTO>> getPlayerStats(@PathVariable("playerId") @NotNull UUID playerId) {
         Player player = playerService.findNotDeletedById(playerId);
@@ -109,7 +116,7 @@ public class PlayerController {
         return ResponseEntity.ok(stats);
     }
 
-    @GetMapping("/{playerId}/teams")
+    @GetMapping("{playerId}/teams")
     @ApiOperation(value = "Get player's teams", notes = "Returns a player's teams")
     public ResponseEntity<List<TeamDTO>> getPlayerTeams(@PathVariable("playerId") @NotNull UUID playerId) {
         Player player = playerService.findNotDeletedById(playerId);

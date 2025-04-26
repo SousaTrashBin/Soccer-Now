@@ -18,12 +18,18 @@ import java.util.*;
 public class GameDTO implements Serializable {
     private TournamentInfoDTO tournament;
     private UUID id;
+    @NotNull
     private GameTeamInfoDTO gameTeamOne;
+    @NotNull
     private GameTeamInfoDTO gameTeamTwo;
     private GameStatsInfoDTO gameStats;
+    @NotNull
     private RefereeInfoDTO primaryReferee;
+    @NotNull
     private Set<RefereeInfoDTO> secondaryReferees = new HashSet<>();
+    @NotNull
     private AddressDTO locatedIn;
+    @NotNull
     private LocalDateTime happensIn;
     @NotNull
     private Boolean isClosed = false;
@@ -31,9 +37,7 @@ public class GameDTO implements Serializable {
     public GameDTO() {
     }
 
-    public GameDTO(
-            UUID tournamentId,
-            Boolean tournamentIsFinished, UUID id, GameTeamInfoDTO gameTeamOne, GameTeamInfoDTO gameTeamTwo, GameStatsInfoDTO gameStats, RefereeInfoDTO primaryReferee, Set<RefereeInfoDTO> secondaryReferees, AddressDTO locatedIn, LocalDateTime happensIn, Boolean isClosed) {
+    public GameDTO(UUID id, GameTeamInfoDTO gameTeamOne, GameTeamInfoDTO gameTeamTwo, GameStatsInfoDTO gameStats, RefereeInfoDTO primaryReferee, Set<RefereeInfoDTO> secondaryReferees, AddressDTO locatedIn, LocalDateTime happensIn, Boolean isClosed) {
         this.id = id;
         this.gameTeamOne = gameTeamOne;
         this.gameTeamTwo = gameTeamTwo;
@@ -174,7 +178,10 @@ public class GameDTO implements Serializable {
      * DTO for {@link pt.ul.fc.css.soccernow.domain.entities.game.GameTeam}
      */
     public static class GameTeamInfoDTO implements Serializable {
+        @NotNull
+        @Size(min = 5, max = 5)
         private Set<GamePlayerInfoDTO> gamePlayers = new HashSet<>();
+        @NotNull
         private TeamInfoDTO team;
 
         public GameTeamInfoDTO() {
@@ -228,7 +235,9 @@ public class GameDTO implements Serializable {
          * DTO for {@link pt.ul.fc.css.soccernow.domain.entities.tournament.GamePlayer}
          */
         public static class GamePlayerInfoDTO implements Serializable {
+            @NotNull
             private FutsalPositionEnum playedInPosition;
+            @NotNull
             private PlayerInfoDTO player;
 
             public GamePlayerInfoDTO() {
@@ -282,6 +291,7 @@ public class GameDTO implements Serializable {
              * DTO for {@link pt.ul.fc.css.soccernow.domain.entities.user.Player}
              */
             public static class PlayerInfoDTO implements Serializable {
+                @NotNull
                 private UUID id;
                 @Pattern(regexp = "^\\p{L}+( \\p{L}+)*$")
                 @Length(max = 100)
@@ -340,8 +350,9 @@ public class GameDTO implements Serializable {
          * DTO for {@link pt.ul.fc.css.soccernow.domain.entities.Team}
          */
         public static class TeamInfoDTO implements Serializable {
+            @NotNull
             private UUID id;
-            @Pattern(regexp = "^\\p{L}+( \\p{L}+)*$")
+            @Pattern(regexp = "^\\p{L}+(\\p{L}+)*$")
             @Length(max = 100)
             private String name;
 
@@ -469,7 +480,9 @@ public class GameDTO implements Serializable {
             @NotNull
             private CardEnum givenCard = CardEnum.NONE;
             @PositiveOrZero
+            @NotNull
             private Integer scoredGoals = 0;
+            @NotNull
             private PlayerInfoDTO player;
 
             public PlayerGameStatsInfoDTO() {
@@ -535,6 +548,7 @@ public class GameDTO implements Serializable {
              * DTO for {@link pt.ul.fc.css.soccernow.domain.entities.user.Player}
              */
             public static class PlayerInfoDTO implements Serializable {
+                @NotNull
                 private UUID id;
                 @Pattern(regexp = "^\\p{L}+( \\p{L}+)*$")
                 @Length(max = 100)
@@ -594,6 +608,7 @@ public class GameDTO implements Serializable {
      * DTO for {@link pt.ul.fc.css.soccernow.domain.entities.user.Referee}
      */
     public static class RefereeInfoDTO implements Serializable {
+        @NotNull
         private UUID id;
         @Pattern(regexp = "^\\p{L}+( \\p{L}+)*$")
         @Length(max = 100)
@@ -667,7 +682,10 @@ public class GameDTO implements Serializable {
     public static class AddressDTO implements Serializable {
         private String country;
         private String city;
+        @NotNull
         private String street;
+        @NotNull
+        @Pattern(regexp = "\\d{4}-\\d{3}")
         private String postalCode;
 
         public AddressDTO() {
@@ -746,7 +764,9 @@ public class GameDTO implements Serializable {
      * DTO for {@link pt.ul.fc.css.soccernow.domain.entities.tournament.Tournament}
      */
     public static class TournamentInfoDTO implements Serializable {
+        @NotNull
         private UUID id;
+        @NotNull
         private Boolean isFinished = false;
 
         public TournamentInfoDTO() {

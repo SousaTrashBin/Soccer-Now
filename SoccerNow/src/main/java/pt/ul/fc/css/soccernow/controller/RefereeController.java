@@ -44,7 +44,7 @@ public class RefereeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(refereeMapper.toDTO(savedReferee));
     }
 
-    @GetMapping("/{refereeId}")
+    @GetMapping("{refereeId}")
     @ApiOperation(value = "Get referee by ID", notes = "Returns a referee by its ID")
     public ResponseEntity<RefereeDTO> getRefereeById(@PathVariable("refereeId") @NotNull UUID refereeId) {
         Referee referee = refereeService.findNotDeletedById(refereeId);
@@ -56,11 +56,11 @@ public class RefereeController {
     public ResponseEntity<List<RefereeDTO>> getAllReferees(@RequestParam(name = "size", required = false) @Min(0) Integer size,
                                                            @RequestParam(name = "order", required = false) String order) {
         Comparator<Referee> officiatedGamesComparator = Comparator.comparing(Referee::getClosedGamesCount);
-        Optional<Comparator<Referee>> optionalRefereeComparator = switch (order) {
-            case "asc" -> Optional.of(officiatedGamesComparator.reversed());
-            case "dsc" -> Optional.of(officiatedGamesComparator);
-            default -> Optional.empty();
-        };
+        Optional<Comparator<Referee>> optionalRefereeComparator = Optional.ofNullable(order).map(
+                orderValue -> orderValue.equals("asc")
+                        ? officiatedGamesComparator
+                        : officiatedGamesComparator.reversed()
+        );
 
         Stream<Referee> refereeStream = refereeService.findAllNotDeleted().stream();
         if (optionalRefereeComparator.isPresent()) {
@@ -72,14 +72,14 @@ public class RefereeController {
         return ResponseEntity.ok(referees);
     }
 
-    @DeleteMapping("/{refereeId}")
+    @DeleteMapping("{refereeId}")
     @ApiOperation(value = "Delete a referee with given ID")
     public ResponseEntity<String> deleteRefereeById(@PathVariable("refereeId") @NotNull UUID refereeId) {
         refereeService.softDelete(refereeId);
         return ResponseEntity.ok("Referee deleted successfully");
     }
 
-    @PutMapping("/{refereeId}")
+    @PutMapping("{refereeId}")
     @ApiOperation(value = "Update a referee with given ID", notes = "Returns the updated referee")
     public ResponseEntity<RefereeDTO> updateRefereeById(
             @PathVariable("refereeId") @NotNull UUID refereeId,
