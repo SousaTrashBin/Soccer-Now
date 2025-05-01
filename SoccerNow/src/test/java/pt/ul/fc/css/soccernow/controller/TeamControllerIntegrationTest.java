@@ -58,7 +58,16 @@ class TeamControllerIntegrationTest {
     }
 
     @Test
-    public void testSetup() {
+    public void testSetup() throws Exception {
+        mockMvc.perform(get("/api/players/"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.length()").value(players.size()));
+
+        mockMvc.perform(get("/api/teams/"))
+               .andExpect(status().isOk())
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("$.length()").value(teams.size()));
     }
 
     @Test
