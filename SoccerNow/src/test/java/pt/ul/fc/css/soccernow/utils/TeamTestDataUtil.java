@@ -16,7 +16,7 @@ public class TeamTestDataUtil {
             "AD Fundão",
             "Leões Porto Salvo",
             "Eléctrico FC",
-            "Viseu 2001",
+            "Viseu",
             "Modicus Sandim",
             "Ferreira do Zêzere",
             "Amarense",

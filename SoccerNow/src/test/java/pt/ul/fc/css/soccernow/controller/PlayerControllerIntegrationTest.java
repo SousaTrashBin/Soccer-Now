@@ -20,9 +20,7 @@ import pt.ul.fc.css.soccernow.util.FutsalPositionEnum;
 @ExtendWith(SpringExtension.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class PlayerControllerIntegrationTest {
-
     private final MockMvc mockMvc;
-
     private final ObjectMapper objectMapper;
 
     @Autowired
