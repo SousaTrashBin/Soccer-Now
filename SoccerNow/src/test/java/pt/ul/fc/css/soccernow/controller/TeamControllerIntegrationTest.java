@@ -11,7 +11,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import pt.ul.fc.css.soccernow.domain.dto.TeamDTO;
 import pt.ul.fc.css.soccernow.domain.dto.user.PlayerDTO;
 import pt.ul.fc.css.soccernow.domain.dto.user.RefereeDTO;
@@ -31,6 +33,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.function.Function;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static pt.ul.fc.css.soccernow.utils.PlayerTestDataUtil.getPlayers;
 import static pt.ul.fc.css.soccernow.utils.TeamTestDataUtil.createRandomTeam;
 import static pt.ul.fc.css.soccernow.utils.RefereeTestDataUtil.getCertificatedReferees;
@@ -102,58 +108,57 @@ class TeamControllerIntegrationTest {
 
     @Test
     public void testGetTeamById() throws Exception {
-        String teamById = mockMvc.perform(
-                MockMvcRequestBuilders.get("/api/teams/" + teams.get(0).getId()) // get first team from the list
-        ).andReturn().getResponse().getContentAsString();
-        System.out.println(teamById);
+        Team team = teams.get(0);
+
+        mockMvc.perform(get("/api/teams/" + team.getId()))
+               .andExpect(status().isOk())
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("$.id").value(team.getId()));
     }
+
 
     @Test
     public void testGetAllTeams() throws Exception {
-        String allTeams = mockMvc.perform(
-                MockMvcRequestBuilders.get("/api/teams/")
-        ).andReturn().getResponse().getContentAsString();
-        System.out.println(allTeams);
+        mockMvc.perform(get("/api/teams/"))
+               .andExpect(status().isOk())
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("$.length()").value(teams.size()));
     }
 
     @Test
     public void testDeleteTeamById() throws Exception {
-        String allTeams = mockMvc.perform(
-                MockMvcRequestBuilders.delete("/api/teams/" + teams.get(0).getId())
-        ).andReturn().getResponse().getContentAsString();
-        System.out.println(allTeams);
+        Team team = teams.get(0);
+
+        mockMvc.perform(delete("/api/teams/" + team.getId()))
+               .andExpect(status().isOk());
+
+        mockMvc.perform(get("/api/teams/"))
+               .andExpect(status().isOk())
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("$.length()").value(teams.size() - 1));
     }
 
     @Test
-    public void testDeleteFirstPlayerTeam() throws Exception {
-        Team firstTeam = getFirstTeamEntity();
-        Player firstPlayer = firstTeam.getPlayers().iterator().next();
+    public void testGetAllPlayersFromTeam() throws Exception {
+        Team team = teams.get(0);
 
-        String response = mockMvc.perform(
-                MockMvcRequestBuilders.delete("/api/teams/" + firstTeam.getId() + "/players/" + firstPlayer.getId())
-        ).andReturn().getResponse().getContentAsString();
-        System.out.println(response);
+        mockMvc.perform(get("/api/teams/" + team.getId() + "/players"))
+               .andExpect(status().isOk())
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("$.length()").value(team.getPlayers().size()));
     }
 
     @Test
-    public void testIfSetupIsWorking() throws Exception {
-        String playersResponse = mockMvc.perform(
-                MockMvcRequestBuilders.get("/api/players/")
-        ).andReturn().getResponse().getContentAsString();
-        System.out.println(playersResponse);
+    public void testDeletePlayerFromTeam() throws Exception {
+        Team team = teams.get(0);
+        Player player = team.getPlayers().iterator().next();
 
-        String teamsResponse = mockMvc.perform(
-                MockMvcRequestBuilders.get("/api/teams/")
-        ).andReturn().getResponse().getContentAsString();
-        System.out.println(teamsResponse);
-    }
+        mockMvc.perform(delete("/api/teams/" + team.getId() + "/players/" + player.getId()))
+               .andExpect(status().isOk());
 
-    private Team getFirstTeamEntity() throws Exception {
-        String jsonResponse = mockMvc.perform(
-                MockMvcRequestBuilders.get("/api/teams/" + teams.get(0).getId())
-        ).andReturn().getResponse().getContentAsString();
-
-        TeamDTO teamDTO = objectMapper.readValue(jsonResponse, TeamDTO.class);
-        return teamMapper.toEntity(teamDTO);
+        mockMvc.perform(get("/api/teams/" + team.getId() + "/players"))
+               .andExpect(status().isOk())
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("$.length()").value(team.getPlayers().size() - 1));
     }
 }
