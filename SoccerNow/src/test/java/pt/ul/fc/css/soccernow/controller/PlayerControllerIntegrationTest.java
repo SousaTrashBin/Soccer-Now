@@ -15,6 +15,11 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import pt.ul.fc.css.soccernow.domain.dto.user.PlayerDTO;
 import pt.ul.fc.css.soccernow.util.FutsalPositionEnum;
 
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
@@ -40,12 +45,89 @@ class PlayerControllerIntegrationTest {
                 MockMvcRequestBuilders.post("/api/players/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(playerDTOJSON)
-        ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.name").value("TEST")
+        ).andExpect(status().is2xxSuccessful()).andExpect(MockMvcResultMatchers.jsonPath("$.name").value("TEST")
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.preferredPosition").value("GOALIE")
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.id").exists()
         );
+    }
+
+    @Test
+    void testIfInValidPlayerCantBeRegistered() throws Exception {
+        PlayerDTO playerDTO = new PlayerDTO()
+                .setName("TEST123")
+                .setPreferredPosition(FutsalPositionEnum.GOALIE);
+        String playerDTOJSON = objectMapper.writeValueAsString(playerDTO);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/players/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(playerDTOJSON)
+        ).andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    void testIfValidPlayerCanBeRegisteredAndUpdated() throws Exception {
+        PlayerDTO playerDTO = new PlayerDTO()
+                .setName("Sofia Reia")
+                .setPreferredPosition(FutsalPositionEnum.FORWARD);
+        String playerDTOJSON = objectMapper.writeValueAsString(playerDTO);
+
+        String jsonResponse = mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/players/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(playerDTOJSON)
+        ).andExpect(status().is2xxSuccessful()).andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Sofia Reia")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.preferredPosition").value("FORWARD")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.id").exists()
+        ).andReturn().getResponse().getContentAsString();
+
+        PlayerDTO savedDTO = objectMapper.readValue(jsonResponse, PlayerDTO.class);
+        savedDTO.setName("Vania Mendonça");
+        savedDTO.setPreferredPosition(FutsalPositionEnum.LEFT_WINGER);
+        String updatedPlayerJSON = objectMapper.writeValueAsString(savedDTO);
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/api/players/" + savedDTO.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updatedPlayerJSON)
+        ).andExpect(status().is2xxSuccessful()).andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Vania Mendonça")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.preferredPosition").value("LEFT_WINGER")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.id").exists()
+        );
+    }
+
+    @Test
+    void testIfValidPlayerCanBeAddedAndRemoved() throws Exception {
+        PlayerDTO playerDTO = new PlayerDTO()
+                .setName("Sofia Reia")
+                .setPreferredPosition(FutsalPositionEnum.FORWARD);
+        String playerDTOJSON = objectMapper.writeValueAsString(playerDTO);
+
+        String jsonResponse = mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/players/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(playerDTOJSON)
+        ).andExpect(status().is2xxSuccessful()).andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Sofia Reia")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.preferredPosition").value("FORWARD")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.id").exists()
+        ).andReturn().getResponse().getContentAsString();
+        PlayerDTO savedDTO = objectMapper.readValue(jsonResponse, PlayerDTO.class);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/api/players/" + savedDTO.getId())
+        ).andExpect(status().is2xxSuccessful());
+        String response = mockMvc.perform(
+                MockMvcRequestBuilders.get("/api/players/")
+        ).andReturn().getResponse().getContentAsString();
+
+        List<?> players = objectMapper.readValue(response, List.class);
+        assertTrue(players.isEmpty());
     }
 }
