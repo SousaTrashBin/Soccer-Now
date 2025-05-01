@@ -11,36 +11,23 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import pt.ul.fc.css.soccernow.domain.dto.TeamDTO;
 import pt.ul.fc.css.soccernow.domain.dto.user.PlayerDTO;
-import pt.ul.fc.css.soccernow.domain.dto.user.RefereeDTO;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
-import pt.ul.fc.css.soccernow.domain.entities.game.GameTeam;
-import pt.ul.fc.css.soccernow.domain.entities.tournament.Placement;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
-import pt.ul.fc.css.soccernow.domain.entities.user.Referee;
 import pt.ul.fc.css.soccernow.domain.entities.user.User;
 import pt.ul.fc.css.soccernow.mapper.PlayerMapper;
-import pt.ul.fc.css.soccernow.mapper.RefereeMapper;
 import pt.ul.fc.css.soccernow.mapper.TeamMapper;
-import pt.ul.fc.css.soccernow.utils.TeamTestDataUtil;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.function.Function;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static pt.ul.fc.css.soccernow.utils.PlayerTestDataUtil.getPlayers;
-import static pt.ul.fc.css.soccernow.utils.TeamTestDataUtil.createRandomTeam;
-import static pt.ul.fc.css.soccernow.utils.RefereeTestDataUtil.getCertificatedReferees;
-import static pt.ul.fc.css.soccernow.utils.RefereeTestDataUtil.getUncertificatedReferees;
 import static pt.ul.fc.css.soccernow.utils.TeamTestDataUtil.getTeams;
 import static pt.ul.fc.css.soccernow.utils.UserTestDataUtil.RANDOM;
 
@@ -51,12 +38,10 @@ import static pt.ul.fc.css.soccernow.utils.UserTestDataUtil.RANDOM;
 class TeamControllerIntegrationTest {
     private final MockMvc mockMvc;
     private final ObjectMapper objectMapper;
-    List<Player> players;
-    List<Team> teams;
-    @Autowired
-    private TeamMapper teamMapper;
-    @Autowired
-    private PlayerMapper playerMapper;
+    private List<Player> players;
+    private List<Team> teams;
+    @Autowired private TeamMapper teamMapper;
+    @Autowired private PlayerMapper playerMapper;
 
     @Autowired
     public TeamControllerIntegrationTest(MockMvc mockMvc, ObjectMapper objectMapper) {
