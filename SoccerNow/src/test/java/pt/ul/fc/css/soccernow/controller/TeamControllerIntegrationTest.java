@@ -11,24 +11,20 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import pt.ul.fc.css.soccernow.domain.dto.TeamDTO;
 import pt.ul.fc.css.soccernow.domain.dto.user.PlayerDTO;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
-import pt.ul.fc.css.soccernow.domain.entities.user.User;
 import pt.ul.fc.css.soccernow.mapper.PlayerMapper;
 import pt.ul.fc.css.soccernow.mapper.TeamMapper;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static pt.ul.fc.css.soccernow.utils.PlayerTestDataUtil.getPlayers;
 import static pt.ul.fc.css.soccernow.utils.TeamTestDataUtil.getTeams;
-import static pt.ul.fc.css.soccernow.utils.UserTestDataUtil.RANDOM;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -37,6 +33,7 @@ import static pt.ul.fc.css.soccernow.utils.UserTestDataUtil.RANDOM;
 class TeamControllerIntegrationTest {
     private final MockMvc mockMvc;
     private final ObjectMapper objectMapper;
+    private final ControllerUtils controllerUtil;
     private List<Player> players;
     private List<Team> teams;
     @Autowired private TeamMapper teamMapper;
@@ -46,47 +43,22 @@ class TeamControllerIntegrationTest {
     public TeamControllerIntegrationTest(MockMvc mockMvc, ObjectMapper objectMapper) {
         this.mockMvc = mockMvc;
         this.objectMapper = objectMapper;
+        controllerUtil = new ControllerUtils(mockMvc, objectMapper);
     }
 
     @BeforeEach
     public void setUp() throws Exception {
         players = getPlayers();
-        players = createObjectFromDTOtoURL("/api/players/", players, (p -> playerMapper.toDTO(p)), (p -> playerMapper.toEntity(p)), PlayerDTO.class);
+        players = controllerUtil.createObjectFromDTOtoURL("/api/players/", players, (p -> playerMapper.toDTO(p)), (p -> playerMapper.toEntity(p)), PlayerDTO.class);
 
         teams = getTeams();
-        teams = createObjectFromDTOtoURL("/api/teams/", teams, (t -> teamMapper.toDTO(t)), (t -> teamMapper.toEntity(t)), TeamDTO.class);
+        teams = controllerUtil.createObjectFromDTOtoURL("/api/teams/", teams, (t -> teamMapper.toDTO(t)), (t -> teamMapper.toEntity(t)), TeamDTO.class);
 
-        initializeTeams();
+        controllerUtil.initializeTeams(teams, players);
     }
 
-    private void initializeTeams() {
-        for (Team team : teams) {
-            RANDOM.ints(0, players.size())
-                    .distinct()
-                    .limit(10)
-                    .mapToObj(i -> players.get(i))
-                    .map(User::getId)
-                    .forEach(id -> {
-                        try {
-                            mockMvc.perform(post("/api/teams/" + team.getId() + "/players/" + id));
-                        } catch (Exception ignored) {
-                        }
-                    });
-        }
-    }
-
-    private <T, X> List<T> createObjectFromDTOtoURL(String url, List<T> entityList, Function<T, X> toDTO, Function<X, T> toEntity, Class<X> DTOClass) throws Exception {
-        ArrayList<T> newEntityList = new ArrayList<>();
-        for (T entity : entityList) {
-            String objectJson = objectMapper.writeValueAsString(toDTO.apply(entity));
-            String jsonResponse = mockMvc.perform(post(url).contentType(MediaType.APPLICATION_JSON)
-                                                           .content(objectJson))
-                                         .andExpect(status().isCreated())
-                                         .andReturn().getResponse().getContentAsString();
-            X entityDTO = objectMapper.readValue(jsonResponse, DTOClass);
-            newEntityList.add(toEntity.apply(entityDTO));
-        }
-        return newEntityList;
+    @Test
+    public void testSetup() {
     }
 
     @Test

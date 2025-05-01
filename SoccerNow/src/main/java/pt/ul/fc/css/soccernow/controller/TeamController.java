@@ -127,7 +127,7 @@ public class TeamController {
             @PathVariable("playerId") @NotNull UUID playerId
     ) {
         Team team = teamService.findNotDeletedById(teamId);
-        Player player = playerService.findNotDeletedById(playerId);
+        Player player = playerService.findNotDeletedById(playerId); //if a player is present on the db it should be allowed to be removed from a team
         teamService.removePlayerFromTeam(player, team);
         return ResponseEntity.ok("Player removed from team successfully.");
     }
@@ -138,6 +138,7 @@ public class TeamController {
             @PathVariable("teamId") @NotNull UUID teamId,
             @PathVariable("playerId") @NotNull UUID playerId
     ) {
+        //probably add this to the service and make it only receive the ids and do the find inside
         Team team = teamService.findNotDeletedById(teamId);
         Player player = playerService.findNotDeletedById(playerId);
         teamService.addPlayerToTeam(player, team);
