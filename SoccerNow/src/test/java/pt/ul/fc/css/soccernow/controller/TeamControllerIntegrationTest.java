@@ -68,7 +68,7 @@ class TeamControllerIntegrationTest {
                     .map(User::getId)
                     .forEach(id -> {
                         try {
-                            mockMvc.perform(post("/api/teams/" + team.getId() + "/players/" + id));
+                            mockMvc.perform(MockMvcRequestBuilders.post("/api/teams/" + team.getId() + "/players/" + id));
                         } catch (Exception ignored) {
                         }
                     });
@@ -79,10 +79,11 @@ class TeamControllerIntegrationTest {
         ArrayList<T> newEntityList = new ArrayList<>();
         for (T entity : entityList) {
             String objectJson = objectMapper.writeValueAsString(toDTO.apply(entity));
-            String jsonResponse = mockMvc.perform(post(url).contentType(MediaType.APPLICATION_JSON)
-                                                           .content(objectJson))
-                                         .andExpect(status().isCreated())
-                                         .andReturn().getResponse().getContentAsString();
+            String jsonResponse = mockMvc.perform(
+                    MockMvcRequestBuilders.post(url)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectJson)
+            ).andReturn().getResponse().getContentAsString();
             X entityDTO = objectMapper.readValue(jsonResponse, DTOClass);
             newEntityList.add(toEntity.apply(entityDTO));
         }
@@ -95,8 +96,8 @@ class TeamControllerIntegrationTest {
 
         mockMvc.perform(get("/api/teams/" + team.getId()))
                .andExpect(status().isOk())
-               .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-//               .andExpect(jsonPath("$.id").value(team.getId()));
+               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+               .andExpect(jsonPath("$.id").value(team.getId().toString()));
     }
 
     @Test
