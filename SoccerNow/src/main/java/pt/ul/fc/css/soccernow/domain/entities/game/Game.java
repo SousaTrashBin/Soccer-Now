@@ -23,10 +23,10 @@ public class Game extends SoftDeleteEntity {
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @OneToOne(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
     private GameTeam gameTeamOne;
 
-    @OneToOne(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
     private GameTeam gameTeamTwo;
 
     @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
@@ -204,13 +204,12 @@ public class Game extends SoftDeleteEntity {
         secondaryReferee.registerSecondaryRefereeGame(this);
     }
 
-    public void registerGameTeamOne(GameTeam validatedGameTeamOne) {
+    public void registerGameTeams(GameTeam validatedGameTeamOne, GameTeam validatedGameTeamTwo) {
         this.gameTeamOne = validatedGameTeamOne;
-        validatedGameTeamOne.setGame(this);
+        this.gameTeamTwo = validatedGameTeamTwo;
     }
 
-    public void registerGameTeamTwo(GameTeam validatedGameTeamTwo) {
-        this.gameTeamTwo = validatedGameTeamTwo;
-        validatedGameTeamTwo.setGame(this);
+    public boolean hasPlayer(Player player) {
+        return getPlayers().contains(player);
     }
 }

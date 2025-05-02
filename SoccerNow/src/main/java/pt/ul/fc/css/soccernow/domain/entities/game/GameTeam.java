@@ -30,18 +30,6 @@ public class GameTeam {
     @JoinColumn(name = "team_id", nullable = false)
     private Team team;
 
-    @OneToOne(optional = false, orphanRemoval = true)
-    @JoinColumn(name = "game_id", nullable = false)
-    private Game game;
-
-    public Game getGame() {
-        return game;
-    }
-
-    public void setGame(Game game) {
-        this.game = game;
-    }
-
     public Team getTeam() {
         return team;
     }
@@ -82,10 +70,6 @@ public class GameTeam {
         return getGamePlayers().size() == FUTSAL_TEAM_SIZE;
     }
 
-    public boolean isClosed() {
-        return getGame().isClosed();
-    }
-
     public Set<Player> getPlayers() {
         return gamePlayers.stream().map(GamePlayer::getPlayer).collect(Collectors.toSet());
     }
@@ -110,18 +94,15 @@ public class GameTeam {
     public String toString() {
         return getClass().getSimpleName() + "(" +
                 "id = " + id + ", " +
-                "team = " + team + ", " +
-                "game = " + game + ")";
+                "team = " + team + ")";
     }
 
     public boolean hasAllPlayersOnTeam(Team team) {
-        return getPlayers().stream()
-                .allMatch(gamePlayer -> gamePlayer.hasTeam(team));
+        return getPlayers().stream().allMatch(team::hasPlayer);
     }
 
     public void registerTeam(Team team) {
         this.team = team;
-        team.registerGameTeam(this);
     }
 
 }

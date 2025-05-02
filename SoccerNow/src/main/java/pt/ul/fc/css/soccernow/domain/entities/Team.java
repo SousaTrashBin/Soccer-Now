@@ -3,7 +3,6 @@ package pt.ul.fc.css.soccernow.domain.entities;
 import jakarta.persistence.*;
 import org.hibernate.proxy.HibernateProxy;
 import pt.ul.fc.css.soccernow.domain.entities.game.Game;
-import pt.ul.fc.css.soccernow.domain.entities.game.GameTeam;
 import pt.ul.fc.css.soccernow.domain.entities.tournament.Placement;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.util.SoftDeleteEntity;
@@ -36,15 +35,18 @@ public class Team extends SoftDeleteEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "team", orphanRemoval = true)
-    private List<GameTeam> gameTeams = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(name = "teams_games",
+            joinColumns = @JoinColumn(name = "team_id"),
+            inverseJoinColumns = @JoinColumn(name = "game_id"))
+    private Set<Game> games = new LinkedHashSet<>();
 
-    public List<GameTeam> getGameTeams() {
-        return gameTeams;
+    public Set<Game> getGames() {
+        return games;
     }
 
-    public void setGameTeams(List<GameTeam> gameTeams) {
-        this.gameTeams = gameTeams;
+    public void setGames(Set<Game> games) {
+        this.games = games;
     }
 
     public String getName() {
@@ -80,7 +82,7 @@ public class Team extends SoftDeleteEntity {
     }
 
     public boolean hasPlayer(Player player) {
-        return player.hasTeam(this);
+        return players.contains(player);
     }
 
     public void addPlayer(Player player) {
@@ -93,13 +95,13 @@ public class Team extends SoftDeleteEntity {
         player.removeTeam(this);
     }
 
-    private Stream<GameTeam> getPendingGamesStream() {
-        return this.getGameTeams()
+    private Stream<Game> getPendingGamesStream() {
+        return this.getGames()
                 .stream()
-                .filter(Predicate.not(GameTeam::isClosed));
+                .filter(Predicate.not(Game::isClosed));
     }
 
-    public List<GameTeam> getPendingGames() {
+    public List<Game> getPendingGames() {
         return getPendingGamesStream().collect(Collectors.toList());
     }
 
@@ -108,8 +110,7 @@ public class Team extends SoftDeleteEntity {
     }
 
     public boolean hasPendingGamesWithPlayer(Player player) {
-        return getPendingGamesStream()
-                .anyMatch(gameTeam -> gameTeam.hasPlayer(player));
+        return getPendingGamesStream().anyMatch(game -> game.hasPlayer(player));
     }
 
     public boolean hasPendingTournaments() {
@@ -121,8 +122,7 @@ public class Team extends SoftDeleteEntity {
     }
 
     public long getVictoryCount() {
-        return gameTeams.stream()
-                .map(GameTeam::getGame)
+        return games.stream()
                 .map(Game::whoWonId)
                 .filter(Objects::nonNull)
                 .filter(id -> id.equals(getId()))
@@ -146,7 +146,11 @@ public class Team extends SoftDeleteEntity {
         return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 
-    public void registerGameTeam(GameTeam gameTeam) {
-        gameTeams.add(gameTeam);
+    public void registerGame(Game game) {
+        games.add(game);
+    }
+
+    public void addGame(Game game) {
+        games.add(game);
     }
 }

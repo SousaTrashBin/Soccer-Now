@@ -8,29 +8,33 @@ import pt.ul.fc.css.soccernow.util.PlacementEnum;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * DTO for {@link pt.ul.fc.css.soccernow.domain.entities.Team}
  */
 public class TeamDTO implements Serializable {
+    @NotNull
+    private Set<GameInfoDTO> games = new LinkedHashSet<>();
     private UUID id;
     private Set<PlayerInfoDTO> players = new LinkedHashSet<>();
     private Set<PlacementInfoDTO> placements = new LinkedHashSet<>();
     @Pattern(regexp = "^\\p{L}+( \\p{L}+)*$")
     @Length(max = 100)
     private String name;
-    private List<GameTeamInfoDTO> gameTeams = new ArrayList<>();
-
     public TeamDTO() {
     }
 
-    public TeamDTO(UUID id, Set<PlayerInfoDTO> players, Set<PlacementInfoDTO> placements, String name, List<GameTeamInfoDTO> gameTeams) {
+    public TeamDTO(
+            Set<GameInfoDTO> games, UUID id, Set<PlayerInfoDTO> players, Set<PlacementInfoDTO> placements, String name) {
         this.id = id;
         this.players = players;
         this.placements = placements;
         this.name = name;
-        this.gameTeams = gameTeams;
+        this.games = games;
     }
 
     public UUID getId() {
@@ -69,14 +73,6 @@ public class TeamDTO implements Serializable {
         return this;
     }
 
-    public List<GameTeamInfoDTO> getGameTeams() {
-        return gameTeams;
-    }
-
-    public TeamDTO setGameTeams(List<GameTeamInfoDTO> gameTeams) {
-        this.gameTeams = gameTeams;
-        return this;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -86,13 +82,12 @@ public class TeamDTO implements Serializable {
         return Objects.equals(this.id, entity.id) &&
                 Objects.equals(this.players, entity.players) &&
                 Objects.equals(this.placements, entity.placements) &&
-                Objects.equals(this.name, entity.name) &&
-                Objects.equals(this.gameTeams, entity.gameTeams);
+                Objects.equals(this.name, entity.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, players, placements, name, gameTeams);
+        return Objects.hash(id, players, placements, name, games);
     }
 
     @Override
@@ -102,7 +97,16 @@ public class TeamDTO implements Serializable {
                 "players = " + players + ", " +
                 "placements = " + placements + ", " +
                 "name = " + name + ", " +
-                "gameTeams = " + gameTeams + ")";
+                "games = " + games + ")";
+    }
+
+    public Set<GameInfoDTO> getGames() {
+        return games;
+    }
+
+    public TeamDTO setGames(Set<GameInfoDTO> games) {
+        this.games = games;
+        return this;
     }
 
     /**
@@ -275,112 +279,79 @@ public class TeamDTO implements Serializable {
     }
 
     /**
-     * DTO for {@link pt.ul.fc.css.soccernow.domain.entities.game.GameTeam}
+     * DTO for {@link pt.ul.fc.css.soccernow.domain.entities.game.Game}
      */
-    public static class GameTeamInfoDTO implements Serializable {
-        private GameInfoDTO game;
+    public static class GameInfoDTO implements Serializable {
+        private LocalDateTime deletedAt;
+        private UUID id;
+        private LocalDateTime happensIn;
+        private Boolean isClosed = false;
 
-        public GameTeamInfoDTO() {
+        public GameInfoDTO() {
         }
 
-        public GameTeamInfoDTO(GameInfoDTO game) {
-            this.game = game;
+        public GameInfoDTO(LocalDateTime deletedAt, UUID id, LocalDateTime happensIn, Boolean isClosed) {
+            this.deletedAt = deletedAt;
+            this.id = id;
+            this.happensIn = happensIn;
+            this.isClosed = isClosed;
         }
 
-        public GameInfoDTO getGame() {
-            return game;
+        public LocalDateTime getDeletedAt() {
+            return deletedAt;
         }
 
-        public GameTeamInfoDTO setGame(GameInfoDTO game) {
-            this.game = game;
-            return this;
+        public void setDeletedAt(LocalDateTime deletedAt) {
+            this.deletedAt = deletedAt;
+        }
+
+        public UUID getId() {
+            return id;
+        }
+
+        public void setId(UUID id) {
+            this.id = id;
+        }
+
+        public LocalDateTime getHappensIn() {
+            return happensIn;
+        }
+
+        public void setHappensIn(LocalDateTime happensIn) {
+            this.happensIn = happensIn;
+        }
+
+        public Boolean getIsClosed() {
+            return isClosed;
+        }
+
+        public void setIsClosed(Boolean isClosed) {
+            this.isClosed = isClosed;
         }
 
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            GameTeamInfoDTO entity = (GameTeamInfoDTO) o;
-            return Objects.equals(this.game, entity.game);
+            GameInfoDTO entity = (GameInfoDTO) o;
+            return Objects.equals(this.deletedAt, entity.deletedAt) &&
+                    Objects.equals(this.id, entity.id) &&
+                    Objects.equals(this.happensIn, entity.happensIn) &&
+                    Objects.equals(this.isClosed, entity.isClosed);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(game);
+            return Objects.hash(deletedAt, id, happensIn, isClosed);
         }
 
         @Override
         public String toString() {
             return getClass().getSimpleName() + "(" +
-                    "game = " + game + ")";
-        }
-
-        /**
-         * DTO for {@link pt.ul.fc.css.soccernow.domain.entities.game.Game}
-         */
-        public static class GameInfoDTO implements Serializable {
-            private UUID id;
-            private LocalDateTime happensIn;
-            private Boolean isClosed = false;
-
-            public GameInfoDTO() {
-            }
-
-            public GameInfoDTO(UUID id, LocalDateTime happensIn, Boolean isClosed) {
-                this.id = id;
-                this.happensIn = happensIn;
-                this.isClosed = isClosed;
-            }
-
-            public UUID getId() {
-                return id;
-            }
-
-            public GameInfoDTO setId(UUID id) {
-                this.id = id;
-                return this;
-            }
-
-            public LocalDateTime getHappensIn() {
-                return happensIn;
-            }
-
-            public GameInfoDTO setHappensIn(LocalDateTime happensIn) {
-                this.happensIn = happensIn;
-                return this;
-            }
-
-            public Boolean getIsClosed() {
-                return isClosed;
-            }
-
-            public GameInfoDTO setIsClosed(Boolean isClosed) {
-                this.isClosed = isClosed;
-                return this;
-            }
-
-            @Override
-            public boolean equals(Object o) {
-                if (this == o) return true;
-                if (o == null || getClass() != o.getClass()) return false;
-                GameInfoDTO entity = (GameInfoDTO) o;
-                return Objects.equals(this.id, entity.id) &&
-                        Objects.equals(this.happensIn, entity.happensIn) &&
-                        Objects.equals(this.isClosed, entity.isClosed);
-            }
-
-            @Override
-            public int hashCode() {
-                return Objects.hash(id, happensIn, isClosed);
-            }
-
-            @Override
-            public String toString() {
-                return getClass().getSimpleName() + "(" +
-                        "id = " + id + ", " +
-                        "happensIn = " + happensIn + ", " +
-                        "isClosed = " + isClosed + ")";
-            }
+                    "deletedAt = " + deletedAt + ", " +
+                    "id = " + id + ", " +
+                    "happensIn = " + happensIn + ", " +
+                    "isClosed = " + isClosed + ")";
         }
     }
 }

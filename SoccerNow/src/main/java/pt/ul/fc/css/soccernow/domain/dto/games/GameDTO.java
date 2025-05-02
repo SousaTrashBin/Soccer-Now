@@ -411,7 +411,7 @@ public class GameDTO implements Serializable {
     public static class GameStatsInfoDTO implements Serializable {
         private Integer teamOneGoals = 0;
         private Integer teamTwoGoals = 0;
-        @Size(min = 10, max = 10)
+        @Size(min = 0, max = 10)
         private Set<PlayerGameStatsInfoDTO> playerGameStats = new LinkedHashSet<>();
 
         public GameStatsInfoDTO() {

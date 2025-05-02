@@ -12,6 +12,7 @@ import pt.ul.fc.css.soccernow.util.CardEnum;
 import pt.ul.fc.css.soccernow.util.FutsalPositionEnum;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -23,18 +24,19 @@ public class PlayerDTO implements Serializable {
     @Length(max = 100)
     private String name;
     private FutsalPositionEnum preferredPosition;
-    private Set<TeamInfoDTO> teams = new LinkedHashSet<>();
     private List<PlayerGameStatsDTO> playerGameStats = new ArrayList<>();
+    private Set<TeamInfoDTO> teams = new LinkedHashSet<>();
 
     public PlayerDTO() {
     }
 
-    public PlayerDTO(UUID id, String name, FutsalPositionEnum preferredPosition, Set<TeamInfoDTO> teams, List<PlayerGameStatsDTO> playerGameStats) {
+    public PlayerDTO(UUID id, String name, FutsalPositionEnum preferredPosition, List<PlayerGameStatsDTO> playerGameStats,
+                     Set<TeamInfoDTO> teams) {
         this.id = id;
         this.name = name;
         this.preferredPosition = preferredPosition;
-        this.teams = teams;
         this.playerGameStats = playerGameStats;
+        this.teams = teams;
     }
 
     public UUID getId() {
@@ -61,15 +63,6 @@ public class PlayerDTO implements Serializable {
 
     public PlayerDTO setPreferredPosition(FutsalPositionEnum preferredPosition) {
         this.preferredPosition = preferredPosition;
-        return this;
-    }
-
-    public Set<TeamInfoDTO> getTeams() {
-        return teams;
-    }
-
-    public PlayerDTO setTeams(Set<TeamInfoDTO> teams) {
-        this.teams = teams;
         return this;
     }
 
@@ -109,62 +102,13 @@ public class PlayerDTO implements Serializable {
                 "playerGameStats = " + playerGameStats + ")";
     }
 
-    /**
-     * DTO for {@link Team}
-     */
-    public static class TeamInfoDTO implements Serializable {
-        @NotNull
-        private UUID id;
-        @Pattern(regexp = "^\\p{L}+( \\p{L}+)*$")
-        @Length(max = 100)
-        private String name;
+    public Set<TeamInfoDTO> getTeams() {
+        return teams;
+    }
 
-        public TeamInfoDTO() {
-        }
-
-        public TeamInfoDTO(UUID id, String name) {
-            this.id = id;
-            this.name = name;
-        }
-
-        public UUID getId() {
-            return id;
-        }
-
-        public TeamInfoDTO setId(UUID id) {
-            this.id = id;
-            return this;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public TeamInfoDTO setName(String name) {
-            this.name = name;
-            return this;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            TeamInfoDTO entity = (TeamInfoDTO) o;
-            return Objects.equals(this.id, entity.id) &&
-                    Objects.equals(this.name, entity.name);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(id, name);
-        }
-
-        @Override
-        public String toString() {
-            return getClass().getSimpleName() + "(" +
-                    "id = " + id + ", " +
-                    "name = " + name + ")";
-        }
+    public PlayerDTO setTeams(Set<TeamInfoDTO> teams) {
+        this.teams = teams;
+        return this;
     }
 
     /**
@@ -277,6 +221,136 @@ public class PlayerDTO implements Serializable {
             public String toString() {
                 return getClass().getSimpleName() + "(" +
                         "id = " + id + ")";
+            }
+        }
+    }
+
+    /**
+     * DTO for {@link Team}
+     */
+    public static class TeamInfoDTO implements Serializable {
+        private UUID id;
+        private String name;
+        private Set<GameDTO> games = new LinkedHashSet<>();
+
+        public TeamInfoDTO() {
+        }
+
+        public TeamInfoDTO(UUID id, String name, Set<GameDTO> games) {
+            this.id = id;
+            this.name = name;
+            this.games = games;
+        }
+
+        public UUID getId() {
+            return id;
+        }
+
+        public void setId(UUID id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public Set<GameDTO> getGames() {
+            return games;
+        }
+
+        public void setGames(Set<GameDTO> games) {
+            this.games = games;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            TeamInfoDTO entity = (TeamInfoDTO) o;
+            return Objects.equals(this.id, entity.id) &&
+                    Objects.equals(this.name, entity.name) &&
+                    Objects.equals(this.games, entity.games);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(id, name, games);
+        }
+
+        @Override
+        public String toString() {
+            return getClass().getSimpleName() + "(" +
+                    "id = " + id + ", " +
+                    "name = " + name + ", " +
+                    "games = " + games + ")";
+        }
+
+        /**
+         * DTO for {@link Game}
+         */
+        public static class GameDTO implements Serializable {
+            private UUID id;
+            private LocalDateTime happensIn;
+            private Boolean isClosed = false;
+
+            public GameDTO() {
+            }
+
+            public GameDTO(UUID id, LocalDateTime happensIn, Boolean isClosed) {
+                this.id = id;
+                this.happensIn = happensIn;
+                this.isClosed = isClosed;
+            }
+
+            public UUID getId() {
+                return id;
+            }
+
+            public void setId(UUID id) {
+                this.id = id;
+            }
+
+            public LocalDateTime getHappensIn() {
+                return happensIn;
+            }
+
+            public void setHappensIn(LocalDateTime happensIn) {
+                this.happensIn = happensIn;
+            }
+
+            public Boolean getIsClosed() {
+                return isClosed;
+            }
+
+            public void setIsClosed(Boolean isClosed) {
+                this.isClosed = isClosed;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                GameDTO entity = (GameDTO) o;
+                return Objects.equals(this.id, entity.id) &&
+                        Objects.equals(this.happensIn, entity.happensIn) &&
+                        Objects.equals(this.isClosed, entity.isClosed);
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hash(id, happensIn, isClosed);
+            }
+
+            @Override
+            public String toString() {
+                return getClass().getSimpleName() + "(" +
+                        "id = " + id + ", " +
+                        "happensIn = " + happensIn + ", " +
+                        "isClosed = " + isClosed + ")";
             }
         }
     }
