@@ -31,8 +31,7 @@ public class PlayerRepositoryIntegrationTests {
 
         assert savedPlayer.getName()
                           .equals(testPlayer.getName())
-               && savedPlayer.getPreferredPosition()
-                             .equals(testPlayer.getPreferredPosition())
+                && savedPlayer.getPreferredPosition() == testPlayer.getPreferredPosition()
                && savedPlayer.getId() != null;
 
         Optional<Player> recalledPlayer = underTest.findById(savedPlayer.getId());

@@ -19,12 +19,15 @@ import pt.ul.fc.css.soccernow.mapper.PlayerMapper;
 import pt.ul.fc.css.soccernow.mapper.TeamMapper;
 
 import java.util.List;
+import java.util.Random;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static pt.ul.fc.css.soccernow.utils.PlayerTestDataUtil.getPlayers;
 import static pt.ul.fc.css.soccernow.utils.TeamTestDataUtil.getTeams;
+import static pt.ul.fc.css.soccernow.utils.UserTestDataUtil.SEED;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -38,6 +41,7 @@ class TeamControllerIntegrationTest {
     private List<Team> teams;
     @Autowired private TeamMapper teamMapper;
     @Autowired private PlayerMapper playerMapper;
+    Random random = new Random(SEED);
 
     @Autowired
     public TeamControllerIntegrationTest(MockMvc mockMvc, ObjectMapper objectMapper) {
@@ -64,11 +68,11 @@ class TeamControllerIntegrationTest {
     @Test
     public void testGetTeamById() throws Exception {
         Team team = teams.get(0);
-
         mockMvc.perform(get("/api/teams/" + team.getId()))
+                .andDo(print())
                .andExpect(status().isOk())
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-               .andExpect(jsonPath("$.id").value(team.getId().toString()));
+                .andExpect(jsonPath("$.id").value(team.getId().toString())).andReturn().getResponse().getContentAsString();
     }
 
     @Test
@@ -76,6 +80,7 @@ class TeamControllerIntegrationTest {
         Team team = teams.get(0);
 
         mockMvc.perform(get("/api/teams/" + team.getId() + "/players"))
+                .andDo(print())
                .andExpect(status().isOk())
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                .andExpect(jsonPath("$.length()").value(10));
@@ -94,9 +99,11 @@ class TeamControllerIntegrationTest {
         Player player = playerMapper.toEntity(playerDTO);
 
         mockMvc.perform(delete("/api/teams/" + team.getId() + "/players/" + player.getId()))
+                .andDo(print())
                .andExpect(status().isOk());
 
         mockMvc.perform(get("/api/teams/" + team.getId() + "/players"))
+                .andDo(print())
                .andExpect(status().isOk())
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                .andExpect(jsonPath("$.length()").value(9));
@@ -105,6 +112,7 @@ class TeamControllerIntegrationTest {
     @Test
     public void testGetAllTeams() throws Exception {
         mockMvc.perform(get("/api/teams/"))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.length()").value(teams.size()));
@@ -115,9 +123,11 @@ class TeamControllerIntegrationTest {
         Team team = teams.get(0);
 
         mockMvc.perform(delete("/api/teams/" + team.getId()))
+                .andDo(print())
                 .andExpect(status().isOk());
 
         mockMvc.perform(get("/api/teams/"))
+                .andDo(print())
                .andExpect(status().isOk())
                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                .andExpect(jsonPath("$.length()").value(teams.size() - 1));
