@@ -8,10 +8,9 @@ import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.util.FutsalPositionEnum;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
-
-import static pt.ul.fc.css.soccernow.utils.UserTestDataUtil.RANDOM;
 
 public class GameTeamDataUtil {
     public static GameTeam createGameTeam(Team team) {
@@ -19,28 +18,23 @@ public class GameTeamDataUtil {
         gameTeam.setTeam(team);
 
         List<Player> teamPlayerList = new ArrayList<>(team.getPlayers());
-        List<Player> selectedPlayers = RANDOM.ints(0, teamPlayerList.size())
-                .distinct()
+        List<Player> selectedPlayers = teamPlayerList.stream()
+                .sorted(Comparator.comparing(Player::getName))
                 .limit(5)
-                .mapToObj(teamPlayerList::get)
                 .toList();
         List<GamePlayer> gamePlayers = new ArrayList<>();
-
-        GamePlayer goalie = new GamePlayer();
-        goalie.setPlayer(selectedPlayers.get(0));
-        goalie.setPlayedInPosition(FutsalPositionEnum.GOALIE);
-        gamePlayers.add(goalie);
         List<FutsalPositionEnum> positions = List.of(
+                FutsalPositionEnum.GOALIE,
                 FutsalPositionEnum.SWEEPER,
                 FutsalPositionEnum.FORWARD,
                 FutsalPositionEnum.LEFT_WINGER,
                 FutsalPositionEnum.RIGHT_WINGER
         );
 
-        for (int i = 1; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {
             GamePlayer gamePlayer = new GamePlayer();
             gamePlayer.setPlayer(selectedPlayers.get(i));
-            gamePlayer.setPlayedInPosition(positions.get(i - 1));
+            gamePlayer.setPlayedInPosition(positions.get(i));
             gamePlayers.add(gamePlayer);
         }
 
