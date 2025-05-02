@@ -29,14 +29,14 @@ import static pt.ul.fc.css.soccernow.utils.UserTestDataUtil.SEED;
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-class PlayerControllerIntegrationTest {
+class PlayerControllerIntegrationTests {
     private final MockMvc mockMvc;
     private final ObjectMapper objectMapper;
     private final PlayerMapper playerMapper;
     Random random = new Random(SEED);
 
     @Autowired
-    public PlayerControllerIntegrationTest(MockMvc mockMvc, ObjectMapper objectMapper, PlayerMapper playerMapper) {
+    public PlayerControllerIntegrationTests(MockMvc mockMvc, ObjectMapper objectMapper, PlayerMapper playerMapper) {
         this.mockMvc = mockMvc;
         this.objectMapper = objectMapper;
         this.playerMapper = playerMapper;

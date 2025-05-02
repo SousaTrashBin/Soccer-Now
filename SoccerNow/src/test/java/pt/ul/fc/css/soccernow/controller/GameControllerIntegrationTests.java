@@ -49,7 +49,7 @@ import static pt.ul.fc.css.soccernow.utils.UserTestDataUtil.SEED;
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-class GameControllerIntegrationTest {
+class GameControllerIntegrationTests {
     private final MockMvc mockMvc;
     private final ObjectMapper objectMapper;
     List<Player> players;
@@ -68,7 +68,7 @@ class GameControllerIntegrationTest {
     private GameMapper gameMapper;
 
     @Autowired
-    public GameControllerIntegrationTest(MockMvc mockMvc, ObjectMapper objectMapper) {
+    public GameControllerIntegrationTests(MockMvc mockMvc, ObjectMapper objectMapper) {
         this.mockMvc = mockMvc;
         this.objectMapper = objectMapper;
         controllerUtil = new ControllerUtils(mockMvc, objectMapper);
