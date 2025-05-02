@@ -7,6 +7,7 @@ import pt.ul.fc.css.soccernow.domain.entities.tournament.Placement;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.util.SoftDeleteEntity;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -99,6 +100,15 @@ public class Team extends SoftDeleteEntity {
         return this.getGames()
                 .stream()
                 .filter(Predicate.not(Game::isClosed));
+    }
+
+    @Override
+    public void delete() {
+        super.delete();
+
+        for (Player player : getPlayers()) {
+            removePlayer(player);
+        }
     }
 
     public List<Game> getPendingGames() {
