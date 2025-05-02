@@ -130,7 +130,7 @@ public class TeamController {
             @PathVariable("playerId") @NotNull UUID playerId
     ) {
         Team team = teamService.findNotDeletedById(teamId);
-        Player player = playerService.findNotDeletedById(playerId); //if a player is present on the db it should be allowed to be removed from a team
+        Player player = playerService.findNotDeletedById(playerId);
         teamService.removePlayerFromTeam(player, team);
         return ResponseEntity.ok("Player removed from team successfully.");
     }

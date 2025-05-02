@@ -7,7 +7,6 @@ import pt.ul.fc.css.soccernow.domain.entities.tournament.Placement;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.util.SoftDeleteEntity;
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -105,8 +104,8 @@ public class Team extends SoftDeleteEntity {
     @Override
     public void delete() {
         super.delete();
-
-        for (Player player : getPlayers()) {
+        List<Player> playersCopy = new ArrayList<>(getPlayers());
+        for (Player player : playersCopy) {
             removePlayer(player);
         }
     }
