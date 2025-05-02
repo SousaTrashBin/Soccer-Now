@@ -10,13 +10,16 @@ import pt.ul.fc.css.soccernow.domain.entities.user.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
-import static pt.ul.fc.css.soccernow.utils.UserTestDataUtil.RANDOM;
+import static pt.ul.fc.css.soccernow.utils.UserTestDataUtil.SEED;
 
 public class ControllerUtils {
     private final MockMvc mockMvc;
     private final ObjectMapper objectMapper;
+    Random random = new Random(SEED);
 
     public ControllerUtils(MockMvc mockMvc, ObjectMapper objectMapper) {
         this.mockMvc = mockMvc;
@@ -25,7 +28,7 @@ public class ControllerUtils {
 
     public void initializeTeams(List<Team> teams, List<Player> players) {
         for (Team team : teams) {
-            RANDOM.ints(0, players.size())
+            random.ints(0, players.size())
                     .distinct()
                     .limit(10)
                     .mapToObj(players::get)
@@ -52,5 +55,17 @@ public class ControllerUtils {
             newEntityList.add(toEntity.apply(entityDTO));
         }
         return newEntityList;
+    }
+
+    public <X, T> List<T> getUpdatedEntities(String url, Function<X, T> toEntity, Class<X> DTOClass) throws Exception {
+        String jsonResponse = mockMvc.perform(
+                MockMvcRequestBuilders.get(url)
+        ).andReturn().getResponse().getContentAsString();
+
+        List<X> entityListDTO = objectMapper.readValue(
+                jsonResponse,
+                objectMapper.getTypeFactory().constructCollectionType(List.class, DTOClass)
+        );
+        return entityListDTO.stream().map(toEntity).collect(Collectors.toList());
     }
 }
