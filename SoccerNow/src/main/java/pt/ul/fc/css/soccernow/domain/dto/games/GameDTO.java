@@ -1,9 +1,6 @@
 package pt.ul.fc.css.soccernow.domain.dto.games;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.PositiveOrZero;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.Length;
 import pt.ul.fc.css.soccernow.util.CardEnum;
 import pt.ul.fc.css.soccernow.util.FutsalPositionEnum;
@@ -30,6 +27,7 @@ public class GameDTO implements Serializable {
     @NotNull
     private AddressDTO locatedIn;
     @NotNull
+    @FutureOrPresent
     private LocalDateTime happensIn;
     @NotNull
     private Boolean isClosed = false;
