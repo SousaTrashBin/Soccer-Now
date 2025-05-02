@@ -15,6 +15,7 @@ import pt.ul.fc.css.soccernow.mapper.PlayerGameStatsMapper;
 import pt.ul.fc.css.soccernow.service.GameService;
 
 import java.net.URI;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -48,9 +49,12 @@ public class GameController {
     @ApiOperation(value = "Close game with given ID", notes = "Returns the closed game")
     public ResponseEntity<GameDTO> closeGameById(
             @PathVariable("gameId") @NotNull UUID gameId,
-            @RequestBody @Validated @NotNull Set<PlayerGameStatsDTO> playerGameStatsDTOs
+            @RequestBody(required = false) @Validated Set<PlayerGameStatsDTO> playerGameStatsDTOs
     ) {
-        Set<PlayerGameStats> playerGameStats = playerGameStatsDTOs.stream().map(playerGameStatsMapper::toEntity).collect(Collectors.toSet());
+        playerGameStatsDTOs = playerGameStatsDTOs != null ? playerGameStatsDTOs : new HashSet<>();
+        Set<PlayerGameStats> playerGameStats = playerGameStatsDTOs.stream()
+                .map(playerGameStatsMapper::toEntity)
+                .collect(Collectors.toSet());
         Game closedGame = gameService.closeGame(gameId, playerGameStats);
         return ResponseEntity.ok(gameMapper.toDTO(closedGame));
     }

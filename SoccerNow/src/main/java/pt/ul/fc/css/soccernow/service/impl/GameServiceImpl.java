@@ -141,21 +141,11 @@ public class GameServiceImpl implements GameService {
     }
 
     public Game closeGame(UUID gameID, Set<PlayerGameStats> incomingPlayerStats) {
-        validatePlayerCount(incomingPlayerStats);
         Game game = validateGameIsOpenAndExists(gameID);
         GameStats gameStats = calculateGameStats(game, incomingPlayerStats);
         game.setGameStats(gameStats);
         game.close();
         return gameRepository.save(game);
-    }
-
-    private void validatePlayerCount(Set<PlayerGameStats> playerStats) {
-        if (playerStats.size() > FUTSAL_TEAM_SIZE * 2) {
-            throw new BadRequestException(
-                    "There couldn't be more than %d players in the game"
-                            .formatted(FUTSAL_TEAM_SIZE * 2)
-            );
-        }
     }
 
     private Game validateGameIsOpenAndExists(UUID gameID) {
@@ -191,6 +181,7 @@ public class GameServiceImpl implements GameService {
 
         for (Player player : playersInGame) {
             PlayerGameStats defaultStats = new PlayerGameStats();
+            defaultStats.setGame(game);
             player.registerGameStats(defaultStats);
             gameStats.registerPlayerGameStats(defaultStats);
         }
