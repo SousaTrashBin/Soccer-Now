@@ -10,6 +10,7 @@ import pt.ul.fc.css.soccernow.domain.dto.games.GameDTO;
 import pt.ul.fc.css.soccernow.domain.dto.games.PlayerGameStatsDTO;
 import pt.ul.fc.css.soccernow.domain.entities.game.Game;
 import pt.ul.fc.css.soccernow.domain.entities.game.PlayerGameStats;
+import pt.ul.fc.css.soccernow.exception.BadRequestException;
 import pt.ul.fc.css.soccernow.mapper.GameMapper;
 import pt.ul.fc.css.soccernow.mapper.PlayerGameStatsMapper;
 import pt.ul.fc.css.soccernow.service.GameService;
@@ -18,6 +19,7 @@ import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Tag(name = "Game", description = "Game operations")
@@ -52,11 +54,25 @@ public class GameController {
             @RequestBody(required = false) @Validated Set<PlayerGameStatsDTO> playerGameStatsDTOs
     ) {
         playerGameStatsDTOs = playerGameStatsDTOs != null ? playerGameStatsDTOs : new HashSet<>();
+        valitePlayerGameStatsDTO(playerGameStatsDTOs);
         Set<PlayerGameStats> playerGameStats = playerGameStatsDTOs.stream()
                 .map(playerGameStatsMapper::toEntity)
                 .collect(Collectors.toSet());
         Game closedGame = gameService.closeGame(gameId, playerGameStats);
         return ResponseEntity.ok(gameMapper.toDTO(closedGame));
+    }
+
+    private void valitePlayerGameStatsDTO(Set<PlayerGameStatsDTO> playerGameStatsDTOs) {
+        boolean hasDuplicatePlayers = playerGameStatsDTOs.stream()
+                .map(PlayerGameStatsDTO::getPlayer)
+                .map(PlayerGameStatsDTO.PlayerInfoDTO::getId)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .values()
+                .stream()
+                .anyMatch(count -> count > 1);
+        if (hasDuplicatePlayers) {
+            throw new BadRequestException("Please remove the duplicate players present on the player stats");
+        }
     }
 
 }
