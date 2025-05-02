@@ -78,7 +78,7 @@ public class GameServiceImpl implements GameService {
                 .collect(Collectors.toSet());
         boolean hasAtLeastOneRefereeWithCertificate = primaryReferee.getHasCertificate() ||
                 secondaryReferees.stream().anyMatch(Referee::getHasCertificate);
-        if (!hasAtLeastOneRefereeWithCertificate) {
+        if (entity.isACompetitiveGame() && !hasAtLeastOneRefereeWithCertificate) {
             throw new BadRequestException("At least one referee needs to have a certificate");
         }
         return new UpdatedAndValidatedRefereesResult(primaryReferee, secondaryReferees);

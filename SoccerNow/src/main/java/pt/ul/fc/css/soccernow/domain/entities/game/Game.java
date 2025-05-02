@@ -212,4 +212,8 @@ public class Game extends SoftDeleteEntity {
     public boolean hasPlayer(Player player) {
         return getPlayers().contains(player);
     }
+
+    public boolean isACompetitiveGame() {
+        return tournament != null;
+    }
 }
