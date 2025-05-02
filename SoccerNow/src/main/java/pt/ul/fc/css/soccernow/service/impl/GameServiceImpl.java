@@ -52,12 +52,22 @@ public class GameServiceImpl implements GameService {
         secondaryReferees.forEach(entity::registerSecondaryReferee);
 
         GameTeam validatedGameTeamOne = prepareAndValidateGameTeam(entity.getGameTeamOne());
+        validatedGameTeamOne.getTeam().addGame(entity);
         GameTeam validatedGameTeamTwo = prepareAndValidateGameTeam(entity.getGameTeamTwo());
-        entity.registerGameTeamOne(validatedGameTeamOne);
-        entity.registerGameTeamTwo(validatedGameTeamTwo);
+        validatedGameTeamTwo.getTeam().addGame(entity);
+
+        verifyNoPlayerOverlap(validatedGameTeamOne, validatedGameTeamTwo);
+        entity.registerGameTeams(validatedGameTeamOne, validatedGameTeamTwo);
 
         return gameRepository.save(entity);
     }
+
+    private void verifyNoPlayerOverlap(GameTeam validatedGameTeamOne, GameTeam validatedGameTeamTwo) {
+        if (validatedGameTeamOne.getPlayers().stream().anyMatch(validatedGameTeamTwo::hasPlayer)) {
+            throw new BadRequestException("There are overlapped players between both game teams");
+        }
+    }
+
 
     private UpdatedAndValidatedRefereesResult updatedAndValidatedReferees(Game entity) {
         Referee primaryReferee = refereeService.findNotDeletedById(entity.getPrimaryReferee()
