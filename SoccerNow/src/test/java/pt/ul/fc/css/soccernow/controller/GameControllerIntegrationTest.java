@@ -158,7 +158,7 @@ class GameControllerIntegrationTest {
     public void testIfGameCanBeClosedWithStats() throws Exception {
         Game game = new Game();
         GameTeam firstGameTeam = createGameTeam(teams.get(0));
-        GameTeam secondGameTeam = createGameTeam(teams.get(4));
+        GameTeam secondGameTeam = createGameTeam(teams.get(6));
         game.setPrimaryReferee(certificatedReferees.get(0));
         game.setGameTeamOne(firstGameTeam);
         game.setGameTeamTwo(secondGameTeam);
@@ -177,15 +177,29 @@ class GameControllerIntegrationTest {
                 .andReturn().getResponse().getContentAsString();
         GameDTO jsonResponseGameDTO = parseDTO(jsonResponse, GameDTO.class);
 
-        Set<GameDTO.GameTeamInfoDTO.GamePlayerInfoDTO> gamePlayers = jsonResponseGameDTO.getGameTeamOne().getGamePlayers();
+        List<UUID> teamOnePlayerUUIDs = jsonResponseGameDTO.getGameTeamOne().getGamePlayers().stream()
+                .map(GameDTO.GameTeamInfoDTO.GamePlayerInfoDTO::getPlayer)
+                .map(GameDTO.GameTeamInfoDTO.GamePlayerInfoDTO.PlayerInfoDTO::getId)
+                .sorted()
+                .toList();
+
+        List<UUID> teamTwoPlayerUUIDs = jsonResponseGameDTO.getGameTeamTwo().getGamePlayers().stream()
+                .map(GameDTO.GameTeamInfoDTO.GamePlayerInfoDTO::getPlayer)
+                .map(GameDTO.GameTeamInfoDTO.GamePlayerInfoDTO.PlayerInfoDTO::getId)
+                .sorted()
+                .toList();
 
         Set<PlayerGameStatsDTO> playerGameStatsDTOSet = Set.of(
-                new PlayerGameStatsDTO(CardEnum.YELLOW, 2, new PlayerGameStatsDTO.PlayerInfoDTO())
+                new PlayerGameStatsDTO(CardEnum.YELLOW, 2, new PlayerGameStatsDTO.PlayerInfoDTO(teamOnePlayerUUIDs.get(0))),
+                new PlayerGameStatsDTO(CardEnum.RED, 4, new PlayerGameStatsDTO.PlayerInfoDTO(teamOnePlayerUUIDs.get(1))),
+                new PlayerGameStatsDTO(CardEnum.RED, 7, new PlayerGameStatsDTO.PlayerInfoDTO(teamTwoPlayerUUIDs.get(0))),
+                new PlayerGameStatsDTO(CardEnum.YELLOW, 1, new PlayerGameStatsDTO.PlayerInfoDTO(teamTwoPlayerUUIDs.get(1)))
         );
 
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/games/" + jsonResponseGameDTO.getId() + "/close")
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(playerGameStatsDTOSet)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -195,7 +209,7 @@ class GameControllerIntegrationTest {
     public void testIfGameCanBeClosedWithoutStats() throws Exception {
         Game game = new Game();
         GameTeam firstGameTeam = createGameTeam(teams.get(0));
-        GameTeam secondGameTeam = createGameTeam(teams.get(4));
+        GameTeam secondGameTeam = createGameTeam(teams.get(5));
         game.setPrimaryReferee(certificatedReferees.get(0));
         game.setGameTeamOne(firstGameTeam);
         game.setGameTeamTwo(secondGameTeam);
