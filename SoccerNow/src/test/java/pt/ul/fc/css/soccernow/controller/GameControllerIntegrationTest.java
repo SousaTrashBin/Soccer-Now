@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import pt.ul.fc.css.soccernow.domain.dto.TeamDTO;
 import pt.ul.fc.css.soccernow.domain.dto.games.GameDTO;
+import pt.ul.fc.css.soccernow.domain.dto.games.PlayerGameStatsDTO;
 import pt.ul.fc.css.soccernow.domain.dto.user.PlayerDTO;
 import pt.ul.fc.css.soccernow.domain.dto.user.RefereeDTO;
 import pt.ul.fc.css.soccernow.domain.entities.Address;
@@ -27,6 +28,7 @@ import pt.ul.fc.css.soccernow.mapper.GameMapper;
 import pt.ul.fc.css.soccernow.mapper.PlayerMapper;
 import pt.ul.fc.css.soccernow.mapper.RefereeMapper;
 import pt.ul.fc.css.soccernow.mapper.TeamMapper;
+import pt.ul.fc.css.soccernow.util.CardEnum;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -150,6 +152,72 @@ class GameControllerIntegrationTest {
         assert savedTeamDTOs.size() == 2;
         assert !Stream.of(gameDTO.getGameTeamOne(), gameDTO.getGameTeamTwo()).map(gameDTOTest -> gameDTOTest.getTeam().getId()).map(id -> deleteEntity("/api/teams/", id)).reduce(Boolean::logicalOr).orElse(false);
 
+    }
+
+    @Test
+    public void testIfGameCanBeClosedWithStats() throws Exception {
+        Game game = new Game();
+        GameTeam firstGameTeam = createGameTeam(teams.get(0));
+        GameTeam secondGameTeam = createGameTeam(teams.get(4));
+        game.setPrimaryReferee(certificatedReferees.get(0));
+        game.setGameTeamOne(firstGameTeam);
+        game.setGameTeamTwo(secondGameTeam);
+        game.setHappensIn(LocalDateTime.now().plusYears(1));
+
+        Address fakeAddress = createAddress();
+        game.setLocatedIn(fakeAddress);
+        GameDTO gameDTO = gameMapper.toDTO(game);
+        String gameDTOJSON = objectMapper.writeValueAsString(gameDTO);
+
+        String jsonResponse = mockMvc.perform(MockMvcRequestBuilders.post("/api/games/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(gameDTOJSON))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        GameDTO jsonResponseGameDTO = parseDTO(jsonResponse, GameDTO.class);
+
+        Set<GameDTO.GameTeamInfoDTO.GamePlayerInfoDTO> gamePlayers = jsonResponseGameDTO.getGameTeamOne().getGamePlayers();
+
+        Set<PlayerGameStatsDTO> playerGameStatsDTOSet = Set.of(
+                new PlayerGameStatsDTO(CardEnum.YELLOW, 2, new PlayerGameStatsDTO.PlayerInfoDTO())
+        );
+
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/games/" + jsonResponseGameDTO.getId() + "/close")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+    }
+
+    @Test
+    public void testIfGameCanBeClosedWithoutStats() throws Exception {
+        Game game = new Game();
+        GameTeam firstGameTeam = createGameTeam(teams.get(0));
+        GameTeam secondGameTeam = createGameTeam(teams.get(4));
+        game.setPrimaryReferee(certificatedReferees.get(0));
+        game.setGameTeamOne(firstGameTeam);
+        game.setGameTeamTwo(secondGameTeam);
+        game.setHappensIn(LocalDateTime.now().plusYears(1));
+
+        Address fakeAddress = createAddress();
+        game.setLocatedIn(fakeAddress);
+        GameDTO gameDTO = gameMapper.toDTO(game);
+        String gameDTOJSON = objectMapper.writeValueAsString(gameDTO);
+
+        String jsonResponse = mockMvc.perform(MockMvcRequestBuilders.post("/api/games/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(gameDTOJSON))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        GameDTO jsonResponseGameDTO = parseDTO(jsonResponse, GameDTO.class);
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/games/" + jsonResponseGameDTO.getId() + "/close")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
     }
 
     private String fetchJson(String url, UUID id) {
