@@ -135,7 +135,7 @@ class GameControllerIntegrationTest {
                 .peek(System.out::println)
                 .toList();
         assert savedPlayerDTOs.size() == 10;
-        System.out.println(savedPlayerDTOs.stream().map(PlayerDTO::getId).map(id -> deleteEntity("/api/players/", id)).toList());
+        assert !savedPlayerDTOs.stream().map(PlayerDTO::getId).map(id -> deleteEntity("/api/players/", id)).reduce(Boolean::logicalOr).orElse(false);
 
         List<TeamDTO> savedTeamDTOs = Stream.of(gameDTO.getGameTeamOne(), gameDTO.getGameTeamTwo())
                 .map(gameTeamInfoDTO -> gameTeamInfoDTO.getTeam().getId())
@@ -146,7 +146,10 @@ class GameControllerIntegrationTest {
                 .filter(teamDTO -> teamDTO.getGames().stream().findFirst().isPresent())
                 .peek(System.out::println)
                 .toList();
+
         assert savedTeamDTOs.size() == 2;
+        assert !Stream.of(gameDTO.getGameTeamOne(), gameDTO.getGameTeamTwo()).map(gameDTOTest -> gameDTOTest.getTeam().getId()).map(id -> deleteEntity("/api/teams/", id)).reduce(Boolean::logicalOr).orElse(false);
+
     }
 
     private String fetchJson(String url, UUID id) {
@@ -162,7 +165,7 @@ class GameControllerIntegrationTest {
 
     private boolean deleteEntity(String url, UUID id) {
         try {
-            return mockMvc.perform(MockMvcRequestBuilders.get(url + id))
+            return mockMvc.perform(MockMvcRequestBuilders.delete(url + id))
                     .andReturn()
                     .getResponse().getStatus() == 200;
         } catch (Exception e) {
