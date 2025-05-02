@@ -1,0 +1,137 @@
+@startuml
+participant Actor
+participant GameController
+participant GameMapper
+participant GameService
+participant GameServiceImpl
+participant RefereeService
+participant TeamService
+participant PlayerService
+participant Game
+participant Referee
+participant Team
+
+Actor -> GameController: registerGame
+activate GameController
+
+GameController -> GameMapper: toEntity
+activate GameMapper
+GameMapper --> GameController: GameEntity
+deactivate GameMapper
+
+GameController -> GameService: add(gameEntity)
+activate GameService
+
+GameService -> GameServiceImpl: add(gameEntity)
+activate GameServiceImpl
+
+loop For each referee (primary + secondary)
+    GameServiceImpl -> GameServiceImpl: validateReferee(refereeId)
+    activate GameServiceImpl
+
+    GameServiceImpl -> RefereeService: findNotDeletedById(refereeId)
+    activate RefereeService
+    RefereeService --> GameServiceImpl: referee
+    deactivate RefereeService
+
+    deactivate GameServiceImpl
+end
+
+alt isInTournament && !hasAtleastOneCertificatedReferee
+        create BadRequestException
+        GameServiceImpl -> BadRequestException: new("Referee certificate required")
+        activate BadRequestException
+        BadRequestException --> GameServiceImpl
+        deactivate BadRequestException
+end
+
+loop For each gameTeam (first + second)
+    GameServiceImpl -> GameServiceImpl: prepareAndValidateGameTeam(gameTeam)
+    activate GameServiceImpl
+
+    GameServiceImpl -> GameTeam: hasTheRightSize()
+    activate GameTeam
+    GameTeam --> GameServiceImpl: boolean
+    deactivate GameTeam
+
+    alt !hasTheRightSize
+        create BadRequestException
+        GameServiceImpl -> BadRequestException: new("Invalid team size")
+        activate BadRequestException
+        BadRequestException --> GameServiceImpl
+        deactivate BadRequestException
+    end
+
+    GameServiceImpl -> GameTeam: hasExactlyOneGoalkeeper()
+    activate GameTeam
+    GameTeam --> GameServiceImpl: boolean
+    deactivate GameTeam
+
+    alt !hasExactlyOneGoalkeeper
+        create BadRequestException
+        GameServiceImpl -> BadRequestException: new("Need exactly 1 GK")
+        activate BadRequestException
+        BadRequestException --> GameServiceImpl
+        deactivate BadRequestException
+    end
+
+    GameServiceImpl -> TeamService: findNotDeletedById(teamId)
+    activate TeamService
+    TeamService --> GameServiceImpl: team
+    deactivate TeamService
+
+    GameServiceImpl -> GameTeam: hasAllPlayersOnTeam(team)
+    activate GameTeam
+    GameTeam --> GameServiceImpl: boolean
+    deactivate GameTeam
+
+    alt !hasAllPlayersOnTeam
+        create BadRequestException
+        GameServiceImpl -> BadRequestException: new("Invalid players")
+        activate BadRequestException
+        BadRequestException --> GameServiceImpl
+        deactivate BadRequestException
+    end
+
+    GameServiceImpl -> GameTeam: registerTeam(team)
+    activate GameTeam
+    GameTeam --> GameServiceImpl: registeredTeam
+    deactivate GameTeam
+
+    deactivate GameServiceImpl
+end
+
+GameServiceImpl -> GameServiceImpl: verifyNoPlayerOverlap()
+activate GameServiceImpl
+
+alt hasCommonPlayers
+    create BadRequestException
+    GameServiceImpl -> BadRequestException: new("Duplicate players")
+    activate BadRequestException
+    BadRequestException --> GameServiceImpl
+    deactivate BadRequestException
+end
+
+deactivate GameServiceImpl
+
+GameServiceImpl -> Game: registerGameTeams(teams)
+activate Game
+Game --> GameServiceImpl: registeredGame
+deactivate Game
+
+GameServiceImpl --> GameService: gameEntity
+deactivate GameServiceImpl
+
+GameService --> GameService : save(gameEntity)
+GameService --> GameController: savedGameEntity
+deactivate GameService
+
+GameController -> GameMapper: toDTO(gameEntity)
+activate GameMapper
+GameMapper --> GameController: gameDTO
+deactivate GameMapper
+
+GameController --> Actor: gameDTO
+deactivate GameController
+
+@enduml
