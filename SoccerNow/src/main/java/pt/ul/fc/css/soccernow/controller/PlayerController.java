@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -12,11 +11,13 @@ import pt.ul.fc.css.soccernow.domain.dto.TeamDTO;
 import pt.ul.fc.css.soccernow.domain.dto.games.PlayerGameStatsDTO;
 import pt.ul.fc.css.soccernow.domain.dto.user.PlayerDTO;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
+import pt.ul.fc.css.soccernow.exception.BadRequestException;
 import pt.ul.fc.css.soccernow.mapper.PlayerGameStatsMapper;
 import pt.ul.fc.css.soccernow.mapper.PlayerMapper;
 import pt.ul.fc.css.soccernow.mapper.TeamMapper;
 import pt.ul.fc.css.soccernow.service.PlayerService;
 
+import java.net.URI;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -44,11 +45,12 @@ public class PlayerController {
     @ApiOperation(value = "Register a player", notes = "Returns the player registered")
     public ResponseEntity<PlayerDTO> registerPlayer(@RequestBody @Validated @NotNull PlayerDTO playerDTO) {
         if (playerDTO.getName() == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // exception
+            throw new BadRequestException("Team name is required");
         }
         Player player = playerMapper.toEntity(playerDTO);
         Player savedPlayer = playerService.add(player);
-        return ResponseEntity.status(HttpStatus.CREATED).body(playerMapper.toDTO(savedPlayer));
+        URI location = URI.create("/api/players/" + savedPlayer.getId());
+        return ResponseEntity.created(location).body(playerMapper.toDTO(savedPlayer));
     }
 
     @GetMapping("{playerId}")

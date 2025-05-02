@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -14,11 +13,13 @@ import pt.ul.fc.css.soccernow.domain.dto.TeamDTO;
 import pt.ul.fc.css.soccernow.domain.dto.user.PlayerDTO;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
+import pt.ul.fc.css.soccernow.exception.BadRequestException;
 import pt.ul.fc.css.soccernow.mapper.PlayerMapper;
 import pt.ul.fc.css.soccernow.mapper.TeamMapper;
 import pt.ul.fc.css.soccernow.service.PlayerService;
 import pt.ul.fc.css.soccernow.service.TeamService;
 
+import java.net.URI;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -47,11 +48,12 @@ public class TeamController {
     @ApiOperation(value = "Register a team", notes = "Returns the team registered")
     public ResponseEntity<TeamDTO> registerTeam(@RequestBody @Validated @NotNull TeamDTO teamDTO) {
         if (teamDTO.getName() == null){
-            return ResponseEntity.badRequest().build(); //exception
+            throw new BadRequestException("Team name is required");
         }
         Team team = teamMapper.toEntity(teamDTO);
         Team savedTeam = teamService.add(team);
-        return ResponseEntity.status(HttpStatus.CREATED).body(teamMapper.toDTO(savedTeam));
+        URI location = URI.create("/api/teams/" + savedTeam.getId());
+        return ResponseEntity.created(location).body(teamMapper.toDTO(savedTeam));
     }
 
     @GetMapping("{teamId}")
@@ -70,6 +72,7 @@ public class TeamController {
             @ApiImplicitParam(name = "order", value = "Sort order (asc or desc)", paramType = "query"),
             @ApiImplicitParam(name = "sortBy", value = "Field to sort by (playerCards or victories)", paramType = "query")
     })
+
     public ResponseEntity<List<TeamDTO>> getAllTeams(@RequestParam(name = "maxPlayers", required = false) @Min(0) Integer maxPlayers,
                                                      @RequestParam(name = "size", required = false) @Min(0) Integer size,
                                                      @RequestParam(name = "order", required = false, defaultValue = "dsc") String order,

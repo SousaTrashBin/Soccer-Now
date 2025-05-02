@@ -4,15 +4,16 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pt.ul.fc.css.soccernow.domain.dto.user.RefereeDTO;
 import pt.ul.fc.css.soccernow.domain.entities.user.Referee;
+import pt.ul.fc.css.soccernow.exception.BadRequestException;
 import pt.ul.fc.css.soccernow.mapper.RefereeMapper;
 import pt.ul.fc.css.soccernow.service.RefereeService;
 
+import java.net.URI;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -37,11 +38,12 @@ public class RefereeController {
     @ApiOperation(value = "Register a referee", notes = "Returns the referee registered")
     public ResponseEntity<RefereeDTO> registerReferee(@RequestBody @Validated @NotNull RefereeDTO refereeDTO) {
         if (refereeDTO.getName() == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new BadRequestException("Team name is required");
         }
         Referee referee = refereeMapper.toEntity(refereeDTO);
         Referee savedReferee = refereeService.add(referee);
-        return ResponseEntity.status(HttpStatus.CREATED).body(refereeMapper.toDTO(savedReferee));
+        URI location = URI.create("/api/referees/" + savedReferee.getId());
+        return ResponseEntity.created(location).body(refereeMapper.toDTO(savedReferee));
     }
 
     @GetMapping("{refereeId}")

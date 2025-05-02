@@ -14,6 +14,7 @@ import pt.ul.fc.css.soccernow.mapper.GameMapper;
 import pt.ul.fc.css.soccernow.mapper.PlayerGameStatsMapper;
 import pt.ul.fc.css.soccernow.service.GameService;
 
+import java.net.URI;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -37,11 +38,14 @@ public class GameController {
     @PostMapping
     @ApiOperation(value = "Register a game", notes = "Returns the game registered")
     public ResponseEntity<GameDTO> registerGame(@RequestBody @Validated @NotNull GameDTO game) {
-        return null;
+        Game entity = gameMapper.toEntity(game);
+        gameService.add(entity);
+        URI location = URI.create("/api/games/" + entity.getId());
+        return ResponseEntity.created(location).body(gameMapper.toDTO(entity));
     }
 
-    @PostMapping("{gameId}/result")
-    @ApiOperation(value = "Register the result of a game with given ID", notes = "Returns the updated game")
+    @PostMapping("{gameId}/close")
+    @ApiOperation(value = "Close game with given ID", notes = "Returns the closed game")
     public ResponseEntity<GameDTO> closeGameById(
             @PathVariable("gameId") @NotNull UUID gameId,
             @RequestBody @Validated @NotNull Set<PlayerGameStatsDTO> playerGameStatsDTOs
@@ -51,10 +55,4 @@ public class GameController {
         return ResponseEntity.ok(gameMapper.toDTO(closedGame));
     }
 
-//    @PutMapping("/{gameId}")
-//    @ApiOperation(value = "Register the result of a game with given ID", notes = "Returns the updated game")
-//    public ResponseEntity<GameDto> setGameResultById(@PathVariable("gameId") long gameId) {
-//        // TODO
-//        return null;
-//    }
 }
