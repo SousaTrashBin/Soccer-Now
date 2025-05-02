@@ -10,17 +10,12 @@ import pt.ul.fc.css.soccernow.domain.entities.tournament.point.PointTournament;
 public interface TeamMapper {
     Team toEntity(TeamDTO teamDTO);
 
-    @AfterMapping
-    default void linkGameTeams(@MappingTarget Team team) {
-        team.getGameTeams().forEach(gameTeam -> gameTeam.setTeam(team));
+    default Tournament createTournament() {
+        return new PointTournament();
     }
 
     TeamDTO toDTO(Team team);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Team partialUpdate(TeamDTO teamDTO, @MappingTarget Team team);
-
-    default Tournament createTournament() {
-        return new PointTournament();
-    }
 }
