@@ -62,7 +62,7 @@ public class PlayerController {
 
     @GetMapping("{playerId}/average-goals")
     @ApiOperation(value = "Get average player goals by ID", notes = "Returns a player by its ID")
-    public ResponseEntity<Integer> getAverageGoalsById(@PathVariable("playerId") @NotNull UUID playerId) {
+    public ResponseEntity<Float> getAverageGoalsById(@PathVariable("playerId") @NotNull UUID playerId) {
         Player player = playerService.findNotDeletedById(playerId);
         return ResponseEntity.ok(player.getAverageGoals());
     }
@@ -70,7 +70,8 @@ public class PlayerController {
     @GetMapping
     @ApiOperation(value = "Get all players", notes = "Returns a list of all players")
     public ResponseEntity<List<PlayerDTO>> getAllPlayers(@RequestParam(name = "size", required = false) @Min(0) Integer size,
-                                                         @RequestParam(name = "order", required = false) String order) {
+                                                         @RequestParam(name = "order", required = false) String order,
+                                                         @RequestParam(name = "name", required = false) String name) {
         Comparator<Player> redCardComparator = Comparator.comparing(Player::getRedCardCount);
         Optional<Comparator<Player>> optionalPlayerComparator = Optional.ofNullable(order).map(
                 orderValue -> orderValue.equals("asc")
@@ -78,7 +79,7 @@ public class PlayerController {
                         : redCardComparator.reversed()
         );
 
-        Stream<Player> playerStream = playerService.findAllNotDeleted().stream();
+        Stream<Player> playerStream = playerService.findAllNotDeleted().stream().filter(player -> name == null || player.getName().contains(name));
         if (optionalPlayerComparator.isPresent()) {
             playerStream = playerStream.sorted(optionalPlayerComparator.get());
         }
