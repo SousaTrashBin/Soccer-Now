@@ -26,13 +26,13 @@ public class PlayerDTO implements Serializable {
     @Length(max = 100)
     private String name;
     private FutsalPositionEnum preferredPosition;
-    private List<PlayerGameStatsDTO> playerGameStats = new ArrayList<>();
+    private List<PlayerGameStatsInfoDTO> playerGameStats = new ArrayList<>();
     private Set<TeamInfoDTO> teams = new LinkedHashSet<>();
 
     public PlayerDTO() {
     }
 
-    public PlayerDTO(UUID id, String name, FutsalPositionEnum preferredPosition, List<PlayerGameStatsDTO> playerGameStats,
+    public PlayerDTO(UUID id, String name, FutsalPositionEnum preferredPosition, List<PlayerGameStatsInfoDTO> playerGameStats,
                      Set<TeamInfoDTO> teams) {
         this.id = id;
         this.name = name;
@@ -68,11 +68,11 @@ public class PlayerDTO implements Serializable {
         return this;
     }
 
-    public List<PlayerGameStatsDTO> getPlayerGameStats() {
+    public List<PlayerGameStatsInfoDTO> getPlayerGameStats() {
         return playerGameStats;
     }
 
-    public PlayerDTO setPlayerGameStats(List<PlayerGameStatsDTO> playerGameStats) {
+    public PlayerDTO setPlayerGameStats(List<PlayerGameStatsInfoDTO> playerGameStats) {
         this.playerGameStats = playerGameStats;
         return this;
     }
@@ -116,7 +116,7 @@ public class PlayerDTO implements Serializable {
     /**
      * DTO for {@link PlayerGameStats}
      */
-    public static class PlayerGameStatsDTO implements Serializable {
+    public static class PlayerGameStatsInfoDTO implements Serializable {
         @NotNull
         private CardEnum givenCard = CardEnum.NONE;
         @NotNull
@@ -124,10 +124,10 @@ public class PlayerDTO implements Serializable {
         private Integer scoredGoals = 0;
         private GameInfoDTO game;
 
-        public PlayerGameStatsDTO() {
+        public PlayerGameStatsInfoDTO() {
         }
 
-        public PlayerGameStatsDTO(CardEnum givenCard, Integer scoredGoals, GameInfoDTO game) {
+        public PlayerGameStatsInfoDTO(CardEnum givenCard, Integer scoredGoals, GameInfoDTO game) {
             this.givenCard = givenCard;
             this.scoredGoals = scoredGoals;
             this.game = game;
@@ -137,7 +137,7 @@ public class PlayerDTO implements Serializable {
             return givenCard;
         }
 
-        public PlayerGameStatsDTO setGivenCard(CardEnum givenCard) {
+        public PlayerGameStatsInfoDTO setGivenCard(CardEnum givenCard) {
             this.givenCard = givenCard;
             return this;
         }
@@ -146,7 +146,7 @@ public class PlayerDTO implements Serializable {
             return scoredGoals;
         }
 
-        public PlayerGameStatsDTO setScoredGoals(Integer scoredGoals) {
+        public PlayerGameStatsInfoDTO setScoredGoals(Integer scoredGoals) {
             this.scoredGoals = scoredGoals;
             return this;
         }
@@ -155,7 +155,7 @@ public class PlayerDTO implements Serializable {
             return game;
         }
 
-        public PlayerGameStatsDTO setGame(GameInfoDTO game) {
+        public PlayerGameStatsInfoDTO setGame(GameInfoDTO game) {
             this.game = game;
             return this;
         }
@@ -164,7 +164,7 @@ public class PlayerDTO implements Serializable {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            PlayerGameStatsDTO entity = (PlayerGameStatsDTO) o;
+            PlayerGameStatsInfoDTO entity = (PlayerGameStatsInfoDTO) o;
             return Objects.equals(this.givenCard, entity.givenCard) &&
                     Objects.equals(this.scoredGoals, entity.scoredGoals) &&
                     Objects.equals(this.game, entity.game);
@@ -236,12 +236,12 @@ public class PlayerDTO implements Serializable {
         @Pattern(regexp = "^\\p{L}+( \\p{L}+)*$")
         @Length(max = 100)
         private String name;
-        private Set<GameDTO> games = new LinkedHashSet<>();
+        private Set<GameInfoDTO> games = new LinkedHashSet<>();
 
         public TeamInfoDTO() {
         }
 
-        public TeamInfoDTO(UUID id, String name, Set<GameDTO> games) {
+        public TeamInfoDTO(UUID id, String name, Set<GameInfoDTO> games) {
             this.id = id;
             this.name = name;
             this.games = games;
@@ -263,11 +263,11 @@ public class PlayerDTO implements Serializable {
             this.name = name;
         }
 
-        public Set<GameDTO> getGames() {
+        public Set<GameInfoDTO> getGames() {
             return games;
         }
 
-        public void setGames(Set<GameDTO> games) {
+        public void setGames(Set<GameInfoDTO> games) {
             this.games = games;
         }
 
@@ -297,15 +297,15 @@ public class PlayerDTO implements Serializable {
         /**
          * DTO for {@link Game}
          */
-        public static class GameDTO implements Serializable {
+        public static class GameInfoDTO implements Serializable {
             private UUID id;
             private LocalDateTime happensIn;
             private Boolean isClosed = false;
 
-            public GameDTO() {
+            public GameInfoDTO() {
             }
 
-            public GameDTO(UUID id, LocalDateTime happensIn, Boolean isClosed) {
+            public GameInfoDTO(UUID id, LocalDateTime happensIn, Boolean isClosed) {
                 this.id = id;
                 this.happensIn = happensIn;
                 this.isClosed = isClosed;
@@ -339,7 +339,7 @@ public class PlayerDTO implements Serializable {
             public boolean equals(Object o) {
                 if (this == o) return true;
                 if (o == null || getClass() != o.getClass()) return false;
-                GameDTO entity = (GameDTO) o;
+                GameInfoDTO entity = (GameInfoDTO) o;
                 return Objects.equals(this.id, entity.id) &&
                         Objects.equals(this.happensIn, entity.happensIn) &&
                         Objects.equals(this.isClosed, entity.isClosed);

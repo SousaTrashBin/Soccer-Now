@@ -286,7 +286,6 @@ public class TeamDTO implements Serializable {
      * DTO for {@link pt.ul.fc.css.soccernow.domain.entities.game.Game}
      */
     public static class GameInfoDTO implements Serializable {
-        private LocalDateTime deletedAt;
         private UUID id;
         private LocalDateTime happensIn;
         private Boolean isClosed = false;
@@ -295,18 +294,9 @@ public class TeamDTO implements Serializable {
         }
 
         public GameInfoDTO(LocalDateTime deletedAt, UUID id, LocalDateTime happensIn, Boolean isClosed) {
-            this.deletedAt = deletedAt;
             this.id = id;
             this.happensIn = happensIn;
             this.isClosed = isClosed;
-        }
-
-        public LocalDateTime getDeletedAt() {
-            return deletedAt;
-        }
-
-        public void setDeletedAt(LocalDateTime deletedAt) {
-            this.deletedAt = deletedAt;
         }
 
         public UUID getId() {
@@ -338,21 +328,19 @@ public class TeamDTO implements Serializable {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             GameInfoDTO entity = (GameInfoDTO) o;
-            return Objects.equals(this.deletedAt, entity.deletedAt) &&
-                    Objects.equals(this.id, entity.id) &&
+            return Objects.equals(this.id, entity.id) &&
                     Objects.equals(this.happensIn, entity.happensIn) &&
                     Objects.equals(this.isClosed, entity.isClosed);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(deletedAt, id, happensIn, isClosed);
+            return Objects.hash(id, happensIn, isClosed);
         }
 
         @Override
         public String toString() {
             return getClass().getSimpleName() + "(" +
-                    "deletedAt = " + deletedAt + ", " +
                     "id = " + id + ", " +
                     "happensIn = " + happensIn + ", " +
                     "isClosed = " + isClosed + ")";
