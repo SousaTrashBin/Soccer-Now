@@ -43,7 +43,7 @@ public class RefereeServiceImpl implements RefereeService {
     public void softDelete(UUID refereeId) {
         Referee referee = findNotDeletedById(refereeId);
         if (referee.hasAnyPendingGames()) {
-            throw new ResourceCouldNotBeDeletedException("Referee", "id", refereeId);
+            throw new ResourceCouldNotBeDeletedException("Referee has a pending game");
         }
         referee.delete();
         refereeRepository.save(referee);
