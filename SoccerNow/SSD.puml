@@ -4,6 +4,7 @@ participant GameController
 participant GameMapper
 participant GameService
 participant GameServiceImpl
+participant GameRepository
 participant RefereeService
 participant TeamService
 participant PlayerService
@@ -122,7 +123,10 @@ deactivate Game
 GameServiceImpl --> GameService: gameEntity
 deactivate GameServiceImpl
 
-GameService --> GameService : save(gameEntity)
+GameService -> GameRepository : save(gameEntity)
+activate GameRepository
+GameRepository --> GameService : savedGameEntity
+deactivate GameRepository
 GameService --> GameController: savedGameEntity
 deactivate GameService
 
