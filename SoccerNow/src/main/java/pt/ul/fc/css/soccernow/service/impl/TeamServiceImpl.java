@@ -16,8 +16,7 @@ import java.util.UUID;
 public class TeamServiceImpl implements TeamService {
     private final TeamRepository teamRepository;
 
-    public TeamServiceImpl(
-            TeamRepository teamRepository) {
+    public TeamServiceImpl(TeamRepository teamRepository) {
         this.teamRepository = teamRepository;
     }
 
