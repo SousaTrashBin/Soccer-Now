@@ -59,7 +59,7 @@ public class TeamServiceImpl implements TeamService {
     public void softDelete(UUID teamId) {
         Team teamToDelete = findNotDeletedById(teamId);
         if (teamToDelete.hasPendingGames() || teamToDelete.hasPendingTournaments()) {
-            throw new ResourceCouldNotBeDeletedException("Referee", "id", teamId);
+            throw new ResourceCouldNotBeDeletedException("Team has either a pending game or tournament");
         }
 
         teamToDelete.delete();

@@ -65,7 +65,7 @@ public class PlayerServiceImpl implements PlayerService {
     public void softDelete(UUID playerId) {
         Player player = findNotDeletedById(playerId);
         if (player.hasPendingGames()) {
-            throw new ResourceCouldNotBeDeletedException("Player", "id", playerId);
+            throw new ResourceCouldNotBeDeletedException("Player has a pending game");
         }
         player.delete();
         playerRepository.save(player);

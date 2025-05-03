@@ -7,6 +7,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "users")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class User extends SoftDeleteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

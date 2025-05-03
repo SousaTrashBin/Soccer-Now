@@ -152,6 +152,8 @@ class GameControllerIntegrationTests {
         assert savedTeamDTOs.size() == 2;
         assert !Stream.of(gameDTO.getGameTeamOne(), gameDTO.getGameTeamTwo()).map(gameDTOTest -> gameDTOTest.getTeam().getId()).map(id -> deleteEntity("/api/teams/", id)).reduce(Boolean::logicalOr).orElse(false);
 
+        UUID refereeId = jsonResponseGameDTO.getPrimaryReferee().getId();
+        assert !deleteEntity("/api/referees/", refereeId);
     }
 
     @Test

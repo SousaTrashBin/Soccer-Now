@@ -10,6 +10,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
+import static pt.ul.fc.css.soccernow.domain.entities.game.GameTeam.FUTSAL_TEAM_SIZE;
+
 @Entity
 @Table(name = "game_stats")
 public class GameStats {
@@ -24,8 +26,8 @@ public class GameStats {
     @Column(name = "team_two_goals", nullable = false)
     private Integer teamTwoGoals = 0;
 
-    @Size(min = 10, max = 10)
-    @OneToMany(cascade = CascadeType.ALL)
+    @Size(min = FUTSAL_TEAM_SIZE * 2, max = FUTSAL_TEAM_SIZE * 2)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<PlayerGameStats> playerGameStats = new LinkedHashSet<>();
 
     public Set<PlayerGameStats> getPlayerGameStats() {

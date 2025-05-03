@@ -1,6 +1,7 @@
 package pt.ul.fc.css.soccernow.domain.entities.game;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import org.hibernate.proxy.HibernateProxy;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
 import pt.ul.fc.css.soccernow.domain.entities.tournament.GamePlayer;
@@ -22,8 +23,9 @@ public class GameTeam {
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "game_team_id")
+    @Size(min = FUTSAL_TEAM_SIZE, max = FUTSAL_TEAM_SIZE)
     private Set<GamePlayer> gamePlayers = new HashSet<>();
 
     @ManyToOne(optional = false)
