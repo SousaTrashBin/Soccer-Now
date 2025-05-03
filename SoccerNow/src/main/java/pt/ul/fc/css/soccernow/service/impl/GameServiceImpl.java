@@ -45,21 +45,26 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public Game add(Game entity) {
+        Game newGame = new Game();
+        newGame.setLocatedIn(entity.getLocatedIn());
+        newGame.setHappensIn(entity.getHappensIn());
+        newGame.setTournament(entity.getTournament());
+
         UpdatedAndValidatedRefereesResult refereesResult = updatedAndValidatedReferees(entity);
         Referee primaryReferee = refereesResult.primaryReferee;
         Set<Referee> secondaryReferees = refereesResult.secondaryReferees;
-        entity.registerPrimaryReferee(primaryReferee);
-        secondaryReferees.forEach(entity::registerSecondaryReferee);
+        newGame.registerPrimaryReferee(primaryReferee);
+        secondaryReferees.forEach(newGame::registerSecondaryReferee);
 
         GameTeam validatedGameTeamOne = prepareAndValidateGameTeam(entity.getGameTeamOne());
-        validatedGameTeamOne.getTeam().addGame(entity);
+        validatedGameTeamOne.getTeam().addGame(newGame);
         GameTeam validatedGameTeamTwo = prepareAndValidateGameTeam(entity.getGameTeamTwo());
-        validatedGameTeamTwo.getTeam().addGame(entity);
+        validatedGameTeamTwo.getTeam().addGame(newGame);
 
         verifyNoPlayerOverlap(validatedGameTeamOne, validatedGameTeamTwo);
-        entity.registerGameTeams(validatedGameTeamOne, validatedGameTeamTwo);
+        newGame.registerGameTeams(validatedGameTeamOne, validatedGameTeamTwo);
 
-        return gameRepository.save(entity);
+        return gameRepository.save(newGame);
     }
 
     private void verifyNoPlayerOverlap(GameTeam validatedGameTeamOne, GameTeam validatedGameTeamTwo) {
