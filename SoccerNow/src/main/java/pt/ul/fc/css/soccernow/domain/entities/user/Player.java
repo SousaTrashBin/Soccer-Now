@@ -105,10 +105,14 @@ public class Player extends User {
                 "name = " + getName() + ")";
     }
 
-    public Integer getAverageGoals() {
-        return getPlayerGameStats()
-                .stream()
-                .map(PlayerGameStats::getScoredGoals)
-                .reduce(0, Integer::sum);
+    public Float getAverageGoals() {
+        List<PlayerGameStats> stats = getPlayerGameStats();
+        if (stats.isEmpty()) {
+            return 0f;
+        }
+        int totalGoals = stats.stream()
+                              .map(PlayerGameStats::getScoredGoals)
+                              .reduce(0, Integer::sum);
+        return (float) totalGoals / stats.size();
     }
 }
