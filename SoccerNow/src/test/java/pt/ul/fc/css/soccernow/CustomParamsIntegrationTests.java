@@ -50,7 +50,6 @@ public class CustomParamsIntegrationTests {
     List<Referee> certificatedReferees;
     List<Referee> uncertificatedReferees;
     List<Team> teams;
-    Random random = new Random(SEED);
     @Autowired
     private TeamMapper teamMapper;
     @Autowired
@@ -109,32 +108,12 @@ public class CustomParamsIntegrationTests {
     public void testFetchTeamsWithMostCards() throws Exception {
         List<Team> teams = fetchTeamsWithQueryString("?sortBy=playerCards");
         assert teams.size() == this.teams.size();
-
-//        List<Team> teamsWithMostCards = new LinkedList<>();
-//        int maxCards = Math.toIntExact(teams.get(0).getPlayersCardCount());
-//        int i = 1;
-//        teamsWithMostCards.add(teams.get(0));
-//
-//        while (i < teams.size() && teams.get(i).getPlayersCardCount() == maxCards) {
-//            teamsWithMostCards.add(teams.get(i));
-//            i++;
-//        }
     }
 
     @Test
     public void testFetchTeamsWithMostVictories() throws Exception {
         List<Team> teams = fetchTeamsWithQueryString("?sortBy=victories");
         assert teams.size() == this.teams.size();
-
-//        List<Team> teamsWithMostWins = new LinkedList<>();
-//        int maxWins = Math.toIntExact(teams.get(0).getVictoryCount());
-//        int i = 1;
-//        teamsWithMostWins.add(teams.get(0));
-//
-//        while (i < teams.size() && teams.get(i).getVictoryCount() == maxWins) {
-//            teamsWithMostWins.add(teams.get(i));
-//            i++;
-//        }
     }
 
     @Test
@@ -142,31 +121,12 @@ public class CustomParamsIntegrationTests {
         List<Referee> referees = fetchRefereesWithQueryString("?order=desc");
         assert referees.size() == this.uncertificatedReferees.size() + this.certificatedReferees.size();
 
-//        List<Referee> refereesWithMostGames = new LinkedList<>();
-//        int maxGames = Math.toIntExact(referees.get(0).getClosedGamesCount());
-//        int i = 1;
-//        refereesWithMostGames.add(referees.get(0));
-//
-//        while (i < referees.size() && referees.get(i).getClosedGamesCount() == maxGames) {
-//            refereesWithMostGames.add(referees.get(i));
-//            i++;
-//        }
     }
 
     @Test
     public void testFetchPlayersWithMostRedCards() throws Exception {
         List<Player> players = fetchPlayersWithQueryString("?order=desc");
         assert players.size() == this.players.size();
-
-//        List<Player> playersWithMostRedCards = new LinkedList<>();
-//        int maxCards = Math.toIntExact(players.get(0).getRedCardCount());
-//        int i = 1;
-//        playersWithMostRedCards.add(players.get(0));
-//
-//        while (i < players.size() && players.get(i).getRedCardCount() == maxCards) {
-//            playersWithMostRedCards.add(players.get(i));
-//            i++;
-//        }
     }
 
     private List<Team> fetchTeamsWithQueryString(String queryString) throws Exception {
