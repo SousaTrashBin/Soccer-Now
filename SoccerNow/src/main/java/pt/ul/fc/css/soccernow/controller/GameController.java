@@ -38,13 +38,20 @@ public class GameController {
         this.gameMapper = gameMapper;
     }
 
+    @GetMapping("{gameId}")
+    @ApiOperation(value = "Get game by ID", notes = "Returns the game with the given ID")
+    public ResponseEntity<GameDTO> findGame(@PathVariable("gameId") @NotNull UUID gameId) {
+        Game game = gameService.findNotDeletedById(gameId);
+        return ResponseEntity.ok(gameMapper.toDTO(game));
+    }
+
     @PostMapping
     @ApiOperation(value = "Register a game", notes = "Returns the game registered")
     public ResponseEntity<GameDTO> registerGame(@RequestBody @Validated @NotNull GameDTO game) {
         Game entity = gameMapper.toEntity(game);
-        gameService.add(entity);
-        URI location = URI.create("/api/games/" + entity.getId());
-        return ResponseEntity.created(location).body(gameMapper.toDTO(entity));
+        Game savedGame = gameService.add(entity);
+        URI location = URI.create("/api/games/" + savedGame.getId());
+        return ResponseEntity.created(location).body(gameMapper.toDTO(savedGame));
     }
 
     @PostMapping("{gameId}/close")
