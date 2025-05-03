@@ -2,7 +2,7 @@ package pt.ul.fc.css.soccernow.controller;
 
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,7 +29,7 @@ import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-@Tag(name = "Team", description = "Team operations")
+@Tag(name = "Team", description = "Team related operations")
 @RestController
 @RequestMapping("/api/teams/")
 public class TeamController {
@@ -47,7 +47,10 @@ public class TeamController {
     }
 
     @PostMapping
-    @ApiOperation(value = "Register a team", notes = "Returns the team registered")
+    @Operation(
+            summary = "Register a team",
+            description = "Registers a new team and returns the details of the registered team."
+    )
     public ResponseEntity<TeamDTO> registerTeam(@RequestBody @Validated @NotNull TeamDTO teamDTO) {
         if (teamDTO.getName() == null) {
             throw new BadRequestException("Team name is required");
@@ -59,24 +62,28 @@ public class TeamController {
     }
 
     @GetMapping("{teamId}")
-    @ApiOperation(value = "Get team by ID", notes = "Returns a team by its ID")
+    @Operation(
+            summary = "Get team by ID",
+            description = "Returns the details of a team identified by the given UUID."
+    )
     public ResponseEntity<TeamDTO> getTeamById(@PathVariable("teamId") @NotNull UUID teamId) {
         Team team = teamService.findNotDeletedById(teamId);
         return ResponseEntity.ok(teamMapper.toDTO(team));
     }
 
     @GetMapping
-    @ApiOperation(value = "Get all teams",
-            notes = "Returns a list of all teams with optional filtering and sorting")
+    @Operation(
+            summary = "Get all teams",
+            description = "Returns a list of all teams. Supports optional result size, presentation order and filtering by name, and sorting by specified fields, like player cards or number of victories."
+    )
     @ApiImplicitParams({
             @ApiImplicitParam(name = "maxPlayers", value = "Maximum number of players in a team", paramType = "query"),
             @ApiImplicitParam(name = "size", value = "Maximum number of teams to return", paramType = "query"),
             @ApiImplicitParam(name = "order", value = "Sort order (asc or desc)", paramType = "query"),
             @ApiImplicitParam(name = "sortBy", value = "Field to sort by (playerCards or victories)", paramType = "query")
     })
-
     public ResponseEntity<List<TeamDTO>> getAllTeams(@Parameter(description = "Número máximo de jogadores") @RequestParam(name = "maxPlayers", required = false) @Min(0) Integer maxPlayers,
-                                                     @Parameter(description = "Tamanho da equipa") @RequestParam(name = "size", required = false) @Min(0) Integer size,
+                                                     @Parameter(description = "Tamanho do resultado") @RequestParam(name = "size", required = false) @Min(0) Integer size,
                                                      @Parameter(description = "Ordem de apresentação: 'asc' para ordem crescente, 'dsc' para ordem decrescente", schema = @Schema(allowableValues = {"asc", "dsc"})) @RequestParam(name = "order", required = false, defaultValue = "dsc") String order,
                                                      @Parameter(description = "Tipo de ordenação: 'playerCards' para ordenar por tipo de cartas, 'victories' para ordenar por número de vitórias", schema = @Schema(allowableValues = {"playerCards", "victories"})) @RequestParam(name = "sortBy", required = false) String sortBy) {
         Comparator<Team> cardComparator = Comparator.comparing(Team::getPlayersCardCount);
@@ -107,14 +114,20 @@ public class TeamController {
     }
 
     @DeleteMapping("{teamId}")
-    @ApiOperation(value = "Delete a team with given ID")
+    @Operation(
+            summary = "Delete team by ID",
+            description = "Performs a soft delete of the team identified by the given UUID. The team will be soft deleted, marked as deleted but not permanently removed."
+    )
     public ResponseEntity<String> deleteTeamById(@PathVariable("teamId") @NotNull UUID teamId) {
         teamService.softDelete(teamId);
         return ResponseEntity.ok("Team deleted successfully");
     }
 
     @PutMapping("{teamId}")
-    @ApiOperation(value = "Update a team with given ID", notes = "Returns the updated team")
+    @Operation(
+            summary = "Update team by ID",
+            description = "Updates the details of a team identified by the given UUID and returns the updated team."
+    )
     public ResponseEntity<TeamDTO> updateTeamById(
             @PathVariable("teamId") @NotNull UUID teamId,
             @RequestBody @Validated @NotNull TeamDTO teamDTO
@@ -126,7 +139,10 @@ public class TeamController {
     }
 
     @DeleteMapping("{teamId}/players/{playerId}")
-    @ApiOperation(value = "Removes a player from a team")
+    @Operation(
+            summary = "Remove player from team by IDs",
+            description = "Removes a player from a team identified by the given UUIDs for the team and player."
+    )
     public ResponseEntity<String> removePlayerFromTeam(
             @PathVariable("teamId") @NotNull UUID teamId,
             @PathVariable("playerId") @NotNull UUID playerId
@@ -138,12 +154,14 @@ public class TeamController {
     }
 
     @PostMapping("{teamId}/players/{playerId}")
-    @ApiOperation(value = "Adds a player to a team")
+    @Operation(
+            summary = "Add player to team by IDs",
+            description = "Adds a player to a team identified by the given UUIDs for the team and player."
+    )
     public ResponseEntity<String> addPlayerToTeam(
             @PathVariable("teamId") @NotNull UUID teamId,
             @PathVariable("playerId") @NotNull UUID playerId
     ) {
-        //probably add this to the service and make it only receive the ids and do the find inside
         Team team = teamService.findNotDeletedById(teamId);
         Player player = playerService.findNotDeletedById(playerId);
         teamService.addPlayerToTeam(player, team);
@@ -151,7 +169,10 @@ public class TeamController {
     }
 
     @GetMapping("{teamId}/players")
-    @ApiOperation(value = "Get the players from a team by ID", notes = "Returns the players from a team by its ID")
+    @Operation(
+            summary = "Get players from a team by ID",
+            description = "Returns a list of players belonging to a team identified by the given team ID."
+    )
     public ResponseEntity<List<PlayerDTO>> getTeamPlayers(@PathVariable("teamId") @NotNull UUID teamId) {
         Team team = teamService.findNotDeletedById(teamId);
         List<PlayerDTO> players = team.getPlayers()
@@ -160,15 +181,4 @@ public class TeamController {
                 .toList();
         return ResponseEntity.ok(players);
     }
-
-//    @GetMapping("/{teamId}/placements")
-//    @ApiOperation(value = "Get the placements from a team by ID", notes = "Returns the placements from a team by its ID")
-//    public ResponseEntity<List<PlacementsDTO>> getTeamPlayers(@PathVariable("teamId") @NotNull UUID teamId) {
-//        Team team = teamService.findNotDeletedById(teamId);
-//        List<PlacementsDTO> placements = team.getPlacements()
-//                .stream()
-//                .map(placementMapper::toDTO)
-//                .toList();
-//        return ResponseEntity.ok(placements);
-//    }
 }
