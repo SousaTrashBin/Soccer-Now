@@ -1,5 +1,5 @@
 @startuml
-participant Actor
+participant User
 participant GameController
 participant GameMapper
 participant GameService
@@ -11,7 +11,7 @@ participant Game
 participant Referee
 participant Team
 
-Actor -> GameController: registerGame
+User -> GameController: registerGame
 activate GameController
 
 GameController -> GameMapper: toEntity
@@ -104,7 +104,7 @@ end
 GameServiceImpl -> GameServiceImpl: verifyNoPlayerOverlap()
 activate GameServiceImpl
 
-alt hasCommonPlayers
+alt hasPlayerOverlap
     create BadRequestException
     GameServiceImpl -> BadRequestException: new("Duplicate players")
     activate BadRequestException
@@ -131,7 +131,7 @@ activate GameMapper
 GameMapper --> GameController: gameDTO
 deactivate GameMapper
 
-GameController --> Actor: gameDTO
+GameController --> User: gameDTO
 deactivate GameController
 
 @enduml
