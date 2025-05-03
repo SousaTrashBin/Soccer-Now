@@ -1,5 +1,6 @@
 package pt.ul.fc.css.soccernow.domain.dto.user;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
@@ -16,6 +17,7 @@ import java.util.UUID;
  */
 public class RefereeDTO implements Serializable {
     private UUID id;
+    @Schema(example = "Sofia Reia")
     @Pattern(regexp = "^\\p{L}+( \\p{L}+)*$")
     @Length(max = 100)
     private String name;

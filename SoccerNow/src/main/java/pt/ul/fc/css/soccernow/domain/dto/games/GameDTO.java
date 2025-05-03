@@ -1,5 +1,6 @@
 package pt.ul.fc.css.soccernow.domain.dto.games;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.Length;
 import pt.ul.fc.css.soccernow.util.CardEnum;
@@ -291,6 +292,7 @@ public class GameDTO implements Serializable {
             public static class PlayerInfoDTO implements Serializable {
                 @NotNull
                 private UUID id;
+                @Schema(example = "Sofia Reia")
                 @Pattern(regexp = "^\\p{L}+( \\p{L}+)*$")
                 @Length(max = 100)
                 private String name;
@@ -350,6 +352,7 @@ public class GameDTO implements Serializable {
         public static class TeamInfoDTO implements Serializable {
             @NotNull
             private UUID id;
+            @Schema(example = "Sporting")
             @Pattern(regexp = "^\\p{L}+(\\p{L}+)*$")
             @Length(max = 100)
             private String name;
@@ -548,6 +551,7 @@ public class GameDTO implements Serializable {
             public static class PlayerInfoDTO implements Serializable {
                 @NotNull
                 private UUID id;
+                @Schema(example = "Sofia Reia")
                 @Pattern(regexp = "^\\p{L}+( \\p{L}+)*$")
                 @Length(max = 100)
                 private String name;
@@ -608,6 +612,7 @@ public class GameDTO implements Serializable {
     public static class RefereeInfoDTO implements Serializable {
         @NotNull
         private UUID id;
+        @Schema(example = "Sofia Reia")
         @Pattern(regexp = "^\\p{L}+( \\p{L}+)*$")
         @Length(max = 100)
         private String name;
@@ -682,6 +687,7 @@ public class GameDTO implements Serializable {
         private String city;
         @NotNull
         private String street;
+        @Schema(example = "2615-672")
         @NotNull
         @Pattern(regexp = "\\d{4}-\\d{3}")
         private String postalCode;

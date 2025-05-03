@@ -1,5 +1,6 @@
 package pt.ul.fc.css.soccernow.domain.dto.user;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -20,6 +21,7 @@ import java.util.*;
  */
 public class PlayerDTO implements Serializable {
     private UUID id;
+    @Schema(example = "Sofia Reia")
     @Pattern(regexp = "^\\p{L}+( \\p{L}+)*$")
     @Length(max = 100)
     private String name;
@@ -230,6 +232,9 @@ public class PlayerDTO implements Serializable {
      */
     public static class TeamInfoDTO implements Serializable {
         private UUID id;
+        @Schema(example = "Sporting")
+        @Pattern(regexp = "^\\p{L}+( \\p{L}+)*$")
+        @Length(max = 100)
         private String name;
         private Set<GameDTO> games = new LinkedHashSet<>();
 
