@@ -1,6 +1,6 @@
 package pt.ul.fc.css.soccernow.controller;
 
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,7 +26,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-@Tag(name = "Player", description = "Player operations")
+@Tag(name = "Player", description = "Player related operations")
 @RestController
 @RequestMapping("/api/players/")
 public class PlayerController {
@@ -44,7 +44,10 @@ public class PlayerController {
     }
 
     @PostMapping
-    @ApiOperation(value = "Register a player", notes = "Returns the player registered")
+    @Operation(
+            summary = "Register a player",
+            description = "Registers a new player and returns the details of the registered player."
+    )
     public ResponseEntity<PlayerDTO> registerPlayer(@RequestBody @Validated @NotNull PlayerDTO playerDTO) {
         if (playerDTO.getName() == null) {
             throw new BadRequestException("Team name is required");
@@ -56,22 +59,31 @@ public class PlayerController {
     }
 
     @GetMapping("{playerId}")
-    @ApiOperation(value = "Get player by ID", notes = "Returns a player by its ID")
+    @Operation(
+            summary = "Get player by ID",
+            description = "Returns the details of a player identified by the given UUID."
+    )
     public ResponseEntity<PlayerDTO> getPlayerById(@PathVariable("playerId") @NotNull UUID playerId) {
         Player player = playerService.findNotDeletedById(playerId);
         return ResponseEntity.ok(playerMapper.toDTO(player));
     }
 
     @GetMapping("average-goals")
-    @ApiOperation(value = "Get average player goals by player name", notes = "Returns a player's average goals by name")
+    @Operation(
+            summary = "Get player's average goals",
+            description = "Returns a list of players with their average goals. If 'playerName' is provided, filters by name; otherwise, returns all players."
+    )
     public ResponseEntity<List<AverageGoalsResponse>> getAverageGoalsById(@Parameter(description = "Nome do jogador") @RequestParam(name = "playerName", required = false) String playerName) {
         List<Player> players = playerName != null ? playerService.findNotDeletedByName(playerName) : playerService.findAllNotDeleted();
         return ResponseEntity.ok(players.stream().map(player -> new AverageGoalsResponse(player.getId(), player.getAverageGoals())).toList());
     }
 
     @GetMapping
-    @ApiOperation(value = "Get all players", notes = "Returns a list of all players")
-    public ResponseEntity<List<PlayerDTO>> getAllPlayers(@Parameter(description = "Tamanho da equipa") @RequestParam(name = "size", required = false) @Min(0) Integer size,
+    @Operation(
+            summary = "Get all players",
+            description = "Returns a list of all players. Supports optional result size, presentation order and filtering by name."
+    )
+    public ResponseEntity<List<PlayerDTO>> getAllPlayers(@Parameter(description = "Tamanho do resultado") @RequestParam(name = "size", required = false) @Min(0) Integer size,
                                                          @Parameter(description = "Ordem de apresentação: 'asc' para ordem crescente, 'dsc' para ordem decrescente", schema = @Schema(allowableValues = {"asc", "dsc"})) @RequestParam(name = "order", required = false) String order,
                                                          @Parameter(description = "Nome do jogador") @RequestParam(name = "playerName", required = false) String name) {
         Comparator<Player> redCardComparator = Comparator.comparing(Player::getRedCardCount);
@@ -91,14 +103,20 @@ public class PlayerController {
     }
 
     @DeleteMapping("{playerId}")
-    @ApiOperation(value = "Delete a player with given ID")
+    @Operation(
+            summary = "Delete player by ID",
+            description = "Performs a soft delete of the player with the specified UUID. The player will soft deleted, marked as deleted but not permanently removed."
+    )
     public ResponseEntity<String> deletePlayerById(@PathVariable("playerId") @NotNull UUID playerId) {
         playerService.softDelete(playerId);
         return ResponseEntity.ok("Player deleted successfully");
     }
 
     @PutMapping("{playerId}")
-    @ApiOperation(value = "Update a player with given ID", notes = "Returns the updated player")
+    @Operation(
+            summary = "Update player by ID",
+            description = "Updates the information of a player identified by the given UUID and returns the updated player data."
+    )
     public ResponseEntity<PlayerDTO> updatePlayerById(
             @PathVariable("playerId") @NotNull UUID playerId,
             @RequestBody @Validated @NotNull PlayerDTO playerDTO
@@ -110,7 +128,10 @@ public class PlayerController {
     }
 
     @GetMapping("{playerId}/stats")
-    @ApiOperation(value = "Get player's stats", notes = "Returns a player's stats")
+    @Operation(
+            summary = "Get player's stats by ID",
+            description = "Returns the game stats of a player identified by the given UUID."
+    )
     public ResponseEntity<List<PlayerGameStatsDTO>> getPlayerStats(@PathVariable("playerId") @NotNull UUID playerId) {
         Player player = playerService.findNotDeletedById(playerId);
         List<PlayerGameStatsDTO> stats = player.getPlayerGameStats()
@@ -121,7 +142,10 @@ public class PlayerController {
     }
 
     @GetMapping("{playerId}/teams")
-    @ApiOperation(value = "Get player's teams", notes = "Returns a player's teams")
+    @Operation(
+            summary = "Get player's teams by ID",
+            description = "Returns a list of teams associated with the player identified by the given UUID."
+    )
     public ResponseEntity<List<TeamDTO>> getPlayerTeams(@PathVariable("playerId") @NotNull UUID playerId) {
         Player player = playerService.findNotDeletedById(playerId);
         List<TeamDTO> teams = player.getTeams()
