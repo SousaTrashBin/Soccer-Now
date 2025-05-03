@@ -12,8 +12,8 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Salesys API")
+                        .title("SoccerNow API")
                         .version("1.0")
-                        .description("API documentation for the Salesys system"));
+                        .description("API documentation for the SoccerNow system"));
     }
 }
