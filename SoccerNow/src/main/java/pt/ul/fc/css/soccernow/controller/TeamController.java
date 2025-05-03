@@ -47,7 +47,7 @@ public class TeamController {
     @PostMapping
     @ApiOperation(value = "Register a team", notes = "Returns the team registered")
     public ResponseEntity<TeamDTO> registerTeam(@RequestBody @Validated @NotNull TeamDTO teamDTO) {
-        if (teamDTO.getName() == null){
+        if (teamDTO.getName() == null) {
             throw new BadRequestException("Team name is required");
         }
         Team team = teamMapper.toEntity(teamDTO);
@@ -153,9 +153,9 @@ public class TeamController {
     public ResponseEntity<List<PlayerDTO>> getTeamPlayers(@PathVariable("teamId") @NotNull UUID teamId) {
         Team team = teamService.findNotDeletedById(teamId);
         List<PlayerDTO> players = team.getPlayers()
-                                      .stream()
-                                      .map(playerMapper::toDTO)
-                                      .toList();
+                .stream()
+                .map(playerMapper::toDTO)
+                .toList();
         return ResponseEntity.ok(players);
     }
 

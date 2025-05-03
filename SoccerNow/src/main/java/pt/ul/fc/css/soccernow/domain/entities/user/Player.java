@@ -111,8 +111,8 @@ public class Player extends User {
             return 0f;
         }
         int totalGoals = stats.stream()
-                              .map(PlayerGameStats::getScoredGoals)
-                              .reduce(0, Integer::sum);
+                .map(PlayerGameStats::getScoredGoals)
+                .reduce(0, Integer::sum);
         return (float) totalGoals / stats.size();
     }
 }

@@ -29,7 +29,7 @@ public class PlayerTestDataUtil {
     public static List<Player> getPlayers(Random random) {
         return IntStream.range(0, 100)
                 .mapToObj(i -> createRandomPlayerEntity(random))
-                        .toList();
+                .toList();
     }
 
 }

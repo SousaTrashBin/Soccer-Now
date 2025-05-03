@@ -1,4 +1,3 @@
-
 package pt.ul.fc.css.soccernow.exception;
 
 import org.springframework.http.HttpStatus;

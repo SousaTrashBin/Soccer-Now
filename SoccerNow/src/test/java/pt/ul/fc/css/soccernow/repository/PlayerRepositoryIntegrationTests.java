@@ -28,18 +28,18 @@ public class PlayerRepositoryIntegrationTests {
     @Test
     public void testThatPlayerCanBeCreatedAndRecalled() {
         Player testPlayer = PlayerTestDataUtil.getPlayers(new Random(SEED))
-                                              .get(0);
+                .get(0);
         Player savedPlayer = underTest.save(testPlayer);
 
         assert savedPlayer.getName()
-                          .equals(testPlayer.getName())
+                .equals(testPlayer.getName())
                 && savedPlayer.getPreferredPosition() == testPlayer.getPreferredPosition()
-               && savedPlayer.getId() != null;
+                && savedPlayer.getId() != null;
 
         Optional<Player> recalledPlayer = underTest.findById(savedPlayer.getId());
         assert recalledPlayer.isPresent();
         assert recalledPlayer.get()
-                             .equals(savedPlayer);
+                .equals(savedPlayer);
     }
 
     @Test
@@ -51,13 +51,13 @@ public class PlayerRepositoryIntegrationTests {
 
         underTest.saveAll(List.of(playerA, playerB, playerC));
         assertThat(underTest.findAll()).hasSize(3)
-                                       .containsExactly(playerA, playerB, playerC);
+                .containsExactly(playerA, playerB, playerC);
 
         playerA.delete();
         underTest.save(playerA);
 
         assertThat(underTest.findAllNotDeleted()).hasSize(2)
-                                                 .containsExactly(playerB, playerC);
+                .containsExactly(playerB, playerC);
     }
 
     @Test
@@ -76,10 +76,10 @@ public class PlayerRepositoryIntegrationTests {
                 .matches(
                         resultPlayer ->
                                 resultPlayer.getName()
-                                            .equals("UPDATED")
-                                && resultPlayer.getPreferredPosition()
-                                               .equals(player.getPreferredPosition())
-                                && resultPlayer.getId()
-                                               .equals(playerId));
+                                        .equals("UPDATED")
+                                        && resultPlayer.getPreferredPosition()
+                                        .equals(player.getPreferredPosition())
+                                        && resultPlayer.getId()
+                                        .equals(playerId));
     }
 }

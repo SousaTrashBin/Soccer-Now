@@ -11,7 +11,7 @@ public class UppercaseNamingStrategy extends CamelCaseToUnderscoresNamingStrateg
             return null;
         }
         final String adjustedName = name.getText()
-                                        .toUpperCase();
+                .toUpperCase();
         return new Identifier(adjustedName, true);
     }
 

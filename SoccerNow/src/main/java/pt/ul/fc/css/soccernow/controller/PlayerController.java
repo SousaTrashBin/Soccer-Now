@@ -88,9 +88,6 @@ public class PlayerController {
         return ResponseEntity.ok(players);
     }
 
-    public record AverageGoalsResponse(UUID id, Float goals) {
-    }
-
     @DeleteMapping("{playerId}")
     @ApiOperation(value = "Delete a player with given ID")
     public ResponseEntity<String> deletePlayerById(@PathVariable("playerId") @NotNull UUID playerId) {
@@ -115,9 +112,9 @@ public class PlayerController {
     public ResponseEntity<List<PlayerGameStatsDTO>> getPlayerStats(@PathVariable("playerId") @NotNull UUID playerId) {
         Player player = playerService.findNotDeletedById(playerId);
         List<PlayerGameStatsDTO> stats = player.getPlayerGameStats()
-                                               .stream()
-                                               .map(playerGameStatsMapper::toDTO)
-                                               .toList();
+                .stream()
+                .map(playerGameStatsMapper::toDTO)
+                .toList();
         return ResponseEntity.ok(stats);
     }
 
@@ -126,9 +123,12 @@ public class PlayerController {
     public ResponseEntity<List<TeamDTO>> getPlayerTeams(@PathVariable("playerId") @NotNull UUID playerId) {
         Player player = playerService.findNotDeletedById(playerId);
         List<TeamDTO> teams = player.getTeams()
-                                    .stream()
-                                    .map(teamMapper::toDTO)
-                                    .toList();
+                .stream()
+                .map(teamMapper::toDTO)
+                .toList();
         return ResponseEntity.ok(teams);
+    }
+
+    public record AverageGoalsResponse(UUID id, Float goals) {
     }
 }

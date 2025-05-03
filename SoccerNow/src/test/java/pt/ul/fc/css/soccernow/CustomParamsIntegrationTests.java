@@ -204,8 +204,8 @@ public class CustomParamsIntegrationTests {
 
     private List<PlayerController.AverageGoalsResponse> fetchAverageGoalsFromPlayer(Player player) throws Exception {
         String resultJson = mockMvc.perform(get("/api/players/average-goals").param("playerName", player.getName()))
-                                    .andExpect(status().isOk())
-                                    .andReturn().getResponse().getContentAsString();
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
         List<PlayerController.AverageGoalsResponse> responses = objectMapper.readValue(
                 resultJson,
                 new TypeReference<>() {

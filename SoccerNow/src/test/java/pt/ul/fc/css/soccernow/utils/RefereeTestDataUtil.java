@@ -28,7 +28,7 @@ public class RefereeTestDataUtil {
     public static List<Referee> getReferees(boolean hasCertificate, Random random) {
         return IntStream.range(0, 50)
                 .mapToObj(i -> createRandomRefereeEntity(hasCertificate, random))
-                        .toList();
+                .toList();
     }
 
 }

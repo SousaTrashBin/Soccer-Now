@@ -25,6 +25,7 @@ public class TeamDTO implements Serializable {
     @Pattern(regexp = "^\\p{L}+( \\p{L}+)*$")
     @Length(max = 100)
     private String name;
+
     public TeamDTO() {
     }
 

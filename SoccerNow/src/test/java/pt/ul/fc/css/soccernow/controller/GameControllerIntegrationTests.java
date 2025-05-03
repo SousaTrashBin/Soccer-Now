@@ -52,6 +52,7 @@ import static pt.ul.fc.css.soccernow.utils.UserTestDataUtil.SEED;
 class GameControllerIntegrationTests {
     private final MockMvc mockMvc;
     private final ObjectMapper objectMapper;
+    private final ControllerUtils controllerUtil;
     List<Player> players;
     List<Referee> certificatedReferees;
     List<Referee> uncertificatedReferees;
@@ -62,7 +63,6 @@ class GameControllerIntegrationTests {
     private PlayerMapper playerMapper;
     @Autowired
     private RefereeMapper refereeMapper;
-    private final ControllerUtils controllerUtil;
     @Autowired
     private GameMapper gameMapper;
 
@@ -237,6 +237,7 @@ class GameControllerIntegrationTests {
     private String fetchJson(String url, UUID id) {
         try {
             return mockMvc.perform(MockMvcRequestBuilders.get(url + id))
+                    .andDo(print())
                     .andReturn()
                     .getResponse()
                     .getContentAsString();
@@ -248,6 +249,7 @@ class GameControllerIntegrationTests {
     private boolean deleteEntity(String url, UUID id) {
         try {
             return mockMvc.perform(MockMvcRequestBuilders.delete(url + id))
+                    .andDo(print())
                     .andReturn()
                     .getResponse().getStatus() == 200;
         } catch (Exception e) {

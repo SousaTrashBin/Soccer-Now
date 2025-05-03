@@ -44,7 +44,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public Player findById(UUID playerId) {
         return playerRepository.findById(playerId)
-                               .orElseThrow(() -> new ResourceDoesNotExistException("Player", "id", playerId));
+                .orElseThrow(() -> new ResourceDoesNotExistException("Player", "id", playerId));
     }
 
     @Override

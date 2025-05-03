@@ -41,8 +41,10 @@ class TeamControllerIntegrationTests {
     private final ControllerUtils controllerUtil;
     private List<Player> players;
     private List<Team> teams;
-    @Autowired private TeamMapper teamMapper;
-    @Autowired private PlayerMapper playerMapper;
+    @Autowired
+    private TeamMapper teamMapper;
+    @Autowired
+    private PlayerMapper playerMapper;
 
     @Autowired
     public TeamControllerIntegrationTests(MockMvc mockMvc, ObjectMapper objectMapper) {
@@ -132,6 +134,7 @@ class TeamControllerIntegrationTests {
 
     private List<Team> fetchTeamsFromPlayer(Player player) throws Exception {
         String playersJson = mockMvc.perform(get("/api/players/" + player.getId() + "/teams"))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse().getContentAsString();
@@ -143,6 +146,7 @@ class TeamControllerIntegrationTests {
 
     private List<Player> fetchPlayersFromTeam(Team team) throws Exception {
         String playersJson = mockMvc.perform(get("/api/teams/" + team.getId() + "/players"))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse().getContentAsString();
@@ -154,6 +158,7 @@ class TeamControllerIntegrationTests {
 
     private Team fetchTeam(Team team) throws Exception {
         String playersJson = mockMvc.perform(get("/api/teams/" + team.getId()))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse().getContentAsString();
@@ -163,6 +168,7 @@ class TeamControllerIntegrationTests {
 
     private List<Team> fetchAllTeams() throws Exception {
         String playersJson = mockMvc.perform(get("/api/teams/"))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse().getContentAsString();
