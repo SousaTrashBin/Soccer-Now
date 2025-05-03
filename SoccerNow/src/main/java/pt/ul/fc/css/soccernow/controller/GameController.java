@@ -1,6 +1,6 @@
 package pt.ul.fc.css.soccernow.controller;
 
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,7 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Tag(name = "Game", description = "Game operations")
+@Tag(name = "Game", description = "Game related operations")
 @RestController
 @RequestMapping("/api/games/")
 public class GameController {
@@ -39,14 +39,20 @@ public class GameController {
     }
 
     @GetMapping("{gameId}")
-    @ApiOperation(value = "Get game by ID", notes = "Returns the game with the given ID")
+    @Operation(
+            summary = "Get game by ID",
+            description = "Returns the details of a game identified by the given UUID."
+    )
     public ResponseEntity<GameDTO> findGame(@PathVariable("gameId") @NotNull UUID gameId) {
         Game game = gameService.findNotDeletedById(gameId);
         return ResponseEntity.ok(gameMapper.toDTO(game));
     }
 
     @PostMapping
-    @ApiOperation(value = "Register a game", notes = "Returns the game registered")
+    @Operation(
+            summary = "Register a game",
+            description = "Registers a new game and returns the details of the registered game."
+    )
     public ResponseEntity<GameDTO> registerGame(@RequestBody @Validated @NotNull GameDTO game) {
         Game entity = gameMapper.toEntity(game);
         Game savedGame = gameService.add(entity);
@@ -55,7 +61,10 @@ public class GameController {
     }
 
     @PostMapping("{gameId}/close")
-    @ApiOperation(value = "Close game with given ID", notes = "Returns the closed game")
+    @Operation(
+            summary = "Close game by ID",
+            description = "Closes the game identified by the given game ID and returns the closed game details. Optionally accepts player game stats."
+    )
     public ResponseEntity<GameDTO> closeGameById(
             @PathVariable("gameId") @NotNull UUID gameId,
             @RequestBody(required = false) @Validated Set<PlayerGameStatsDTO> playerGameStatsDTOs
