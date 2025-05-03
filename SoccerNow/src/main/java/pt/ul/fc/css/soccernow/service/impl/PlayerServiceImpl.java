@@ -95,4 +95,9 @@ public class PlayerServiceImpl implements PlayerService {
         player.delete();
         playerRepository.save(player);
     }
+
+    @Override
+    public List<Player> findNotDeletedByName(String playerName) {
+        return playerRepository.findNotDeletedByName(playerName);
+    }
 }
