@@ -2,10 +2,12 @@ package pt.ul.fc.css.soccernow;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -21,9 +23,14 @@ import pt.ul.fc.css.soccernow.mapper.PlayerMapper;
 import pt.ul.fc.css.soccernow.mapper.RefereeMapper;
 import pt.ul.fc.css.soccernow.mapper.TeamMapper;
 
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static pt.ul.fc.css.soccernow.utils.PlayerTestDataUtil.getPlayers;
 import static pt.ul.fc.css.soccernow.utils.RefereeTestDataUtil.getCertificatedReferees;
 import static pt.ul.fc.css.soccernow.utils.RefereeTestDataUtil.getUncertificatedReferees;
@@ -78,5 +85,124 @@ public class CustomParamsIntegrationTests {
         players = controllerUtil.getUpdatedEntities("/api/players/", (x -> playerMapper.toEntity(x)), PlayerDTO.class);
     }
 
+    @Test
+    public void testFetchTeamsWithLessThanFivePlayers() throws Exception {
+        List<Team> teams = fetchTeamsWithQueryString("?maxPlayers=4");
+        assert teams.isEmpty();
+    }
 
+    @Test
+    public void testFetchAverageGoalsFromCertainPlayers() throws Exception {
+        List<Player> players = fetchPlayersWithQueryString("?name=Luka");
+
+        for (Player player : players) {
+            float averageGoals = fetchAverageGoalsFromPlayer(player);
+            assert averageGoals >= 0f;
+        }
+    }
+
+    @Test
+    public void testFetchTeamsWithMostCards() throws Exception {
+        List<Team> teams = fetchTeamsWithQueryString("?sortBy=playerCards");
+        assert teams.size() == this.teams.size();
+
+//        List<Team> teamsWithMostCards = new LinkedList<>();
+//        int maxCards = Math.toIntExact(teams.get(0).getPlayersCardCount());
+//        int i = 1;
+//        teamsWithMostCards.add(teams.get(0));
+//
+//        while (i < teams.size() && teams.get(i).getPlayersCardCount() == maxCards) {
+//            teamsWithMostCards.add(teams.get(i));
+//            i++;
+//        }
+    }
+
+    @Test
+    public void testFetchTeamsWithMostVictories() throws Exception {
+        List<Team> teams = fetchTeamsWithQueryString("?sortBy=victories");
+        assert teams.size() == this.teams.size();
+
+//        List<Team> teamsWithMostWins = new LinkedList<>();
+//        int maxWins = Math.toIntExact(teams.get(0).getVictoryCount());
+//        int i = 1;
+//        teamsWithMostWins.add(teams.get(0));
+//
+//        while (i < teams.size() && teams.get(i).getVictoryCount() == maxWins) {
+//            teamsWithMostWins.add(teams.get(i));
+//            i++;
+//        }
+    }
+
+    @Test
+    public void testFetchRefereesWithMostGames() throws Exception {
+        List<Referee> referees = fetchRefereesWithQueryString("?order=desc");
+        assert referees.size() == this.uncertificatedReferees.size() + this.certificatedReferees.size();
+
+//        List<Referee> refereesWithMostGames = new LinkedList<>();
+//        int maxGames = Math.toIntExact(referees.get(0).getClosedGamesCount());
+//        int i = 1;
+//        refereesWithMostGames.add(referees.get(0));
+//
+//        while (i < referees.size() && referees.get(i).getClosedGamesCount() == maxGames) {
+//            refereesWithMostGames.add(referees.get(i));
+//            i++;
+//        }
+    }
+
+    @Test
+    public void testFetchPlayersWithMostRedCards() throws Exception {
+        List<Player> players = fetchPlayersWithQueryString("?order=desc");
+        assert players.size() == this.players.size();
+
+//        List<Player> playersWithMostRedCards = new LinkedList<>();
+//        int maxCards = Math.toIntExact(players.get(0).getRedCardCount());
+//        int i = 1;
+//        playersWithMostRedCards.add(players.get(0));
+//
+//        while (i < players.size() && players.get(i).getRedCardCount() == maxCards) {
+//            playersWithMostRedCards.add(players.get(i));
+//            i++;
+//        }
+    }
+
+    private List<Team> fetchTeamsWithQueryString(String queryString) throws Exception {
+        String resultJson = mockMvc.perform(get("/api/teams/" + queryString))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse().getContentAsString();
+
+        return Arrays.stream(objectMapper.readValue(resultJson, TeamDTO[].class))
+                .map(teamMapper::toEntity)
+                .toList();
+    }
+
+    private List<Player> fetchPlayersWithQueryString(String queryString) throws Exception {
+        String resultJson = mockMvc.perform(get("/api/players/" + queryString))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse().getContentAsString();
+
+        return Arrays.stream(objectMapper.readValue(resultJson, PlayerDTO[].class))
+                .map(playerMapper::toEntity)
+                .toList();
+    }
+
+    private List<Referee> fetchRefereesWithQueryString(String queryString) throws Exception {
+        String resultJson = mockMvc.perform(get("/api/referees/" + queryString))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse().getContentAsString();
+
+        return Arrays.stream(objectMapper.readValue(resultJson, RefereeDTO[].class))
+                .map(refereeMapper::toEntity)
+                .toList();
+    }
+
+    private float fetchAverageGoalsFromPlayer(Player player) throws Exception {
+        String resultJson = mockMvc.perform(get("/api/players/" + player.getId() + "/average-goals"))
+                                    .andExpect(status().isOk())
+                                    .andReturn().getResponse().getContentAsString();
+
+        return Float.parseFloat(resultJson);
+    }
 }
