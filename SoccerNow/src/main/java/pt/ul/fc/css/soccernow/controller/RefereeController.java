@@ -1,6 +1,6 @@
 package pt.ul.fc.css.soccernow.controller;
 
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-@Tag(name = "Referee", description = "Referee operations")
+@Tag(name = "Referee", description = "Referee related operations")
 @RestController
 @RequestMapping("/api/referees/")
 public class RefereeController {
@@ -37,7 +37,10 @@ public class RefereeController {
     }
 
     @PostMapping
-    @ApiOperation(value = "Register a referee", notes = "Returns the referee registered")
+    @Operation(
+            summary = "Register a referee",
+            description = "Registers a new referee and returns the details of the registered referee."
+    )
     public ResponseEntity<RefereeDTO> registerReferee(@RequestBody @Validated @NotNull RefereeDTO refereeDTO) {
         if (refereeDTO.getName() == null) {
             throw new BadRequestException("Team name is required");
@@ -49,15 +52,21 @@ public class RefereeController {
     }
 
     @GetMapping("{refereeId}")
-    @ApiOperation(value = "Get referee by ID", notes = "Returns a referee by its ID")
+    @Operation(
+            summary = "Get referee by ID",
+            description = "Returns the details of a referee identified by the given UUID."
+    )
     public ResponseEntity<RefereeDTO> getRefereeById(@PathVariable("refereeId") @NotNull UUID refereeId) {
         Referee referee = refereeService.findNotDeletedById(refereeId);
         return ResponseEntity.ok(refereeMapper.toDTO(referee));
     }
 
     @GetMapping
-    @ApiOperation(value = "Get all referees", notes = "Returns a list of all referees")
-    public ResponseEntity<List<RefereeDTO>> getAllReferees(@Parameter(description = "Nome do árbitro") @RequestParam(name = "size", required = false) @Min(0) Integer size,
+    @Operation(
+            summary = "Get all referees",
+            description = "Returns a list of all referees. Supports optional result size and presentation order."
+    )
+    public ResponseEntity<List<RefereeDTO>> getAllReferees(@Parameter(description = "Tamanho do resultado") @RequestParam(name = "size", required = false) @Min(0) Integer size,
                                                            @Parameter(description = "Ordem de apresentação: 'asc' para ordem crescente, 'dsc' para ordem decrescente", schema = @Schema(allowableValues = {"asc", "dsc"})) @RequestParam(name = "order", required = false) String order) {
         Comparator<Referee> officiatedGamesComparator = Comparator.comparing(Referee::getClosedGamesCount);
         Optional<Comparator<Referee>> optionalRefereeComparator = Optional.ofNullable(order).map(
@@ -77,14 +86,20 @@ public class RefereeController {
     }
 
     @DeleteMapping("{refereeId}")
-    @ApiOperation(value = "Delete a referee with given ID")
+    @Operation(
+            summary = "Delete a referee by ID",
+            description = "Deletes a referee identified by the given referee ID."
+    )
     public ResponseEntity<String> deleteRefereeById(@PathVariable("refereeId") @NotNull UUID refereeId) {
         refereeService.softDelete(refereeId);
         return ResponseEntity.ok("Referee deleted successfully");
     }
 
     @PutMapping("{refereeId}")
-    @ApiOperation(value = "Update a referee with given ID", notes = "Returns the updated referee")
+    @Operation(
+            summary = "Update a referee by ID",
+            description = "Updates the referee identified by the given referee ID and returns the updated details."
+    )
     public ResponseEntity<RefereeDTO> updateRefereeById(
             @PathVariable("refereeId") @NotNull UUID refereeId,
             @RequestBody @Validated @NotNull RefereeDTO refereeDTO
