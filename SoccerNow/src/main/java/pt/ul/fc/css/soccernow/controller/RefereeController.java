@@ -1,6 +1,8 @@
 package pt.ul.fc.css.soccernow.controller;
 
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -55,8 +57,8 @@ public class RefereeController {
 
     @GetMapping
     @ApiOperation(value = "Get all referees", notes = "Returns a list of all referees")
-    public ResponseEntity<List<RefereeDTO>> getAllReferees(@RequestParam(name = "size", required = false) @Min(0) Integer size,
-                                                           @RequestParam(name = "order", required = false) String order) {
+    public ResponseEntity<List<RefereeDTO>> getAllReferees(@Parameter(description = "Nome do árbitro") @RequestParam(name = "size", required = false) @Min(0) Integer size,
+                                                           @Parameter(description = "Ordem de apresentação: 'asc' para ordem crescente, 'dsc' para ordem decrescente", schema = @Schema(allowableValues = {"asc", "dsc"})) @RequestParam(name = "order", required = false) String order) {
         Comparator<Referee> officiatedGamesComparator = Comparator.comparing(Referee::getClosedGamesCount);
         Optional<Comparator<Referee>> optionalRefereeComparator = Optional.ofNullable(order).map(
                 orderValue -> orderValue.equals("asc")

@@ -1,6 +1,8 @@
 package pt.ul.fc.css.soccernow.controller;
 
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -62,16 +64,16 @@ public class PlayerController {
 
     @GetMapping("average-goals")
     @ApiOperation(value = "Get average player goals by player name", notes = "Returns a player's average goals by name")
-    public ResponseEntity<List<AverageGoalsResponse>> getAverageGoalsById(@RequestParam(name = "playerName", required = false) String playerName) {
+    public ResponseEntity<List<AverageGoalsResponse>> getAverageGoalsById(@Parameter(description = "Nome do jogador") @RequestParam(name = "playerName", required = false) String playerName) {
         List<Player> players = playerName != null ? playerService.findNotDeletedByName(playerName) : playerService.findAllNotDeleted();
         return ResponseEntity.ok(players.stream().map(player -> new AverageGoalsResponse(player.getId(), player.getAverageGoals())).toList());
     }
 
     @GetMapping
     @ApiOperation(value = "Get all players", notes = "Returns a list of all players")
-    public ResponseEntity<List<PlayerDTO>> getAllPlayers(@RequestParam(name = "size", required = false) @Min(0) Integer size,
-                                                         @RequestParam(name = "order", required = false) String order,
-                                                         @RequestParam(name = "playerName", required = false) String name) {
+    public ResponseEntity<List<PlayerDTO>> getAllPlayers(@Parameter(description = "Tamanho da equipa") @RequestParam(name = "size", required = false) @Min(0) Integer size,
+                                                         @Parameter(description = "Ordem de apresentação: 'asc' para ordem crescente, 'dsc' para ordem decrescente", schema = @Schema(allowableValues = {"asc", "dsc"})) @RequestParam(name = "order", required = false) String order,
+                                                         @Parameter(description = "Nome do jogador") @RequestParam(name = "playerName", required = false) String name) {
         Comparator<Player> redCardComparator = Comparator.comparing(Player::getRedCardCount);
         Optional<Comparator<Player>> optionalPlayerComparator = Optional.ofNullable(order).map(
                 orderValue -> orderValue.equals("asc")

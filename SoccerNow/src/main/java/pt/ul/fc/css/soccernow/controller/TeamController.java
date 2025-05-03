@@ -3,6 +3,8 @@ package pt.ul.fc.css.soccernow.controller;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -73,10 +75,10 @@ public class TeamController {
             @ApiImplicitParam(name = "sortBy", value = "Field to sort by (playerCards or victories)", paramType = "query")
     })
 
-    public ResponseEntity<List<TeamDTO>> getAllTeams(@RequestParam(name = "maxPlayers", required = false) @Min(0) Integer maxPlayers,
-                                                     @RequestParam(name = "size", required = false) @Min(0) Integer size,
-                                                     @RequestParam(name = "order", required = false, defaultValue = "dsc") String order,
-                                                     @RequestParam(name = "sortBy", required = false) String sortBy) {
+    public ResponseEntity<List<TeamDTO>> getAllTeams(@Parameter(description = "Número máximo de jogadores") @RequestParam(name = "maxPlayers", required = false) @Min(0) Integer maxPlayers,
+                                                     @Parameter(description = "Tamanho da equipa") @RequestParam(name = "size", required = false) @Min(0) Integer size,
+                                                     @Parameter(description = "Ordem de apresentação: 'asc' para ordem crescente, 'dsc' para ordem decrescente", schema = @Schema(allowableValues = {"asc", "dsc"})) @RequestParam(name = "order", required = false, defaultValue = "dsc") String order,
+                                                     @Parameter(description = "Tipo de ordenação: 'playerCards' para ordenar por tipo de cartas, 'victories' para ordenar por número de vitórias", schema = @Schema(allowableValues = {"playerCards", "victories"})) @RequestParam(name = "sortBy", required = false) String sortBy) {
         Comparator<Team> cardComparator = Comparator.comparing(Team::getPlayersCardCount);
         Comparator<Team> victoryComparator = Comparator.comparing(Team::getVictoryCount);
         Predicate<TeamDTO> filterPredicate = maxPlayers == null
