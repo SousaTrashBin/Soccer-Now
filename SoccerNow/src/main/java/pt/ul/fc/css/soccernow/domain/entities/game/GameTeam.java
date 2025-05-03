@@ -23,7 +23,7 @@ public class GameTeam {
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
     @JoinColumn(name = "game_team_id")
     @Size(min = FUTSAL_TEAM_SIZE, max = FUTSAL_TEAM_SIZE)
     private Set<GamePlayer> gamePlayers = new HashSet<>();

@@ -17,6 +17,7 @@ import pt.ul.fc.css.soccernow.service.GameService;
 
 import java.net.URI;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
@@ -43,7 +44,7 @@ public class GameController {
             summary = "Get game by ID",
             description = "Returns the details of a game identified by the given UUID."
     )
-    public ResponseEntity<GameDTO> findGame(@PathVariable("gameId") @NotNull UUID gameId) {
+    public ResponseEntity<GameDTO> getGameById(@PathVariable("gameId") @NotNull UUID gameId) {
         Game game = gameService.findNotDeletedById(gameId);
         return ResponseEntity.ok(gameMapper.toDTO(game));
     }
@@ -76,6 +77,16 @@ public class GameController {
                 .collect(Collectors.toSet());
         Game closedGame = gameService.closeGame(gameId, playerGameStats);
         return ResponseEntity.ok(gameMapper.toDTO(closedGame));
+    }
+
+    @GetMapping
+    @Operation(
+            summary = "Get all non deleted games",
+            description = "Returns the details of all non deleted games."
+    )
+    public ResponseEntity<List<GameDTO>> getAllGames() {
+        List<Game> allNotDeleted = gameService.findAllNotDeleted();
+        return ResponseEntity.ok(allNotDeleted.stream().map(gameMapper::toDTO).toList());
     }
 
     private void valitePlayerGameStatsDTO(Set<PlayerGameStatsDTO> playerGameStatsDTOs) {

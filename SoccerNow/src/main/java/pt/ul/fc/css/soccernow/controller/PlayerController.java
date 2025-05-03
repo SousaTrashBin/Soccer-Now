@@ -84,7 +84,7 @@ public class PlayerController {
             description = "Returns a list of all players. Supports optional result size, presentation order and filtering by name."
     )
     public ResponseEntity<List<PlayerDTO>> getAllPlayers(@Parameter(description = "Tamanho do resultado") @RequestParam(name = "size", required = false) @Min(0) Integer size,
-                                                         @Parameter(description = "Ordem de apresentação: 'asc' para ordem crescente, 'dsc' para ordem decrescente", schema = @Schema(allowableValues = {"asc", "dsc"})) @RequestParam(name = "order", required = false) String order,
+                                                         @Parameter(description = "Ordem de apresentação de acordo com o número de cartões vermelhos: 'asc' para ordem crescente, 'dsc' para ordem decrescente", schema = @Schema(allowableValues = {"asc", "dsc"})) @RequestParam(name = "order", required = false) String order,
                                                          @Parameter(description = "Nome do jogador") @RequestParam(name = "playerName", required = false) String name) {
         Comparator<Player> redCardComparator = Comparator.comparing(Player::getRedCardCount);
         Optional<Comparator<Player>> optionalPlayerComparator = Optional.ofNullable(order).map(

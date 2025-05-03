@@ -67,7 +67,7 @@ public class RefereeController {
             description = "Returns a list of all referees. Supports optional result size and presentation order."
     )
     public ResponseEntity<List<RefereeDTO>> getAllReferees(@Parameter(description = "Tamanho do resultado") @RequestParam(name = "size", required = false) @Min(0) Integer size,
-                                                           @Parameter(description = "Ordem de apresentação: 'asc' para ordem crescente, 'dsc' para ordem decrescente", schema = @Schema(allowableValues = {"asc", "dsc"})) @RequestParam(name = "order", required = false) String order) {
+                                                           @Parameter(description = "Ordem de apresentação de acordo com o número de jogos oficiados: 'asc' para ordem crescente, 'dsc' para ordem decrescente", schema = @Schema(allowableValues = {"asc", "dsc"})) @RequestParam(name = "order", required = false) String order) {
         Comparator<Referee> officiatedGamesComparator = Comparator.comparing(Referee::getClosedGamesCount);
         Optional<Comparator<Referee>> optionalRefereeComparator = Optional.ofNullable(order).map(
                 orderValue -> orderValue.equals("asc")

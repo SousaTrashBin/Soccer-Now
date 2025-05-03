@@ -27,7 +27,7 @@ public class GameStats {
     private Integer teamTwoGoals = 0;
 
     @Size(min = FUTSAL_TEAM_SIZE * 2, max = FUTSAL_TEAM_SIZE * 2)
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<PlayerGameStats> playerGameStats = new LinkedHashSet<>();
 
     public Set<PlayerGameStats> getPlayerGameStats() {

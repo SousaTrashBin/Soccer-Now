@@ -25,6 +25,9 @@ public class TeamServiceImpl implements TeamService {
         if (!team.hasPlayer(player)) {
             throw new BadRequestException(player.getName() + " is not on team " + team.getName());
         }
+        if (team.hasPendingGamesWithPlayer(player)) {
+            throw new ResourceCouldNotBeDeletedException("Player " + player.getName() + " has a pending game on team " + team.getName());
+        }
         team.removePlayer(player);
         teamRepository.save(team);
     }

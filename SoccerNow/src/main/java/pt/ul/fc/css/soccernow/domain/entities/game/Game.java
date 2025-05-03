@@ -157,10 +157,10 @@ public class Game extends SoftDeleteEntity {
     }
 
     public UUID whoWonId() {
-        return switch (gameStats.getResult()) {
+        return switch (getResult()) {
             case DRAW, PENDING -> null;
-            case TEAM_1_WON -> getGameTeamOne().getId();
-            case TEAM_2_WON -> getGameTeamTwo().getId();
+            case TEAM_1_WON -> getGameTeamOne().getTeam().getId();
+            case TEAM_2_WON -> getGameTeamTwo().getTeam().getId();
         };
     }
 

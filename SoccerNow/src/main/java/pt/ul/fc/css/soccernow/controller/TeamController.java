@@ -82,34 +82,33 @@ public class TeamController {
             @ApiImplicitParam(name = "order", value = "Sort order (asc or desc)", paramType = "query"),
             @ApiImplicitParam(name = "sortBy", value = "Field to sort by (playerCards or victories)", paramType = "query")
     })
+
     public ResponseEntity<List<TeamDTO>> getAllTeams(@Parameter(description = "Número máximo de jogadores") @RequestParam(name = "maxPlayers", required = false) @Min(0) Integer maxPlayers,
                                                      @Parameter(description = "Tamanho do resultado") @RequestParam(name = "size", required = false) @Min(0) Integer size,
                                                      @Parameter(description = "Ordem de apresentação: 'asc' para ordem crescente, 'dsc' para ordem decrescente", schema = @Schema(allowableValues = {"asc", "dsc"})) @RequestParam(name = "order", required = false, defaultValue = "dsc") String order,
                                                      @Parameter(description = "Tipo de ordenação: 'playerCards' para ordenar por tipo de cartas, 'victories' para ordenar por número de vitórias", schema = @Schema(allowableValues = {"playerCards", "victories"})) @RequestParam(name = "sortBy", required = false) String sortBy) {
-        Comparator<Team> cardComparator = Comparator.comparing(Team::getPlayersCardCount);
-        Comparator<Team> victoryComparator = Comparator.comparing(Team::getVictoryCount);
+
         Predicate<TeamDTO> filterPredicate = maxPlayers == null
                 ? team -> true
                 : team -> team.getPlayers().size() <= maxPlayers;
 
-        Optional<Comparator<Team>> comparator = Optional.ofNullable(sortBy)
-                .filter(sortByValue -> List.of("playerCards", "victories").contains(sortByValue))
-                .map(sortByValue -> sortByValue.equals("playerCards") ? cardComparator : victoryComparator);
-
-
-        Optional<Comparator<Team>> optionalTeamComparator = comparator
-                .map(comp -> order.equals("asc") ? comp : comp.reversed());
-
         Stream<Team> teamStream = teamService.findAllNotDeleted().stream();
 
-        if (optionalTeamComparator.isPresent()) {
-            teamStream = teamStream.sorted(optionalTeamComparator.get());
-        }
+        teamStream = Optional.ofNullable(sortBy)
+                .filter(s -> List.of("playerCards", "victories").contains(s))
+                .map(s -> s.equals("playerCards")
+                        ? Comparator.comparing(Team::getPlayersCardCount)
+                        : Comparator.comparing(Team::getVictoryCount))
+                .map(comp -> "asc".equals(order) ? comp : comp.reversed())
+                .map(teamStream::sorted)
+                .orElse(teamStream);
 
-        Stream<TeamDTO> filteredTeamDTOStream = teamStream.map(teamMapper::toDTO).filter(filterPredicate);
-        List<TeamDTO> teams = size != null
-                ? filteredTeamDTOStream.limit(size).toList()
-                : filteredTeamDTOStream.toList();
+        List<TeamDTO> teams = teamStream
+                .map(teamMapper::toDTO)
+                .filter(filterPredicate)
+                .limit(size != null ? size : Long.MAX_VALUE)
+                .toList();
+
         return ResponseEntity.ok(teams);
     }
 
