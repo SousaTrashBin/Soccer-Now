@@ -62,8 +62,8 @@ public class PlayerController {
 
     @GetMapping("average-goals")
     @ApiOperation(value = "Get average player goals by player name", notes = "Returns a player's average goals by name")
-    public ResponseEntity<List<AverageGoalsResponse>> getAverageGoalsById(@RequestParam(name = "playerName") @NotNull String playerName) {
-        List<Player> players = playerService.findNotDeletedByName(playerName);
+    public ResponseEntity<List<AverageGoalsResponse>> getAverageGoalsById(@RequestParam(name = "playerName", required = false) String playerName) {
+        List<Player> players = playerName != null ? playerService.findNotDeletedByName(playerName) : playerService.findAllNotDeleted();
         return ResponseEntity.ok(players.stream().map(player -> new AverageGoalsResponse(player.getId(), player.getAverageGoals())).toList());
     }
 
@@ -88,7 +88,7 @@ public class PlayerController {
         return ResponseEntity.ok(players);
     }
 
-    record AverageGoalsResponse(UUID uuid, Float goals) {
+    public record AverageGoalsResponse(UUID id, Float goals) {
     }
 
     @DeleteMapping("{playerId}")
