@@ -63,7 +63,6 @@ class GameControllerIntegrationTests {
     @Autowired
     private RefereeMapper refereeMapper;
     private final ControllerUtils controllerUtil;
-    Random random = new Random(SEED);
     @Autowired
     private GameMapper gameMapper;
 
@@ -76,19 +75,20 @@ class GameControllerIntegrationTests {
 
     @BeforeEach
     public void setUp() throws Exception {
-        players = getPlayers();
+        Random random = new Random(SEED);
+        players = getPlayers(random);
         players = controllerUtil.createObjectFromDTOtoURL("/api/players/", players, (p -> playerMapper.toDTO(p)), (p -> playerMapper.toEntity(p)), PlayerDTO.class);
 
-        uncertificatedReferees = getUncertificatedReferees();
+        uncertificatedReferees = getUncertificatedReferees(random);
         uncertificatedReferees = controllerUtil.createObjectFromDTOtoURL("/api/referees/", uncertificatedReferees, (r -> refereeMapper.toDTO(r)), (r -> refereeMapper.toEntity(r)), RefereeDTO.class);
 
-        certificatedReferees = getCertificatedReferees();
+        certificatedReferees = getCertificatedReferees(random);
         certificatedReferees = controllerUtil.createObjectFromDTOtoURL("/api/referees/", certificatedReferees, (r -> refereeMapper.toDTO(r)), (r -> refereeMapper.toEntity(r)), RefereeDTO.class);
 
-        teams = getTeams();
+        teams = getTeams(random);
         teams = controllerUtil.createObjectFromDTOtoURL("/api/teams/", teams, (t -> teamMapper.toDTO(t)), (t -> teamMapper.toEntity(t)), TeamDTO.class);
 
-        controllerUtil.initializeTeams(teams, players);
+        controllerUtil.initializeTeams(teams, players, random);
         teams = controllerUtil.getUpdatedEntities("/api/teams/", (x -> teamMapper.toEntity(x)), TeamDTO.class);
         players = controllerUtil.getUpdatedEntities("/api/players/", (x -> playerMapper.toEntity(x)), PlayerDTO.class);
     }
@@ -103,7 +103,7 @@ class GameControllerIntegrationTests {
     public void testIfValidGameCanBeCreated() throws Exception {
         Game game = new Game();
         GameTeam firstGameTeam = createGameTeam(teams.get(0));
-        GameTeam secondGameTeam = createGameTeam(teams.get(9));
+        GameTeam secondGameTeam = createGameTeam(teams.get(4));
         game.setPrimaryReferee(certificatedReferees.get(0));
         game.setGameTeamOne(firstGameTeam);
         game.setGameTeamTwo(secondGameTeam);
@@ -158,7 +158,7 @@ class GameControllerIntegrationTests {
     public void testIfGameCanBeClosedWithStats() throws Exception {
         Game game = new Game();
         GameTeam firstGameTeam = createGameTeam(teams.get(0));
-        GameTeam secondGameTeam = createGameTeam(teams.get(6));
+        GameTeam secondGameTeam = createGameTeam(teams.get(2));
         game.setPrimaryReferee(certificatedReferees.get(0));
         game.setGameTeamOne(firstGameTeam);
         game.setGameTeamTwo(secondGameTeam);
@@ -209,7 +209,7 @@ class GameControllerIntegrationTests {
     public void testIfGameCanBeClosedWithoutStats() throws Exception {
         Game game = new Game();
         GameTeam firstGameTeam = createGameTeam(teams.get(0));
-        GameTeam secondGameTeam = createGameTeam(teams.get(5));
+        GameTeam secondGameTeam = createGameTeam(teams.get(2));
         game.setPrimaryReferee(certificatedReferees.get(0));
         game.setGameTeamOne(firstGameTeam);
         game.setGameTeamTwo(secondGameTeam);

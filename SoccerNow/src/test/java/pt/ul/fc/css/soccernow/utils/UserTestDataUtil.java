@@ -5,7 +5,6 @@ import java.util.Random;
 
 public class UserTestDataUtil {
     public static final long SEED = 42L;
-    public static final Random RANDOM = new Random(SEED);
 
     private static final List<String> SAMPLE_NAMES =
             List.of(
@@ -33,10 +32,9 @@ public class UserTestDataUtil {
                     "Reia",
                     "Almeida");
 
-    public static String getRandomUserName() {
-        return "%s %s"
-                .formatted(
-                        SAMPLE_NAMES.get(RANDOM.nextInt(SAMPLE_NAMES.size())),
-                        SAMPLE_SURNAMES.get(RANDOM.nextInt(SAMPLE_SURNAMES.size())));
+    public static String getRandomUserName(Random random) {
+        return "%s %s".formatted(
+                SAMPLE_NAMES.get(random.nextInt(SAMPLE_NAMES.size())),
+                SAMPLE_SURNAMES.get(random.nextInt(SAMPLE_SURNAMES.size())));
     }
 }

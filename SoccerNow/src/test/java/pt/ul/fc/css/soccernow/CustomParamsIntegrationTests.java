@@ -1,5 +1,6 @@
 package pt.ul.fc.css.soccernow;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import pt.ul.fc.css.soccernow.controller.ControllerUtils;
+import pt.ul.fc.css.soccernow.controller.PlayerController;
 import pt.ul.fc.css.soccernow.domain.dto.TeamDTO;
 import pt.ul.fc.css.soccernow.domain.dto.user.PlayerDTO;
 import pt.ul.fc.css.soccernow.domain.dto.user.RefereeDTO;
@@ -24,7 +26,6 @@ import pt.ul.fc.css.soccernow.mapper.RefereeMapper;
 import pt.ul.fc.css.soccernow.mapper.TeamMapper;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -68,19 +69,20 @@ public class CustomParamsIntegrationTests {
 
     @BeforeEach
     public void setUp() throws Exception {
-        players = getPlayers();
+        Random random = new Random(SEED);
+        players = getPlayers(random);
         players = controllerUtil.createObjectFromDTOtoURL("/api/players/", players, (p -> playerMapper.toDTO(p)), (p -> playerMapper.toEntity(p)), PlayerDTO.class);
 
-        uncertificatedReferees = getUncertificatedReferees();
+        uncertificatedReferees = getUncertificatedReferees(random);
         uncertificatedReferees = controllerUtil.createObjectFromDTOtoURL("/api/referees/", uncertificatedReferees, (r -> refereeMapper.toDTO(r)), (r -> refereeMapper.toEntity(r)), RefereeDTO.class);
 
-        certificatedReferees = getCertificatedReferees();
+        certificatedReferees = getCertificatedReferees(random);
         certificatedReferees = controllerUtil.createObjectFromDTOtoURL("/api/referees/", certificatedReferees, (r -> refereeMapper.toDTO(r)), (r -> refereeMapper.toEntity(r)), RefereeDTO.class);
 
-        teams = getTeams();
+        teams = getTeams(random);
         teams = controllerUtil.createObjectFromDTOtoURL("/api/teams/", teams, (t -> teamMapper.toDTO(t)), (t -> teamMapper.toEntity(t)), TeamDTO.class);
 
-        controllerUtil.initializeTeams(teams, players);
+        controllerUtil.initializeTeams(teams, players, random);
         teams = controllerUtil.getUpdatedEntities("/api/teams/", (x -> teamMapper.toEntity(x)), TeamDTO.class);
         players = controllerUtil.getUpdatedEntities("/api/players/", (x -> playerMapper.toEntity(x)), PlayerDTO.class);
     }
@@ -96,8 +98,10 @@ public class CustomParamsIntegrationTests {
         List<Player> players = fetchPlayersWithQueryString("?name=Luka");
 
         for (Player player : players) {
-            float averageGoals = fetchAverageGoalsFromPlayer(player);
-            assert averageGoals >= 0f;
+            assert fetchAverageGoalsFromPlayer(player).stream()
+                    .allMatch(averageGoalsResponse -> averageGoalsResponse.goals() != null
+                            && Float.compare(averageGoalsResponse.goals(), 0f) >= 0
+                    );
         }
     }
 
@@ -198,11 +202,15 @@ public class CustomParamsIntegrationTests {
                 .toList();
     }
 
-    private float fetchAverageGoalsFromPlayer(Player player) throws Exception {
-        String resultJson = mockMvc.perform(get("/api/players/" + player.getId() + "/average-goals"))
+    private List<PlayerController.AverageGoalsResponse> fetchAverageGoalsFromPlayer(Player player) throws Exception {
+        String resultJson = mockMvc.perform(get("/api/players/average-goals").param("playerName", player.getName()))
                                     .andExpect(status().isOk())
                                     .andReturn().getResponse().getContentAsString();
-
-        return Float.parseFloat(resultJson);
+        List<PlayerController.AverageGoalsResponse> responses = objectMapper.readValue(
+                resultJson,
+                new TypeReference<>() {
+                }
+        );
+        return responses;
     }
 }

@@ -14,19 +14,16 @@ import java.util.Random;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static pt.ul.fc.css.soccernow.utils.UserTestDataUtil.SEED;
-
 public class ControllerUtils {
     private final MockMvc mockMvc;
     private final ObjectMapper objectMapper;
-    Random random = new Random(SEED);
 
     public ControllerUtils(MockMvc mockMvc, ObjectMapper objectMapper) {
         this.mockMvc = mockMvc;
         this.objectMapper = objectMapper;
     }
 
-    public void initializeTeams(List<Team> teams, List<Player> players) {
+    public void initializeTeams(List<Team> teams, List<Player> players, Random random) {
         for (Team team : teams) {
             random.ints(0, players.size())
                     .distinct()

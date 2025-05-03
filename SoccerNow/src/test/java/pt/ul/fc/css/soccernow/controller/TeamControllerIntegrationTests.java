@@ -43,7 +43,6 @@ class TeamControllerIntegrationTests {
     private List<Team> teams;
     @Autowired private TeamMapper teamMapper;
     @Autowired private PlayerMapper playerMapper;
-    Random random = new Random(SEED);
 
     @Autowired
     public TeamControllerIntegrationTests(MockMvc mockMvc, ObjectMapper objectMapper) {
@@ -54,13 +53,14 @@ class TeamControllerIntegrationTests {
 
     @BeforeEach
     public void setUp() throws Exception {
-        players = getPlayers();
+        Random random = new Random(SEED);
+        players = getPlayers(random);
         players = controllerUtil.createObjectFromDTOtoURL("/api/players/", players, (p -> playerMapper.toDTO(p)), (p -> playerMapper.toEntity(p)), PlayerDTO.class);
 
-        teams = getTeams();
+        teams = getTeams(random);
         teams = controllerUtil.createObjectFromDTOtoURL("/api/teams/", teams, (t -> teamMapper.toDTO(t)), (t -> teamMapper.toEntity(t)), TeamDTO.class);
 
-        controllerUtil.initializeTeams(teams, players);
+        controllerUtil.initializeTeams(teams, players, random);
 
         teams = controllerUtil.getUpdatedEntities("/api/teams/", (t -> teamMapper.toEntity(t)), TeamDTO.class);
         players = controllerUtil.getUpdatedEntities("/api/players/", (p -> playerMapper.toEntity(p)), PlayerDTO.class);

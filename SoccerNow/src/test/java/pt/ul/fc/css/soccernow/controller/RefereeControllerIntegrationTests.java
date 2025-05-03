@@ -17,12 +17,10 @@ import pt.ul.fc.css.soccernow.domain.entities.user.Referee;
 import pt.ul.fc.css.soccernow.mapper.RefereeMapper;
 
 import java.util.List;
-import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static pt.ul.fc.css.soccernow.utils.UserTestDataUtil.SEED;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -32,7 +30,6 @@ public class RefereeControllerIntegrationTests {
     private final MockMvc mockMvc;
     private final ObjectMapper objectMapper;
     private final RefereeMapper refereeMapper;
-    Random random = new Random(SEED);
 
     @Autowired
     public RefereeControllerIntegrationTests(MockMvc mockMvc, ObjectMapper objectMapper, RefereeMapper refereeMapper) {

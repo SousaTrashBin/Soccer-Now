@@ -11,9 +11,11 @@ import pt.ul.fc.css.soccernow.utils.PlayerTestDataUtil;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static pt.ul.fc.css.soccernow.utils.UserTestDataUtil.SEED;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
@@ -25,7 +27,7 @@ public class PlayerRepositoryIntegrationTests {
 
     @Test
     public void testThatPlayerCanBeCreatedAndRecalled() {
-        Player testPlayer = PlayerTestDataUtil.getPlayers()
+        Player testPlayer = PlayerTestDataUtil.getPlayers(new Random(SEED))
                                               .get(0);
         Player savedPlayer = underTest.save(testPlayer);
 
@@ -42,12 +44,10 @@ public class PlayerRepositoryIntegrationTests {
 
     @Test
     public void testThatMultiplePlayersCanBeCreatedAndRecalled() {
-        Player playerA = PlayerTestDataUtil.getPlayers()
-                                           .get(0);
-        Player playerB = PlayerTestDataUtil.getPlayers()
-                                           .get(1);
-        Player playerC = PlayerTestDataUtil.getPlayers()
-                                           .get(2);
+        List<Player> players = PlayerTestDataUtil.getPlayers(new Random(SEED));
+        Player playerA = players.get(0);
+        Player playerB = players.get(1);
+        Player playerC = players.get(2);
 
         underTest.saveAll(List.of(playerA, playerB, playerC));
         assertThat(underTest.findAll()).hasSize(3)
@@ -62,8 +62,7 @@ public class PlayerRepositoryIntegrationTests {
 
     @Test
     public void testThatPlayerCanBeUpdated() {
-        Player player = PlayerTestDataUtil.getPlayers()
-                                          .get(0);
+        Player player = PlayerTestDataUtil.getPlayers(new Random(SEED)).get(0);
         underTest.save(player);
 
         player.setName("UPDATED");

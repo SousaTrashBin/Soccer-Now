@@ -3,9 +3,8 @@ package pt.ul.fc.css.soccernow.utils;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
 
 import java.util.List;
+import java.util.Random;
 import java.util.stream.IntStream;
-
-import static pt.ul.fc.css.soccernow.utils.UserTestDataUtil.RANDOM;
 
 public class TeamTestDataUtil {
     private static final List<String> RANDOM_TEAM_NAMES = List.of(
@@ -31,18 +30,18 @@ public class TeamTestDataUtil {
             "Burinhosa"
     );
 
-    public static Team createRandomTeam() {
+    public static Team createRandomTeam(Random random) {
         Team team = new Team();
-        team.setName(getRandomClubName());
+        team.setName(getRandomClubName(random));
         return team;
     }
 
-    public static String getRandomClubName() {
-        int randomIndex = RANDOM.nextInt(RANDOM_TEAM_NAMES.size());
+    public static String getRandomClubName(Random random) {
+        int randomIndex = random.nextInt(RANDOM_TEAM_NAMES.size());
         return RANDOM_TEAM_NAMES.get(randomIndex);
     }
 
-    public static List<Team> getTeams() {
-        return IntStream.range(0, 20).mapToObj(i -> createRandomTeam()).toList();
+    public static List<Team> getTeams(Random random) {
+        return IntStream.range(0, 20).mapToObj(i -> createRandomTeam(random)).toList();
     }
 }

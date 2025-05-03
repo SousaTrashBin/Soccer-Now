@@ -18,12 +18,10 @@ import pt.ul.fc.css.soccernow.mapper.PlayerMapper;
 import pt.ul.fc.css.soccernow.util.FutsalPositionEnum;
 
 import java.util.List;
-import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static pt.ul.fc.css.soccernow.utils.UserTestDataUtil.SEED;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -33,7 +31,6 @@ class PlayerControllerIntegrationTests {
     private final MockMvc mockMvc;
     private final ObjectMapper objectMapper;
     private final PlayerMapper playerMapper;
-    Random random = new Random(SEED);
 
     @Autowired
     public PlayerControllerIntegrationTests(MockMvc mockMvc, ObjectMapper objectMapper, PlayerMapper playerMapper) {
