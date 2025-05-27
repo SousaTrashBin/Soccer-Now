@@ -8,6 +8,7 @@ import pt.ul.fc.css.soccernow.domain.entities.game.GameTeam;
 import pt.ul.fc.css.soccernow.domain.entities.game.PlayerGameStats;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.domain.entities.user.Referee;
+import pt.ul.fc.css.soccernow.domain.entities.user.User;
 import pt.ul.fc.css.soccernow.exception.BadRequestException;
 import pt.ul.fc.css.soccernow.exception.ResourceCouldNotBeDeletedException;
 import pt.ul.fc.css.soccernow.exception.ResourceDoesNotExistException;
@@ -146,11 +147,25 @@ public class GameServiceImpl implements GameService {
     }
 
     public Game closeGame(UUID gameID, Set<PlayerGameStats> incomingPlayerStats) {
+        valitePlayerGameStatsDTO(incomingPlayerStats);
         Game game = validateGameIsOpenAndExists(gameID);
         GameStats gameStats = calculateGameStats(game, incomingPlayerStats);
         game.setGameStats(gameStats);
         game.close();
         return gameRepository.save(game);
+    }
+
+    private void valitePlayerGameStatsDTO(Set<PlayerGameStats> playerGameStatsDTOs) {
+        boolean hasDuplicatePlayers = playerGameStatsDTOs.stream()
+                .map(PlayerGameStats::getPlayer)
+                .map(User::getId)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .values()
+                .stream()
+                .anyMatch(count -> count > 1);
+        if (hasDuplicatePlayers) {
+            throw new BadRequestException("Please remove the duplicate players present on the player stats");
+        }
     }
 
     private Game validateGameIsOpenAndExists(UUID gameID) {

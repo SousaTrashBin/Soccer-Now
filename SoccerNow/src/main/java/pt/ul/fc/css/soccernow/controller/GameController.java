@@ -10,7 +10,6 @@ import pt.ul.fc.css.soccernow.domain.dto.games.GameDTO;
 import pt.ul.fc.css.soccernow.domain.dto.games.PlayerGameStatsDTO;
 import pt.ul.fc.css.soccernow.domain.entities.game.Game;
 import pt.ul.fc.css.soccernow.domain.entities.game.PlayerGameStats;
-import pt.ul.fc.css.soccernow.exception.BadRequestException;
 import pt.ul.fc.css.soccernow.mapper.GameMapper;
 import pt.ul.fc.css.soccernow.mapper.PlayerGameStatsMapper;
 import pt.ul.fc.css.soccernow.service.GameService;
@@ -20,7 +19,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Tag(name = "Game", description = "Game related operations")
@@ -71,7 +69,6 @@ public class GameController {
             @RequestBody(required = false) @Validated Set<PlayerGameStatsDTO> playerGameStatsDTOs
     ) {
         playerGameStatsDTOs = playerGameStatsDTOs != null ? playerGameStatsDTOs : new HashSet<>();
-        valitePlayerGameStatsDTO(playerGameStatsDTOs);
         Set<PlayerGameStats> playerGameStats = playerGameStatsDTOs.stream()
                 .map(playerGameStatsMapper::toEntity)
                 .collect(Collectors.toSet());
@@ -87,19 +84,6 @@ public class GameController {
     public ResponseEntity<List<GameDTO>> getAllGames() {
         List<Game> allNotDeleted = gameService.findAllNotDeleted();
         return ResponseEntity.ok(allNotDeleted.stream().map(gameMapper::toDTO).toList());
-    }
-
-    private void valitePlayerGameStatsDTO(Set<PlayerGameStatsDTO> playerGameStatsDTOs) {
-        boolean hasDuplicatePlayers = playerGameStatsDTOs.stream()
-                .map(PlayerGameStatsDTO::getPlayer)
-                .map(PlayerGameStatsDTO.PlayerInfoDTO::getId)
-                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
-                .values()
-                .stream()
-                .anyMatch(count -> count > 1);
-        if (hasDuplicatePlayers) {
-            throw new BadRequestException("Please remove the duplicate players present on the player stats");
-        }
     }
 
 }
