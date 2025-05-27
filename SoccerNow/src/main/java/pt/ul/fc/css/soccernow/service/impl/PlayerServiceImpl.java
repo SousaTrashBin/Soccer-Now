@@ -6,6 +6,7 @@ import pt.ul.fc.css.soccernow.exception.ResourceCouldNotBeDeletedException;
 import pt.ul.fc.css.soccernow.exception.ResourceDoesNotExistException;
 import pt.ul.fc.css.soccernow.repository.PlayerRepository;
 import pt.ul.fc.css.soccernow.service.PlayerService;
+import pt.ul.fc.css.soccernow.util.PlayerSearchParams;
 
 import java.util.List;
 import java.util.UUID;
@@ -74,5 +75,10 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public List<Player> findNotDeletedByName(String playerName) {
         return playerRepository.findNotDeletedByName(playerName);
+    }
+
+    @Override
+    public List<Player> findAllNotDeleted(PlayerSearchParams params) {
+        return playerRepository.findAllNotDeleted(params);
     }
 }
