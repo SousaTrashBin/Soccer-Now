@@ -4,18 +4,17 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
+import pt.ul.fc.css.soccernow.domain.dto.games.CardInfoDTO;
+import pt.ul.fc.css.soccernow.domain.dto.games.GameInfoDTO;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * DTO for {@link pt.ul.fc.css.soccernow.domain.entities.user.Referee}
  */
 public class RefereeDTO implements Serializable {
+    private Set<GameInfoDTO> secondaryRefereeGames = new HashSet<>();
     private UUID id;
     @Schema(example = "Sofia Reia")
     @Pattern(regexp = "^\\p{L}+( \\p{L}+)*$")
@@ -24,16 +23,18 @@ public class RefereeDTO implements Serializable {
     @NotNull
     private Boolean hasCertificate = false;
     private Set<GameInfoDTO> primaryRefereeGames = new HashSet<>();
-    private Set<GameInfoDTO> secondaryRefereeGames = new HashSet<>();
+    private Set<CardInfoDTO> issuedCards = new LinkedHashSet<>();
 
     public RefereeDTO() {
     }
 
-    public RefereeDTO(UUID id, String name, Boolean hasCertificate, Set<GameInfoDTO> primaryRefereeGames, Set<GameInfoDTO> secondaryRefereeGames) {
+    public RefereeDTO(
+            Set<GameInfoDTO> secondaryRefereeGames, UUID id, String name, Boolean hasCertificate, Set<GameInfoDTO> primaryRefereeGames, Set<CardInfoDTO> issuedCards) {
         this.id = id;
         this.name = name;
         this.hasCertificate = hasCertificate;
         this.primaryRefereeGames = primaryRefereeGames;
+        this.issuedCards = issuedCards;
         this.secondaryRefereeGames = secondaryRefereeGames;
     }
 
@@ -73,12 +74,12 @@ public class RefereeDTO implements Serializable {
         return this;
     }
 
-    public Set<GameInfoDTO> getSecondaryRefereeGames() {
-        return secondaryRefereeGames;
+    public Set<CardInfoDTO> getIssuedCards() {
+        return issuedCards;
     }
 
-    public RefereeDTO setSecondaryRefereeGames(Set<GameInfoDTO> secondaryRefereeGames) {
-        this.secondaryRefereeGames = secondaryRefereeGames;
+    public RefereeDTO setIssuedCards(Set<CardInfoDTO> issuedCards) {
+        this.issuedCards = issuedCards;
         return this;
     }
 
@@ -91,12 +92,12 @@ public class RefereeDTO implements Serializable {
                 Objects.equals(this.name, entity.name) &&
                 Objects.equals(this.hasCertificate, entity.hasCertificate) &&
                 Objects.equals(this.primaryRefereeGames, entity.primaryRefereeGames) &&
-                Objects.equals(this.secondaryRefereeGames, entity.secondaryRefereeGames);
+                Objects.equals(this.issuedCards, entity.issuedCards);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, hasCertificate, primaryRefereeGames, secondaryRefereeGames);
+        return Objects.hash(id, name, hasCertificate, primaryRefereeGames, issuedCards);
     }
 
     @Override
@@ -106,75 +107,15 @@ public class RefereeDTO implements Serializable {
                 "name = " + name + ", " +
                 "hasCertificate = " + hasCertificate + ", " +
                 "primaryRefereeGames = " + primaryRefereeGames + ", " +
-                "secondaryRefereeGames = " + secondaryRefereeGames + ")";
+                "issuedCards = " + issuedCards + ")";
     }
 
-    /**
-     * DTO for {@link pt.ul.fc.css.soccernow.domain.entities.game.Game}
-     */
-    public static class GameInfoDTO implements Serializable {
-        private UUID id;
-        private LocalDateTime happensIn;
-        private Boolean isClosed = false;
-
-        public GameInfoDTO() {
-        }
-
-        public GameInfoDTO(UUID id, LocalDateTime happensIn, Boolean isClosed) {
-            this.id = id;
-            this.happensIn = happensIn;
-            this.isClosed = isClosed;
-        }
-
-        public UUID getId() {
-            return id;
-        }
-
-        public GameInfoDTO setId(UUID id) {
-            this.id = id;
-            return this;
-        }
-
-        public LocalDateTime getHappensIn() {
-            return happensIn;
-        }
-
-        public GameInfoDTO setHappensIn(LocalDateTime happensIn) {
-            this.happensIn = happensIn;
-            return this;
-        }
-
-        public Boolean getIsClosed() {
-            return isClosed;
-        }
-
-        public GameInfoDTO setIsClosed(Boolean isClosed) {
-            this.isClosed = isClosed;
-            return this;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            GameInfoDTO entity = (GameInfoDTO) o;
-            return Objects.equals(this.id, entity.id) &&
-                    Objects.equals(this.happensIn, entity.happensIn) &&
-                    Objects.equals(this.isClosed, entity.isClosed);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(id, happensIn, isClosed);
-        }
-
-        @Override
-        public String toString() {
-            return getClass().getSimpleName() + "(" +
-                    "id = " + id + ", " +
-                    "happensIn = " + happensIn + ", " +
-                    "isClosed = " + isClosed + ")";
-        }
+    public Set<GameInfoDTO> getSecondaryRefereeGames() {
+        return secondaryRefereeGames;
     }
 
+    public RefereeDTO setSecondaryRefereeGames(Set<GameInfoDTO> secondaryRefereeGames) {
+        this.secondaryRefereeGames = secondaryRefereeGames;
+        return this;
+    }
 }
