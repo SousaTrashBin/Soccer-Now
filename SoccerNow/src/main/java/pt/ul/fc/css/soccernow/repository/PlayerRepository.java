@@ -2,11 +2,11 @@ package pt.ul.fc.css.soccernow.repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.util.CardEnum;
 import pt.ul.fc.css.soccernow.util.PlayerSearchParams;
@@ -18,7 +18,7 @@ import static pt.ul.fc.css.soccernow.domain.entities.game.QCard.card;
 import static pt.ul.fc.css.soccernow.domain.entities.game.QPlayerGameStats.playerGameStats;
 import static pt.ul.fc.css.soccernow.domain.entities.user.QPlayer.player;
 
-public interface PlayerRepository extends SoftDeletedRepository<Player>, QuerydslPredicateExecutor<Player> {
+public interface PlayerRepository extends SoftDeletedRepository<Player> {
     List<Player> findByDeletedAtIsNullAndName(String name);
 
     default List<Player> findNotDeletedByName(String name) {
@@ -30,13 +30,15 @@ public interface PlayerRepository extends SoftDeletedRepository<Player>, Queryds
 
         conditions.add(player.deletedAt.isNull());
 
-        if (params.getPlayerName() != null && !params.getPlayerName().isBlank()) {
-            conditions.add(player.name.containsIgnoreCase(params.getPlayerName()));
+        if (params.getName() != null && !params.getName().isBlank()) {
+            conditions.add(player.name.containsIgnoreCase(params.getName()));
         }
 
-        if (params.getPreferredPosition() != null) {
-            conditions.add(player.preferredPosition.eq(params.getPreferredPosition()));
-        }
+        BooleanExpression positionCondition = params.getPreferredPositions().isEmpty()
+                ? Expressions.TRUE
+                : player.preferredPosition.in(params.getPreferredPositions());
+
+        conditions.add(positionCondition);
 
         JPQLQuery<Long> cardCountSubquery = JPAExpressions
                 .select(card.count())
@@ -60,8 +62,8 @@ public interface PlayerRepository extends SoftDeletedRepository<Player>, Queryds
                 .from(playerGameStats)
                 .where(playerGameStats.player.eq(player));
 
-        if (params.getScoredGoals() != null) {
-            conditions.add(goalCountQuery.eq(params.getScoredGoals()));
+        if (params.getNumScoredGoals() != null) {
+            conditions.add(goalCountQuery.eq(params.getNumScoredGoals()));
         }
         if (params.getMinScoredGoals() != null) {
             conditions.add(goalCountQuery.gt(params.getMinScoredGoals()));
@@ -78,11 +80,11 @@ public interface PlayerRepository extends SoftDeletedRepository<Player>, Queryds
         if (params.getNumGames() != null) {
             conditions.add(gameCountQuery.eq(params.getNumGames().longValue()));
         }
-        if (params.getMinNumGames() != null) {
-            conditions.add(gameCountQuery.gt(params.getMinNumGames().longValue()));
+        if (params.getMinGames() != null) {
+            conditions.add(gameCountQuery.gt(params.getMinGames().longValue()));
         }
-        if (params.getMaxNumGames() != null) {
-            conditions.add(gameCountQuery.lt(params.getMaxNumGames().longValue()));
+        if (params.getMaxGames() != null) {
+            conditions.add(gameCountQuery.lt(params.getMaxGames().longValue()));
         }
 
         BooleanBuilder predicate = conditions.stream()
