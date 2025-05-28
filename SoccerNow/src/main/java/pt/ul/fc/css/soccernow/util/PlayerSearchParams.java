@@ -1,29 +1,39 @@
 package pt.ul.fc.css.soccernow.util;
 
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlayerSearchParams {
     @Min(1)
     private Integer size;
 
-    @Pattern(regexp = "asc|dsc", message = "Order must be 'asc' or 'dsc'")
-    private String redCardComparatorOrder;
-
-    private String playerName;
-    private FutsalPositionEnum preferredPosition;
+    @NotNull
+    private RedCardOrder redCardComparatorOrder = RedCardOrder.ASC;
+    private String name;
+    private List<FutsalPositionEnum> preferredPositions = new ArrayList<>();
 
     private Integer numReceivedCards;
     private Integer minReceivedCards;
     private Integer maxReceivedCards;
 
-    private Integer scoredGoals;
+    private Integer numScoredGoals;
     private Integer minScoredGoals;
     private Integer maxScoredGoals;
 
     private Integer numGames;
-    private Integer minNumGames;
-    private Integer maxNumGames;
+    private Integer minGames;
+    private Integer maxGames;
+
+    public RedCardOrder getRedCardComparatorOrder() {
+        return redCardComparatorOrder;
+    }
+
+    public void setRedCardComparatorOrder(RedCardOrder redCardComparatorOrder) {
+        this.redCardComparatorOrder = redCardComparatorOrder;
+    }
 
     public Integer getSize() {
         return size;
@@ -33,28 +43,12 @@ public class PlayerSearchParams {
         this.size = size;
     }
 
-    public String getRedCardComparatorOrder() {
-        return redCardComparatorOrder;
+    public String getName() {
+        return name;
     }
 
-    public void setRedCardComparatorOrder(String redCardComparatorOrder) {
-        this.redCardComparatorOrder = redCardComparatorOrder;
-    }
-
-    public String getPlayerName() {
-        return playerName;
-    }
-
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
-    }
-
-    public FutsalPositionEnum getPreferredPosition() {
-        return preferredPosition;
-    }
-
-    public void setPreferredPosition(FutsalPositionEnum preferredPosition) {
-        this.preferredPosition = preferredPosition;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Integer getNumReceivedCards() {
@@ -81,12 +75,12 @@ public class PlayerSearchParams {
         this.maxReceivedCards = maxReceivedCards;
     }
 
-    public Integer getScoredGoals() {
-        return scoredGoals;
+    public Integer getNumScoredGoals() {
+        return numScoredGoals;
     }
 
-    public void setScoredGoals(Integer scoredGoals) {
-        this.scoredGoals = scoredGoals;
+    public void setNumScoredGoals(Integer numScoredGoals) {
+        this.numScoredGoals = numScoredGoals;
     }
 
     public Integer getMinScoredGoals() {
@@ -113,20 +107,32 @@ public class PlayerSearchParams {
         this.numGames = numGames;
     }
 
-    public Integer getMinNumGames() {
-        return minNumGames;
+    public Integer getMinGames() {
+        return minGames;
     }
 
-    public void setMinNumGames(Integer minNumGames) {
-        this.minNumGames = minNumGames;
+    public void setMinGames(Integer minGames) {
+        this.minGames = minGames;
     }
 
-    public Integer getMaxNumGames() {
-        return maxNumGames;
+    public Integer getMaxGames() {
+        return maxGames;
     }
 
-    public void setMaxNumGames(Integer maxNumGames) {
-        this.maxNumGames = maxNumGames;
+    public void setMaxGames(Integer maxGames) {
+        this.maxGames = maxGames;
+    }
+
+    public List<FutsalPositionEnum> getPreferredPositions() {
+        return preferredPositions;
+    }
+
+    public void setPreferredPositions(List<FutsalPositionEnum> preferredPositions) {
+        this.preferredPositions = preferredPositions;
+    }
+
+    public enum RedCardOrder {
+        ASC, DSC
     }
 
 }
