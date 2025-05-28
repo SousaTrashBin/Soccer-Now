@@ -130,6 +130,15 @@ class PlayerControllerIntegrationTests {
         PlayerDTO savedDTO = objectMapper.readValue(jsonResponse, PlayerDTO.class);
 
         mockMvc.perform(
+                        MockMvcRequestBuilders.get("/api/players/?playerName=Sofia&size=1&numReceivedCards=0")
+                                .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[?(@.name == 'Sofia Reia')]").exists())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].preferredPosition").value("FORWARD"));
+
+        mockMvc.perform(
                 MockMvcRequestBuilders.delete("/api/players/" + savedDTO.getId())
         ).andDo(print()).andExpect(status().is2xxSuccessful());
         String response = mockMvc.perform(
@@ -137,6 +146,7 @@ class PlayerControllerIntegrationTests {
         ).andReturn().getResponse().getContentAsString();
 
         List<?> players = objectMapper.readValue(response, List.class);
+        System.out.println(players);
         assertTrue(players.isEmpty());
     }
 }

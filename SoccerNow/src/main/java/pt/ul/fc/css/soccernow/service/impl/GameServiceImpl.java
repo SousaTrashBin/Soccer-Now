@@ -2,10 +2,7 @@ package pt.ul.fc.css.soccernow.service.impl;
 
 import org.springframework.stereotype.Service;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
-import pt.ul.fc.css.soccernow.domain.entities.game.Game;
-import pt.ul.fc.css.soccernow.domain.entities.game.GameStats;
-import pt.ul.fc.css.soccernow.domain.entities.game.GameTeam;
-import pt.ul.fc.css.soccernow.domain.entities.game.PlayerGameStats;
+import pt.ul.fc.css.soccernow.domain.entities.game.*;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.domain.entities.user.Referee;
 import pt.ul.fc.css.soccernow.domain.entities.user.User;
@@ -18,10 +15,7 @@ import pt.ul.fc.css.soccernow.service.PlayerService;
 import pt.ul.fc.css.soccernow.service.RefereeService;
 import pt.ul.fc.css.soccernow.service.TeamService;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -147,15 +141,15 @@ public class GameServiceImpl implements GameService {
     }
 
     public Game closeGame(UUID gameID, Set<PlayerGameStats> incomingPlayerStats) {
-        valitePlayerGameStatsDTO(incomingPlayerStats);
         Game game = validateGameIsOpenAndExists(gameID);
+        valitePlayerGameStatsDTO(game, incomingPlayerStats);
         GameStats gameStats = calculateGameStats(game, incomingPlayerStats);
         game.setGameStats(gameStats);
         game.close();
         return gameRepository.save(game);
     }
 
-    private void valitePlayerGameStatsDTO(Set<PlayerGameStats> playerGameStatsDTOs) {
+    private void valitePlayerGameStatsDTO(Game game, Set<PlayerGameStats> playerGameStatsDTOs) {
         boolean hasDuplicatePlayers = playerGameStatsDTOs.stream()
                 .map(PlayerGameStats::getPlayer)
                 .map(User::getId)
@@ -165,6 +159,14 @@ public class GameServiceImpl implements GameService {
                 .anyMatch(count -> count > 1);
         if (hasDuplicatePlayers) {
             throw new BadRequestException("Please remove the duplicate players present on the player stats");
+        }
+        for (Referee referee : playerGameStatsDTOs.stream().flatMap(playerGameStats -> playerGameStats.getReceivedCards().stream())
+                .map(Card::getReferee)
+                .toList()) {
+            referee = refereeService.findNotDeletedById(referee.getId());
+            if (!game.hasReferee(referee)) {
+                throw new BadRequestException("Only referees registered in the game can give cards");
+            }
         }
     }
 
@@ -189,7 +191,19 @@ public class GameServiceImpl implements GameService {
             PlayerGameStats playerGameStats = new PlayerGameStats();
             Integer scoredGoals = playerStat.getScoredGoals();
             playerGameStats.setScoredGoals(scoredGoals);
-            playerGameStats.setGivenCard(playerStat.getGivenCard());
+            playerGameStats.setPlayer(playerStat.getPlayer());
+            Set<Card> cards = new LinkedHashSet<>();
+            for (Card card : playerGameStats.getReceivedCards()) {
+                Card newCard = new Card();
+                newCard.setCardType(card.getCardType());
+                newCard.setPlayer(playerGameStats);
+
+                Referee referee = refereeService.findNotDeletedById(card.getReferee().getId());
+                newCard.setReferee(referee);
+                referee.addIssuedCard(card);
+                cards.add(card);
+            }
+            playerGameStats.setReceivedCards(cards);
             playerGameStats.setGame(game);
 
             saved.registerGameStats(playerGameStats);

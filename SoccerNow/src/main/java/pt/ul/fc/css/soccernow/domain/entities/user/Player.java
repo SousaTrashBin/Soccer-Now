@@ -70,11 +70,16 @@ public class Player extends User {
     }
 
     public long getRedCardCount() {
-        return playerGameStats.stream().filter(playerStats -> playerStats.getGivenCard() == CardEnum.RED).count();
+        return playerGameStats.stream()
+                .flatMap(pgs -> pgs.getGivenCardsByType(CardEnum.RED).stream())
+                .count();
     }
 
+
     public long getYellowCardCount() {
-        return playerGameStats.stream().filter(playerStats -> playerStats.getGivenCard() == CardEnum.YELLOW).count();
+        return playerGameStats.stream()
+                .flatMap(pgs -> pgs.getGivenCardsByType(CardEnum.YELLOW).stream())
+                .count();
     }
 
     public long getCardCount() {

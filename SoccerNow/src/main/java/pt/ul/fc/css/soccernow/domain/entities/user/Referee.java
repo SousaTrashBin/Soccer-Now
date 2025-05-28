@@ -1,13 +1,12 @@
 package pt.ul.fc.css.soccernow.domain.entities.user;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import org.hibernate.proxy.HibernateProxy;
+import pt.ul.fc.css.soccernow.domain.entities.game.Card;
 import pt.ul.fc.css.soccernow.domain.entities.game.Game;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
@@ -23,6 +22,17 @@ public class Referee extends User {
 
     @ManyToMany(mappedBy = "secondaryReferees")
     private Set<Game> secondaryRefereeGames = new HashSet<>();
+
+    @OneToMany(mappedBy = "referee", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Card> issuedCards = new LinkedHashSet<>();
+
+    public Set<Card> getIssuedCards() {
+        return issuedCards;
+    }
+
+    public void setIssuedCards(Set<Card> issuedCards) {
+        this.issuedCards = issuedCards;
+    }
 
     public Set<Game> getSecondaryRefereeGames() {
         return secondaryRefereeGames;
@@ -88,5 +98,9 @@ public class Referee extends User {
 
     public void registerSecondaryRefereeGame(Game refereeGame) {
         this.secondaryRefereeGames.add(refereeGame);
+    }
+
+    public void addIssuedCard(Card issuedCard) {
+        this.issuedCards.add(issuedCard);
     }
 }

@@ -2,9 +2,7 @@ package pt.ul.fc.css.soccernow.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,6 +16,7 @@ import pt.ul.fc.css.soccernow.mapper.PlayerGameStatsMapper;
 import pt.ul.fc.css.soccernow.mapper.PlayerMapper;
 import pt.ul.fc.css.soccernow.mapper.TeamMapper;
 import pt.ul.fc.css.soccernow.service.PlayerService;
+import pt.ul.fc.css.soccernow.util.PlayerSearchParams;
 
 import java.net.URI;
 import java.util.Comparator;
@@ -83,22 +82,21 @@ public class PlayerController {
             summary = "Get all players",
             description = "Returns a list of all players. Supports optional result size, presentation order and filtering by name."
     )
-    public ResponseEntity<List<PlayerDTO>> getAllPlayers(@Parameter(description = "Tamanho do resultado") @RequestParam(name = "size", required = false) @Min(0) Integer size,
-                                                         @Parameter(description = "Ordem de apresentação de acordo com o número de cartões vermelhos: 'asc' para ordem crescente, 'dsc' para ordem decrescente", schema = @Schema(allowableValues = {"asc", "dsc"})) @RequestParam(name = "order", required = false) String order,
-                                                         @Parameter(description = "Nome do jogador") @RequestParam(name = "playerName", required = false) String name) {
+    public ResponseEntity<List<PlayerDTO>> getAllPlayers(@ModelAttribute PlayerSearchParams params) {
         Comparator<Player> redCardComparator = Comparator.comparing(Player::getRedCardCount);
-        Optional<Comparator<Player>> optionalPlayerComparator = Optional.ofNullable(order).map(
+        Optional<Comparator<Player>> optionalPlayerComparator = Optional.ofNullable(params.getRedCardComparatorOrder()).map(
                 orderValue -> orderValue.equals("asc")
                         ? redCardComparator
                         : redCardComparator.reversed()
         );
-        Stream<Player> playerStream = name == null ? playerService.findAllNotDeleted().stream() : playerService.findNotDeletedByName(name).stream();
+        List<Player> filteredPlayers = playerService.findAllNotDeleted(params);
+        Stream<Player> playerStream = filteredPlayers.stream();
         if (optionalPlayerComparator.isPresent()) {
-            playerStream = playerStream.sorted(optionalPlayerComparator.get());
+            playerStream = filteredPlayers.stream().sorted(optionalPlayerComparator.get());
         }
 
         Stream<PlayerDTO> playerDTOStream = playerStream.map(playerMapper::toDTO);
-        List<PlayerDTO> players = size != null ? playerDTOStream.limit(size).toList() : playerDTOStream.toList();
+        List<PlayerDTO> players = params.getSize() != null ? playerDTOStream.limit(params.getSize()).toList() : playerDTOStream.toList();
         return ResponseEntity.ok(players);
     }
 

@@ -216,4 +216,8 @@ public class Game extends SoftDeleteEntity {
     public boolean isACompetitiveGame() {
         return tournament != null;
     }
+
+    public boolean hasReferee(Referee referee) {
+        return primaryReferee.equals(referee) || secondaryReferees.stream().anyMatch(referee::equals);
+    }
 }

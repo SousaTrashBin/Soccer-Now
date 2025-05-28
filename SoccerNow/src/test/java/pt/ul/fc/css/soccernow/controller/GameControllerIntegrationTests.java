@@ -14,10 +14,14 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import pt.ul.fc.css.soccernow.domain.dto.TeamDTO;
+import pt.ul.fc.css.soccernow.domain.dto.games.CardInfoDTO;
 import pt.ul.fc.css.soccernow.domain.dto.games.GameDTO;
+import pt.ul.fc.css.soccernow.domain.dto.games.GamePlayerDTO;
 import pt.ul.fc.css.soccernow.domain.dto.games.PlayerGameStatsDTO;
 import pt.ul.fc.css.soccernow.domain.dto.user.PlayerDTO;
+import pt.ul.fc.css.soccernow.domain.dto.user.PlayerInfoDTO;
 import pt.ul.fc.css.soccernow.domain.dto.user.RefereeDTO;
+import pt.ul.fc.css.soccernow.domain.dto.user.RefereeInfoDTO;
 import pt.ul.fc.css.soccernow.domain.entities.Address;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
 import pt.ul.fc.css.soccernow.domain.entities.game.Game;
@@ -133,7 +137,6 @@ class GameControllerIntegrationTests {
                 .filter(Objects::nonNull)
                 .map(response -> parseDTO(response, PlayerDTO.class))
                 .filter(Objects::nonNull)
-                .filter(this::hasGames)
                 .peek(System.out::println)
                 .toList();
         assert savedPlayerDTOs.size() == 10;
@@ -180,22 +183,38 @@ class GameControllerIntegrationTests {
         GameDTO jsonResponseGameDTO = parseDTO(jsonResponse, GameDTO.class);
 
         List<UUID> teamOnePlayerUUIDs = jsonResponseGameDTO.getGameTeamOne().getGamePlayers().stream()
-                .map(GameDTO.GameTeamInfoDTO.GamePlayerInfoDTO::getPlayer)
-                .map(GameDTO.GameTeamInfoDTO.GamePlayerInfoDTO.PlayerInfoDTO::getId)
+                .map(GamePlayerDTO::getPlayer)
+                .map(PlayerInfoDTO::getId)
                 .sorted()
                 .toList();
 
         List<UUID> teamTwoPlayerUUIDs = jsonResponseGameDTO.getGameTeamTwo().getGamePlayers().stream()
-                .map(GameDTO.GameTeamInfoDTO.GamePlayerInfoDTO::getPlayer)
-                .map(GameDTO.GameTeamInfoDTO.GamePlayerInfoDTO.PlayerInfoDTO::getId)
+                .map(GamePlayerDTO::getPlayer)
+                .map(PlayerInfoDTO::getId)
                 .sorted()
                 .toList();
 
         Set<PlayerGameStatsDTO> playerGameStatsDTOSet = Set.of(
-                new PlayerGameStatsDTO(CardEnum.YELLOW, 2, new PlayerGameStatsDTO.PlayerInfoDTO(teamOnePlayerUUIDs.get(0))),
-                new PlayerGameStatsDTO(CardEnum.RED, 4, new PlayerGameStatsDTO.PlayerInfoDTO(teamOnePlayerUUIDs.get(1))),
-                new PlayerGameStatsDTO(CardEnum.RED, 7, new PlayerGameStatsDTO.PlayerInfoDTO(teamTwoPlayerUUIDs.get(0))),
-                new PlayerGameStatsDTO(CardEnum.YELLOW, 1, new PlayerGameStatsDTO.PlayerInfoDTO(teamTwoPlayerUUIDs.get(1)))
+                new PlayerGameStatsDTO(
+                        2,
+                        new PlayerInfoDTO(teamOnePlayerUUIDs.get(0)),
+                        Set.of(new CardInfoDTO(CardEnum.YELLOW, new RefereeInfoDTO(certificatedReferees.get(0).getId())))
+                ),
+                new PlayerGameStatsDTO(
+                        4,
+                        new PlayerInfoDTO(teamOnePlayerUUIDs.get(1)),
+                        Set.of(new CardInfoDTO(CardEnum.RED, new RefereeInfoDTO(certificatedReferees.get(0).getId())))
+                ),
+                new PlayerGameStatsDTO(
+                        7,
+                        new PlayerInfoDTO(teamTwoPlayerUUIDs.get(0)),
+                        Set.of(new CardInfoDTO(CardEnum.RED, new RefereeInfoDTO(certificatedReferees.get(0).getId())))
+                ),
+                new PlayerGameStatsDTO(
+                        1,
+                        new PlayerInfoDTO(teamTwoPlayerUUIDs.get(1)),
+                        Set.of(new CardInfoDTO(CardEnum.YELLOW, new RefereeInfoDTO(certificatedReferees.get(0).getId())))
+                )
         );
 
 
@@ -267,8 +286,4 @@ class GameControllerIntegrationTests {
         }
     }
 
-    private boolean hasGames(PlayerDTO player) {
-        return player.getTeams().stream()
-                .anyMatch(team -> !team.getGames().isEmpty());
-    }
 }
