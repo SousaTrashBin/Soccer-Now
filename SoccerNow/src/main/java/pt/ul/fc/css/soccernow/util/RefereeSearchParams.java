@@ -1,22 +1,22 @@
 package pt.ul.fc.css.soccernow.util;
 
 public class RefereeSearchParams {
-    private String refereeName;
+    private String name;
 
     private Integer numGames;
-    private Integer minNumGames;
-    private Integer maxNumGames;
+    private Integer minGames;
+    private Integer maxGames;
 
     private Integer numCardsGiven;
-    private Integer minNumCardsGiven;
-    private Integer maxNumCardsGiven;
+    private Integer minCardsGiven;
+    private Integer maxCardsGiven;
 
-    public String getRefereeName() {
-        return refereeName;
+    public String getName() {
+        return name;
     }
 
-    public void setRefereeName(String refereeName) {
-        this.refereeName = refereeName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Integer getNumGames() {
@@ -27,20 +27,20 @@ public class RefereeSearchParams {
         this.numGames = numGames;
     }
 
-    public Integer getMinNumGames() {
-        return minNumGames;
+    public Integer getMinGames() {
+        return minGames;
     }
 
-    public void setMinNumGames(Integer minNumGames) {
-        this.minNumGames = minNumGames;
+    public void setMinGames(Integer minGames) {
+        this.minGames = minGames;
     }
 
-    public Integer getMaxNumGames() {
-        return maxNumGames;
+    public Integer getMaxGames() {
+        return maxGames;
     }
 
-    public void setMaxNumGames(Integer maxNumGames) {
-        this.maxNumGames = maxNumGames;
+    public void setMaxGames(Integer maxGames) {
+        this.maxGames = maxGames;
     }
 
     public Integer getNumCardsGiven() {
@@ -51,19 +51,19 @@ public class RefereeSearchParams {
         this.numCardsGiven = numCardsGiven;
     }
 
-    public Integer getMinNumCardsGiven() {
-        return minNumCardsGiven;
+    public Integer getMinCardsGiven() {
+        return minCardsGiven;
     }
 
-    public void setMinNumCardsGiven(Integer minNumCardsGiven) {
-        this.minNumCardsGiven = minNumCardsGiven;
+    public void setMinCardsGiven(Integer minCardsGiven) {
+        this.minCardsGiven = minCardsGiven;
     }
 
-    public Integer getMaxNumCardsGiven() {
-        return maxNumCardsGiven;
+    public Integer getMaxCardsGiven() {
+        return maxCardsGiven;
     }
 
-    public void setMaxNumCardsGiven(Integer maxNumCardsGiven) {
-        this.maxNumCardsGiven = maxNumCardsGiven;
+    public void setMaxCardsGiven(Integer maxCardsGiven) {
+        this.maxCardsGiven = maxCardsGiven;
     }
 }
