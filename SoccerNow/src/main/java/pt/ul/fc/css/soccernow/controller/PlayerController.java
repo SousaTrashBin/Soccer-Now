@@ -85,7 +85,7 @@ public class PlayerController {
     public ResponseEntity<List<PlayerDTO>> getAllPlayers(@ModelAttribute PlayerSearchParams params) {
         Comparator<Player> redCardComparator = Comparator.comparing(Player::getRedCardCount);
         Optional<Comparator<Player>> optionalPlayerComparator = Optional.ofNullable(params.getRedCardComparatorOrder()).map(
-                orderValue -> orderValue.equals("asc")
+                orderValue -> PlayerSearchParams.RedCardOrder.ASC.equals(orderValue)
                         ? redCardComparator
                         : redCardComparator.reversed()
         );
