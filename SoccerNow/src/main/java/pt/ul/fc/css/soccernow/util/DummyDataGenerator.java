@@ -58,13 +58,13 @@ public class DummyDataGenerator {
     private Set<PlayerGameStats> getPlayerStats(List<Player> firstTeamPlayers, List<Player> secondTeamPlayers, Game game) {
         PlayerGameStats playerOneGameStats = new PlayerGameStats();
         playerOneGameStats.setPlayer(firstTeamPlayers.get(0));
-        playerOneGameStats.setGivenCard(CardEnum.RED);
+        //playerOneGameStats.setGivenCard(CardEnum.RED);
         playerOneGameStats.setScoredGoals(10);
         playerOneGameStats.setGame(game);
 
         PlayerGameStats playerTwoGameStats = new PlayerGameStats();
         playerTwoGameStats.setPlayer(secondTeamPlayers.get(0));
-        playerTwoGameStats.setGivenCard(CardEnum.YELLOW);
+        //playerTwoGameStats.setGivenCard(CardEnum.YELLOW);
         playerTwoGameStats.setScoredGoals(5);
         playerTwoGameStats.setGame(game);
 
