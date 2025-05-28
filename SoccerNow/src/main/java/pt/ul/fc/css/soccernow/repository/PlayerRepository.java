@@ -1,17 +1,22 @@
 package pt.ul.fc.css.soccernow.repository;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.JPQLQuery;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
-import pt.ul.fc.css.soccernow.domain.entities.game.QPlayerGameStats;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
-import pt.ul.fc.css.soccernow.domain.entities.user.QPlayer;
 import pt.ul.fc.css.soccernow.util.CardEnum;
 import pt.ul.fc.css.soccernow.util.PlayerSearchParams;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static pt.ul.fc.css.soccernow.domain.entities.game.QCard.card;
+import static pt.ul.fc.css.soccernow.domain.entities.game.QPlayerGameStats.playerGameStats;
+import static pt.ul.fc.css.soccernow.domain.entities.user.QPlayer.player;
 
 public interface PlayerRepository extends SoftDeletedRepository<Player>, QuerydslPredicateExecutor<Player> {
     List<Player> findByDeletedAtIsNullAndName(String name);
@@ -21,87 +26,69 @@ public interface PlayerRepository extends SoftDeletedRepository<Player>, Queryds
     }
 
     default List<Player> findAllNotDeleted(PlayerSearchParams params) {
-        QPlayer player = QPlayer.player;
-        QPlayerGameStats pgs = QPlayerGameStats.playerGameStats;
+        List<BooleanExpression> conditions = new ArrayList<>();
 
-        BooleanBuilder predicate = new BooleanBuilder().and(player.deletedAt.isNull());
+        conditions.add(player.deletedAt.isNull());
 
-        if (params.getPlayerName() != null && !params.getPlayerName().trim().isEmpty()) {
-            predicate.and(player.name.containsIgnoreCase(params.getPlayerName()));
+        if (params.getPlayerName() != null && !params.getPlayerName().isBlank()) {
+            conditions.add(player.name.containsIgnoreCase(params.getPlayerName()));
         }
 
         if (params.getPreferredPosition() != null) {
-            predicate.and(player.preferredPosition.eq(params.getPreferredPosition()));
+            conditions.add(player.preferredPosition.eq(params.getPreferredPosition()));
         }
+
+        JPQLQuery<Long> cardCountSubquery = JPAExpressions
+                .select(card.count())
+                .from(playerGameStats)
+                .join(playerGameStats.receivedCards, card)
+                .where(playerGameStats.player.eq(player)
+                        .and(card.cardType.ne(CardEnum.NONE)));
 
         if (params.getNumReceivedCards() != null) {
-            predicate.and(JPAExpressions
-                    .select(pgs.givenCard.count().coalesce(0L))
-                    .from(pgs)
-                    .where(pgs.player.eq(player).and(pgs.givenCard.ne(CardEnum.NONE)))
-                    .eq(params.getNumReceivedCards().longValue()));
+            conditions.add(cardCountSubquery.eq(params.getNumReceivedCards().longValue()));
         }
         if (params.getMinReceivedCards() != null) {
-            predicate.and(JPAExpressions
-                    .select(pgs.givenCard.count().coalesce(0L))
-                    .from(pgs)
-                    .where(pgs.player.eq(player).and(pgs.givenCard.ne(CardEnum.NONE)))
-                    .goe(params.getMinReceivedCards().longValue()));
+            conditions.add(cardCountSubquery.gt(params.getMinReceivedCards().longValue()));
         }
         if (params.getMaxReceivedCards() != null) {
-            predicate.and(JPAExpressions
-                    .select(pgs.givenCard.count().coalesce(0L))
-                    .from(pgs)
-                    .where(pgs.player.eq(player).and(pgs.givenCard.ne(CardEnum.NONE)))
-                    .loe(params.getMaxReceivedCards().longValue()));
+            conditions.add(cardCountSubquery.lt(params.getMaxReceivedCards().longValue()));
         }
+
+        JPQLQuery<Integer> goalCountQuery = JPAExpressions
+                .select(playerGameStats.scoredGoals.sum().coalesce(0))
+                .from(playerGameStats)
+                .where(playerGameStats.player.eq(player));
 
         if (params.getScoredGoals() != null) {
-            predicate.and(JPAExpressions
-                    .select(pgs.scoredGoals.sum().coalesce(0))
-                    .from(pgs)
-                    .where(pgs.player.eq(player))
-                    .eq(params.getScoredGoals()));
+            conditions.add(goalCountQuery.eq(params.getScoredGoals()));
         }
-
         if (params.getMinScoredGoals() != null) {
-            predicate.and(JPAExpressions
-                    .select(pgs.scoredGoals.sum().coalesce(0))
-                    .from(pgs)
-                    .where(pgs.player.eq(player))
-                    .gt(params.getMinScoredGoals()));
+            conditions.add(goalCountQuery.gt(params.getMinScoredGoals()));
         }
         if (params.getMaxScoredGoals() != null) {
-            predicate.and(JPAExpressions
-                    .select(pgs.scoredGoals.sum().coalesce(0))
-                    .from(pgs)
-                    .where(pgs.player.eq(player))
-                    .lt(params.getMaxScoredGoals()));
+            conditions.add(goalCountQuery.lt(params.getMaxScoredGoals()));
         }
+
+        JPQLQuery<Long> gameCountQuery = JPAExpressions
+                .select(playerGameStats.count().coalesce(0L))
+                .from(playerGameStats)
+                .where(playerGameStats.player.eq(player));
 
         if (params.getNumGames() != null) {
-            predicate.and(JPAExpressions
-                    .select(pgs.count().coalesce(0L))
-                    .from(pgs)
-                    .where(pgs.player.eq(player))
-                    .eq(params.getNumGames().longValue()));
+            conditions.add(gameCountQuery.eq(params.getNumGames().longValue()));
         }
-
         if (params.getMinNumGames() != null) {
-            predicate.and(JPAExpressions
-                    .select(pgs.count().coalesce(0L))
-                    .from(pgs)
-                    .where(pgs.player.eq(player))
-                    .goe(params.getMinNumGames().longValue()));
+            conditions.add(gameCountQuery.gt(params.getMinNumGames().longValue()));
+        }
+        if (params.getMaxNumGames() != null) {
+            conditions.add(gameCountQuery.lt(params.getMaxNumGames().longValue()));
         }
 
-        if (params.getMaxNumGames() != null) {
-            predicate.and(JPAExpressions
-                    .select(pgs.count().coalesce(0L))
-                    .from(pgs)
-                    .where(pgs.player.eq(player))
-                    .loe(params.getMaxNumGames().longValue()));
-        }
+        BooleanBuilder predicate = conditions.stream()
+                .reduce(BooleanExpression::and)
+                .map(BooleanBuilder::new)
+                .orElse(new BooleanBuilder());
 
         Pageable pageable = params.getSize() != null
                 ? PageRequest.of(0, params.getSize())
