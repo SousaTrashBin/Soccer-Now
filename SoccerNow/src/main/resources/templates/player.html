@@ -18,34 +18,34 @@
 
       <div>
         <label for="position">Position</label>
-        <select name="position" id="position">
+        <select name="preferredPositions" id="position">
           <option value=""></option>
-          <option value="goalie">Goalie</option>
-          <option value="left-winger">Left Winger</option>
-          <option value="right-winger">Right Winger</option>
-          <option value="sweeper">Sweeper</option>
-          <option value="forward">Forward</option>
+          <option value="GOALIE">Goalie</option>
+          <option value="LEFT_WINGER">Left Winger</option>
+          <option value="RIGHT_WINGER">Right Winger</option>
+          <option value="SWEEPER">Sweeper</option>
+          <option value="FORWARD">Forward</option>
         </select>
       </div>
 
       <div>
-        <label for="goals">Goals scored</label>
+        <label for="goals">Scored goals</label>
         <input type="number"
-               name="goals"
+               name="numScoredGoals"
                id="goals">
       </div>
 
       <div>
-        <label for="cards">Cards received</label>
+        <label for="cards">Received cards</label>
         <input type="number"
-               name="cards"
+               name="numReceivedCards"
                id="cards">
       </div>
 
       <div>
         <label for="games">Games played</label>
         <input type="number"
-               name="games"
+               name="numGames"
                id="games">
       </div>
 
@@ -68,10 +68,10 @@
       <tbody>
         <tr th:each="p : ${players}">
           <td th:text="${p.name}" />
-          <td th:text="${p.position}" />
-          <td th:text="${p.goals}" />
-          <td th:text="${p.cards}" />
-          <td th:text="${p.games}" />
+          <td th:text="${p.preferredPosition}" />
+          <td th:text="${p.scoredGoals}" />
+          <td th:text="${p.receivedCards}" />
+          <td th:text="${p.gamesPlayed}" />
         </tr>
       </tbody>
     </table>
