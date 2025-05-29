@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SoccerNow - Games</title>
+</head>
+<body>
+    <h1>SoccerNow: Games</h1>
+
+    <form method="get" action="@{/games}">
+        <div>
+            <label for="closedGamesOnly">Closed Games</label>
+            <input type="checkbox"
+                   name="isClosed"
+                   id="closedGamesOnly">
+        </div>
+
+<!--        <div>-->
+<!--            <label for="openedGames">Games to be played</label>-->
+<!--            <input type="number"-->
+<!--                   name="numGames???"-->
+<!--                   id="openedGames">-->
+<!--        </div>-->
+
+        <div>
+            <label for="goals">N goals</label>
+            <input type="number"
+                   name="numGoals"
+                   id="goals">
+        </div>
+
+<!--        <div>-->
+<!--            <label for="location">Location</label>-->
+<!--            <input type="text"-->
+<!--                   name="???"-->
+<!--                   id="location">-->
+<!--        </div>-->
+
+        <div>
+            <label for="time">Time of day</label>
+            <select name="timeOfDay" id="time">
+                <option value=""></option>
+                <option value="MORNING">Morning</option>
+                <option value="AFTERNOON">Afternoon</option>
+                <option value="EVENING">Evening</option>
+            </select>
+        </div>
+
+      <button type="submit">Filter</button>
+    </form>
+
+    <hr>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Closed</th>
+          <th>Goals Scored</th>
+          <th>Time of day</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr th:each="g : ${games}">
+          <td th:text="${g.isClosed}" />
+<!--            <td th:text="${g.isClosed}" />-->
+<!--            <td th:text="${g.isClosed}" />-->
+<!--            <td th:text="${g.isClosed}" />-->
+<!--            <td th:text="${g.isClosed}" />-->
+        </tr>
+      </tbody>
+    </table>
+</body>
+</html>

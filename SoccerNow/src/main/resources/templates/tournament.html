@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SoccerNow - Tournaments</title>
+</head>
+<body>
+    <h1>SoccerNow: Tournaments</h1>
+
+    <form method="get" action="@{/tournaments}">
+        <div>
+            <label for="name">Name</label>
+            <input type="text"
+                   name="name"
+                   id="name">
+        </div>
+
+        <div>
+            <label for="team">Team name</label>
+            <input type="text"
+                   name="teams"
+                   id="team">
+        </div>
+
+        <div>
+            <label for="nGamesClosed">N games closed</label>
+            <input type="number"
+                   name="numGamesClosed"
+                   id="nGamesClosed">
+        </div>
+
+        <div>
+            <label for="nGamesOpened">N games opened</label>
+            <input type="number"
+                   name="numGamesOpened"
+                   id="nGamesOpened">
+        </div>
+
+      <button type="submit">Filter</button>
+    </form>
+
+    <hr>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>N games closed</th>
+          <th>N games closed</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr th:each="t : ${tournaments}">
+          <td th:text="${t.name}" />
+<!--            <td th:text="${t.name}" />-->
+<!--            <td th:text="${t.name}" />-->
+<!--            <td th:text="${t.name}" />-->
+        </tr>
+      </tbody>
+    </table>
+</body>
+</html>

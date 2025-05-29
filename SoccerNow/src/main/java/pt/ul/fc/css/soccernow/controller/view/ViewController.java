@@ -7,11 +7,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import pt.ul.fc.css.soccernow.domain.dto.user.PlayerDTO;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.mapper.PlayerMapper;
-import pt.ul.fc.css.soccernow.mapper.RefereeMapper;
 import pt.ul.fc.css.soccernow.service.PlayerService;
-import pt.ul.fc.css.soccernow.service.RefereeService;
-import pt.ul.fc.css.soccernow.util.PlayerSearchParams;
-import pt.ul.fc.css.soccernow.util.RefereeSearchParams;
+import pt.ul.fc.css.soccernow.util.*;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -20,19 +17,13 @@ import java.util.stream.Stream;
 public class ViewController {
     private final PlayerService playerService;
     private final PlayerMapper playerMapper;
-    private final RefereeService refereeService;
-    private final RefereeMapper refereeMapper;
 
     public ViewController(
             PlayerService playerService,
-            PlayerMapper playerMapper,
-            RefereeService refereeService,
-            RefereeMapper refereeMapper
+            PlayerMapper playerMapper
     ) {
         this.playerService = playerService;
         this.playerMapper = playerMapper;
-        this.refereeService = refereeService;
-        this.refereeMapper = refereeMapper;
     }
 
     @GetMapping("/")
@@ -66,7 +57,38 @@ public class ViewController {
             @ModelAttribute RefereeSearchParams params,
             Model model
     ) {
+        // TODO
         model.addAttribute("referees", null);
-        return "player";
+        return "referee";
+    }
+
+    @GetMapping("/teams")
+    public String getTeamsPage(
+            @ModelAttribute TeamSearchParams params,
+            Model model
+    ) {
+        // TODO
+        model.addAttribute("teams", null);
+        return "team";
+    }
+
+    @GetMapping("/games")
+    public String getGamesPage(
+            @ModelAttribute GameSearchParams params,
+            Model model
+    ) {
+        // TODO
+        model.addAttribute("games", null);
+        return "game";
+    }
+
+    @GetMapping("/tournaments")
+    public String getTournamentsPage(
+            @ModelAttribute TournamentSearchParams params,
+            Model model
+    ) {
+        // TODO
+        model.addAttribute("tournaments", null);
+        return "tournament";
     }
 }
