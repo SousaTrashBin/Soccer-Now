@@ -7,20 +7,32 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import pt.ul.fc.css.soccernow.domain.dto.user.PlayerDTO;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.mapper.PlayerMapper;
+import pt.ul.fc.css.soccernow.mapper.RefereeMapper;
 import pt.ul.fc.css.soccernow.service.PlayerService;
+import pt.ul.fc.css.soccernow.service.RefereeService;
 import pt.ul.fc.css.soccernow.util.PlayerSearchParams;
+import pt.ul.fc.css.soccernow.util.RefereeSearchParams;
 
 import java.util.List;
 import java.util.stream.Stream;
 
 @Controller
-public class WebController {
+public class ViewController {
     private final PlayerService playerService;
     private final PlayerMapper playerMapper;
+    private final RefereeService refereeService;
+    private final RefereeMapper refereeMapper;
 
-    public WebController(PlayerService playerService, PlayerMapper playerMapper) {
+    public ViewController(
+            PlayerService playerService,
+            PlayerMapper playerMapper,
+            RefereeService refereeService,
+            RefereeMapper refereeMapper
+    ) {
         this.playerService = playerService;
         this.playerMapper = playerMapper;
+        this.refereeService = refereeService;
+        this.refereeMapper = refereeMapper;
     }
 
     @GetMapping("/")
@@ -46,6 +58,15 @@ public class WebController {
 
         model.addAttribute("players", players);
 
+        return "player";
+    }
+
+    @GetMapping("/referees")
+    public String getRefereesPage(
+            @ModelAttribute RefereeSearchParams params,
+            Model model
+    ) {
+        model.addAttribute("referees", null);
         return "player";
     }
 }

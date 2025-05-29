@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SoccerNow - Referees</title>
+</head>
+<body>
+    <h1>SoccerNow: Referees</h1>
+
+    <form method="get" action="@{/referees}">
+      <div>
+        <label for="name">Name</label>
+        <input type="text"
+               name="name"
+               id="name">
+      </div>
+
+      <div>
+        <label for="games">Officiated games</label>
+        <input type="number"
+               name="numGames"
+               id="games">
+      </div>
+
+      <div>
+        <label for="cards">Cards given</label>
+        <input type="number"
+               name="numCardsGiven"
+               id="cards">
+      </div>
+
+      <button type="submit">Filter</button>
+    </form>
+
+    <hr>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Certified</th>
+          <th>Games</th>
+          <th>Cards given</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr th:each="r : ${referees}">
+          <td th:text="${r.name}" />
+          <td th:text="${r.hasCertified}" />
+          <td th:text="${p.primaryRefereeGames}" />
+          <td th:text="${p.issuedCards}" />
+        </tr>
+      </tbody>
+    </table>
+</body>
+</html>
