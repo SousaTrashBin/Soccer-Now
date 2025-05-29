@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import pt.ul.fc.css.soccernow.domain.entities.user.Referee;
 import pt.ul.fc.css.soccernow.util.CardEnum;
+import pt.ul.fc.css.soccernow.util.GameStatusEnum;
 import pt.ul.fc.css.soccernow.util.RefereeSearchParams;
 
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public interface RefereeRepository extends SoftDeletedRepository<Referee> {
         JPQLQuery<Long> gameCountSubquery = JPAExpressions
                 .select(game.count())
                 .from(game)
-                .where(game.isClosed)
+                .where(game.status.eq(GameStatusEnum.CLOSED))
                 .where(game.primaryReferee.eq(referee)
                         .or(game.secondaryReferees.contains(referee)));
         if (params.getNumGames() != null) {
