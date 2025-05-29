@@ -2,12 +2,15 @@ package pt.ul.fc.css.soccernow.util;
 
 import jakarta.validation.constraints.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GameSearchParams {
     private Integer numGames;
     private Integer minGames;
     private Integer maxGames;
 
-    private Boolean isClosed = Boolean.TRUE;
+    List<GameStatusEnum> statuses = new ArrayList<>();
 
     private Integer numGoals;
     private Integer minGoals;
@@ -44,12 +47,12 @@ public class GameSearchParams {
         this.maxGames = maxGames;
     }
 
-    public Boolean getClosed() {
-        return isClosed;
+    public List<GameStatusEnum> getStatuses() {
+        return statuses;
     }
 
-    public void setClosed(Boolean closed) {
-        isClosed = closed;
+    public void setStatuses(List<GameStatusEnum> statuses) {
+        this.statuses = statuses;
     }
 
     public Integer getNumGoals() {
@@ -116,7 +119,4 @@ public class GameSearchParams {
         this.timeOfDay = timeOfDay;
     }
 
-    public enum TimeOfDay {
-        MORNING, AFTERNOON, EVENING
-    }
 }
