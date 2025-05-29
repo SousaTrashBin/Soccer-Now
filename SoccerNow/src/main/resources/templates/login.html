@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SoccerNow - Login</title>
+</head>
+<body>
+  <div>
+    <p>Welcome back to SoccerNow!</p>
+    <form method="get" th:action="@{/home}">
+      <label for="email">Email:</label>
+      <input required
+             type="email"
+             name="email"
+             id="email">
+
+      <label for="password">Password</label>
+      <input required
+             type="email"
+             name="email"
+             id="password">
+
+      <button type="submit">Login</button>
+    </form>
+  </div>
+</body>
+</html>

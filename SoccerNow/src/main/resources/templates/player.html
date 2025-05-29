@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SoccerNow - Players</title>
+</head>
+<body>
+    <h1>SoccerNow: Players</h1>
+
+    <form method="get" action="@{/players}">
+      <div>
+        <label for="name">Name</label>
+        <input type="text"
+               name="name"
+               id="name">
+      </div>
+
+      <div>
+        <label for="position">Position</label>
+        <select name="position" id="position">
+          <option value=""></option>
+          <option value="goalie">Goalie</option>
+          <option value="left-winger">Left Winger</option>
+          <option value="right-winger">Right Winger</option>
+          <option value="sweeper">Sweeper</option>
+          <option value="forward">Forward</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="goals">Goals scored</label>
+        <input type="number"
+               name="goals"
+               id="goals">
+      </div>
+
+      <div>
+        <label for="cards">Cards received</label>
+        <input type="number"
+               name="cards"
+               id="cards">
+      </div>
+
+      <div>
+        <label for="games">Games played</label>
+        <input type="number"
+               name="games"
+               id="games">
+      </div>
+
+      <button type="submit">Filter</button>
+    </form>
+
+    <hr>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Position</th>
+          <th>Goals scored</th>
+          <th>Cards received</th>
+          <th>Games played</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr th:each="p : ${players}">
+          <td th:text="${p.name}" />
+          <td th:text="${p.position}" />
+          <td th:text="${p.goals}" />
+          <td th:text="${p.cards}" />
+          <td th:text="${p.games}" />
+        </tr>
+      </tbody>
+    </table>
+</body>
+</html>
