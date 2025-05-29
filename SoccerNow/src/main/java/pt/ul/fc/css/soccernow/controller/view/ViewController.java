@@ -49,7 +49,7 @@ public class ViewController {
 
         model.addAttribute("players", players);
 
-        return "player";
+        return "players";
     }
 
     @GetMapping("/referees")
@@ -59,7 +59,7 @@ public class ViewController {
     ) {
         // TODO
         model.addAttribute("referees", null);
-        return "referee";
+        return "referees";
     }
 
     @GetMapping("/teams")
@@ -69,7 +69,7 @@ public class ViewController {
     ) {
         // TODO
         model.addAttribute("teams", null);
-        return "team";
+        return "teams";
     }
 
     @GetMapping("/games")
@@ -79,7 +79,7 @@ public class ViewController {
     ) {
         // TODO
         model.addAttribute("games", null);
-        return "game";
+        return "games";
     }
 
     @GetMapping("/tournaments")
@@ -89,6 +89,6 @@ public class ViewController {
     ) {
         // TODO
         model.addAttribute("tournaments", null);
-        return "tournament";
+        return "tournaments";
     }
 }
