@@ -7,6 +7,7 @@ import pt.ul.fc.css.soccernow.domain.entities.tournament.Tournament;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.domain.entities.user.Referee;
 import pt.ul.fc.css.soccernow.util.GameResultEnum;
+import pt.ul.fc.css.soccernow.util.GameStatusEnum;
 import pt.ul.fc.css.soccernow.util.SoftDeleteEntity;
 
 import java.time.LocalDateTime;
@@ -51,12 +52,21 @@ public class Game extends SoftDeleteEntity {
     @Column(name = "happens_in", nullable = false)
     private LocalDateTime happensIn;
 
-    @Column(name = "is_closed", nullable = false)
-    private Boolean isClosed = false;
-
     @ManyToOne
     @JoinColumn(name = "tournament_id")
     private Tournament tournament;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private GameStatusEnum status = GameStatusEnum.OPENED;
+
+    public GameStatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(GameStatusEnum status) {
+        this.status = status;
+    }
 
     public Tournament getTournament() {
         return tournament;
@@ -64,14 +74,6 @@ public class Game extends SoftDeleteEntity {
 
     public void setTournament(Tournament tournament) {
         this.tournament = tournament;
-    }
-
-    public Boolean getIsClosed() {
-        return isClosed;
-    }
-
-    public void setIsClosed(Boolean isClosed) {
-        this.isClosed = isClosed;
     }
 
     public LocalDateTime getHappensIn() {
@@ -138,12 +140,8 @@ public class Game extends SoftDeleteEntity {
         this.id = id;
     }
 
-    public boolean isClosed() {
-        return isClosed;
-    }
-
     public void close() {
-        this.isClosed = true;
+        this.status = GameStatusEnum.CLOSED;
     }
 
     public Set<Player> getPlayers() {
@@ -190,7 +188,7 @@ public class Game extends SoftDeleteEntity {
                 "primaryReferee = " + primaryReferee + ", " +
                 "locatedIn = " + locatedIn + ", " +
                 "happensIn = " + happensIn + ", " +
-                "isClosed = " + isClosed + ", " +
+                "status = " + status + ", " +
                 "tournament = " + tournament + ")";
     }
 
@@ -219,5 +217,9 @@ public class Game extends SoftDeleteEntity {
 
     public boolean hasReferee(Referee referee) {
         return primaryReferee.equals(referee) || secondaryReferees.stream().anyMatch(referee::equals);
+    }
+
+    public boolean isClosed() {
+        return status == GameStatusEnum.CLOSED;
     }
 }

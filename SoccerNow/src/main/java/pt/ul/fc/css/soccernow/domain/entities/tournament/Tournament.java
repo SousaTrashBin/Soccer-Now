@@ -3,6 +3,7 @@ package pt.ul.fc.css.soccernow.domain.entities.tournament;
 import jakarta.persistence.*;
 import pt.ul.fc.css.soccernow.domain.entities.game.Game;
 import pt.ul.fc.css.soccernow.util.SoftDeleteEntity;
+import pt.ul.fc.css.soccernow.util.TournamentStatusEnum;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,12 +18,32 @@ public abstract class Tournament extends SoftDeleteEntity {
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @Column(name = "is_finished", nullable = false)
-    private Boolean isFinished = false;
-
     @OneToMany(mappedBy = "tournament", orphanRemoval = true)
     @OrderBy("happensIn")
     private List<Game> games = new ArrayList<>();
+
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private TournamentStatusEnum status = TournamentStatusEnum.OPEN;
+
+    public TournamentStatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(TournamentStatusEnum tournamentStatusEnum) {
+        this.status = tournamentStatusEnum;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public List<Game> getGames() {
         return games;
@@ -30,14 +51,6 @@ public abstract class Tournament extends SoftDeleteEntity {
 
     public void setGames(List<Game> games) {
         this.games = games;
-    }
-
-    public Boolean getIsFinished() {
-        return isFinished;
-    }
-
-    public void setIsFinished(Boolean isFinished) {
-        this.isFinished = isFinished;
     }
 
     public UUID getId() {

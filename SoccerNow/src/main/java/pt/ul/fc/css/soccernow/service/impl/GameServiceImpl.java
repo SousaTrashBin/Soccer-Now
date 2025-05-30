@@ -14,6 +14,7 @@ import pt.ul.fc.css.soccernow.service.GameService;
 import pt.ul.fc.css.soccernow.service.PlayerService;
 import pt.ul.fc.css.soccernow.service.RefereeService;
 import pt.ul.fc.css.soccernow.service.TeamService;
+import pt.ul.fc.css.soccernow.util.GameStatusEnum;
 
 import java.util.*;
 import java.util.function.Function;
@@ -119,7 +120,7 @@ public class GameServiceImpl implements GameService {
     @Override
     public void softDelete(UUID entityId) {
         Game gameToDelete = findNotDeletedById(entityId);
-        if (!gameToDelete.isClosed()) {
+        if (!gameToDelete.getStatus().equals(GameStatusEnum.CLOSED)) {
             throw new ResourceCouldNotBeDeletedException("Game", "id", entityId);
         }
         gameToDelete.delete();
@@ -172,7 +173,7 @@ public class GameServiceImpl implements GameService {
 
     private Game validateGameIsOpenAndExists(UUID gameID) {
         Game game = findNotDeletedById(gameID);
-        if (game.isClosed()) {
+        if (game.getStatus().equals(GameStatusEnum.CLOSED)) {
             throw new BadRequestException("Game is already closed");
         }
         return game;
