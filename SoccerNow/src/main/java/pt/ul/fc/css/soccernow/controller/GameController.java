@@ -13,6 +13,7 @@ import pt.ul.fc.css.soccernow.domain.entities.game.PlayerGameStats;
 import pt.ul.fc.css.soccernow.mapper.GameMapper;
 import pt.ul.fc.css.soccernow.mapper.PlayerGameStatsMapper;
 import pt.ul.fc.css.soccernow.service.GameService;
+import pt.ul.fc.css.soccernow.util.GameSearchParams;
 
 import java.net.URI;
 import java.util.HashSet;
@@ -81,8 +82,8 @@ public class GameController {
             summary = "Get all non deleted games",
             description = "Returns the details of all non deleted games."
     )
-    public ResponseEntity<List<GameDTO>> getAllGames() {
-        List<Game> allNotDeleted = gameService.findAllNotDeleted();
+    public ResponseEntity<List<GameDTO>> getAllGames(@ModelAttribute GameSearchParams params) {
+        List<Game> allNotDeleted = gameService.findAllNotDeleted(params);
         return ResponseEntity.ok(allNotDeleted.stream().map(gameMapper::toDTO).toList());
     }
 
