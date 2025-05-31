@@ -26,7 +26,17 @@ public class TeamSearchParams {
     private Integer minAchievements;
     private Integer maxAchievements;
 
+    private Integer size;
+
     private List<FutsalPositionEnum> missingPositions = new ArrayList<>();
+
+    public Integer getSize() {
+        return size;
+    }
+
+    public void setSize(Integer size) {
+        this.size = size;
+    }
 
     public String getName() {
         return name;

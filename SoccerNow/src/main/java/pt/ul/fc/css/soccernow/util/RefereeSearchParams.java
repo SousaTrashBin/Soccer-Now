@@ -11,6 +11,8 @@ public class RefereeSearchParams {
     private Integer minCardsGiven;
     private Integer maxCardsGiven;
 
+    private Integer size;
+
     public String getName() {
         return name;
     }
@@ -65,5 +67,13 @@ public class RefereeSearchParams {
 
     public void setMaxCardsGiven(Integer maxCardsGiven) {
         this.maxCardsGiven = maxCardsGiven;
+    }
+
+    public Integer getSize() {
+        return size;
+    }
+
+    public void setSize(Integer size) {
+        this.size = size;
     }
 }
