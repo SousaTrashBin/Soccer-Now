@@ -8,6 +8,7 @@ import pt.ul.fc.css.soccernow.exception.ResourceCouldNotBeDeletedException;
 import pt.ul.fc.css.soccernow.exception.ResourceDoesNotExistException;
 import pt.ul.fc.css.soccernow.repository.TeamRepository;
 import pt.ul.fc.css.soccernow.service.TeamService;
+import pt.ul.fc.css.soccernow.util.TeamSearchParams;
 
 import java.util.List;
 import java.util.UUID;
@@ -39,6 +40,11 @@ public class TeamServiceImpl implements TeamService {
         }
         team.addPlayer(player);
         teamRepository.save(team);
+    }
+
+    @Override
+    public List<Team> findAllNotDeleted(TeamSearchParams params) {
+        return teamRepository.findAllNotDeleted(params);
     }
 
     @Override

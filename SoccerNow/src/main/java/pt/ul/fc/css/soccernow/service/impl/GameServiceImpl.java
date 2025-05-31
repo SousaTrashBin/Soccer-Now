@@ -14,6 +14,7 @@ import pt.ul.fc.css.soccernow.service.GameService;
 import pt.ul.fc.css.soccernow.service.PlayerService;
 import pt.ul.fc.css.soccernow.service.RefereeService;
 import pt.ul.fc.css.soccernow.service.TeamService;
+import pt.ul.fc.css.soccernow.util.GameSearchParams;
 import pt.ul.fc.css.soccernow.util.GameStatusEnum;
 
 import java.util.*;
@@ -148,6 +149,11 @@ public class GameServiceImpl implements GameService {
         game.setGameStats(gameStats);
         game.close();
         return gameRepository.save(game);
+    }
+
+    @Override
+    public List<Game> findAllNotDeleted(GameSearchParams params) {
+        return gameRepository.findAllNotDeleted(params);
     }
 
     private void valitePlayerGameStatsDTO(Game game, Set<PlayerGameStats> playerGameStatsDTOs) {

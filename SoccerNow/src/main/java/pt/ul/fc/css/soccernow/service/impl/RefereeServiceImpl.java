@@ -6,6 +6,7 @@ import pt.ul.fc.css.soccernow.exception.ResourceCouldNotBeDeletedException;
 import pt.ul.fc.css.soccernow.exception.ResourceDoesNotExistException;
 import pt.ul.fc.css.soccernow.repository.RefereeRepository;
 import pt.ul.fc.css.soccernow.service.RefereeService;
+import pt.ul.fc.css.soccernow.util.RefereeSearchParams;
 
 import java.util.List;
 import java.util.UUID;
@@ -67,5 +68,10 @@ public class RefereeServiceImpl implements RefereeService {
             throw new ResourceDoesNotExistException("Referee", "id", refereeId);
         }
         return referee;
+    }
+
+    @Override
+    public List<Referee> findAllNotDeleted(RefereeSearchParams params) {
+        return refereeRepository.findAllNotDeleted(params);
     }
 }
