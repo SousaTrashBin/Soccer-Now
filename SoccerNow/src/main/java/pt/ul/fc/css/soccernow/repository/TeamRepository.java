@@ -133,7 +133,9 @@ public interface TeamRepository extends SoftDeletedRepository<Team> {
                 .map(BooleanBuilder::new)
                 .orElse(new BooleanBuilder());
 
-        Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
+        Pageable pageable = params.getSize() != null
+                ? PageRequest.of(0, params.getSize())
+                : PageRequest.of(0, Integer.MAX_VALUE);
 
         return findAll(predicate, pageable).getContent();
     }
