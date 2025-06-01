@@ -4,6 +4,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pt.ul.fc.css.soccernow.domain.dto.user.PlayerDTO;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.mapper.PlayerMapper;
@@ -27,8 +30,22 @@ public class ViewController {
     }
 
     @GetMapping("/")
+    public String redirectToLoginPage() {
+        return "redirect:/login";
+    }
+
+    @GetMapping("/login")
     public String getLoginPage() {
         return "login";
+    }
+
+    @PostMapping("/login")
+    public String redirectToHomePage(
+            @RequestParam String email,
+            @RequestParam String password,
+            RedirectAttributes redirectAttributes
+    ) {
+        return "redirect:/home";
     }
 
     @GetMapping("/home")

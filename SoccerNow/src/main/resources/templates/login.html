@@ -7,7 +7,7 @@
 <body>
   <div>
     <p>Welcome back to SoccerNow!</p>
-    <form method="get" th:action="@{/home}">
+    <form method="post" th:action="@{/login}">
       <label for="email">Email:</label>
       <input required
              type="email"
@@ -16,8 +16,8 @@
 
       <label for="password">Password</label>
       <input required
-             type="email"
-             name="email"
+             type="password"
+             name="password"
              id="password">
 
       <button type="submit">Login</button>
