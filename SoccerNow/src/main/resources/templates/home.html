@@ -3,18 +3,20 @@
       xmlns:th="https://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <title>SoccerNow - Home</title>
 </head>
-<body>
-  <h1>SoccerNow</h1>
+<body class="flex flex-col gap-2 h-screen justify-center items-center text-2xl">
+  <h1 class="font-bold text-3xl mb-4">SoccerNow</h1>
+
   <p>Actions</p>
-  <a th:href="@{/register-game-result}">Register Game result</a>
-  <!--    <hr>-->
+  <a th:href="@{/register-game-result}" class="mb-6 w-[20%] text-center border-2 border-gray-400 hover:bg-amber-200 cursor-pointer p-2 rounded-xl">Register Game result</a>
+
   <p>Search</p>
-  <a th:href="@{/teams}">Teams</a>
-  <a th:href="@{/tournaments}">Tournaments</a>
-  <a th:href="@{/games}">Games</a>
-  <a th:href="@{/players}">Players</a>
-  <a th:href="@{/referees}">Referees</a>
+  <a th:href="@{/teams}" class="w-[20%] text-center border-2 border-gray-400 hover:bg-amber-200 cursor-pointer p-2 rounded-xl">Teams</a>
+  <a th:href="@{/tournaments}" class="w-[20%] text-center border-2 border-gray-400 hover:bg-amber-200 cursor-pointer p-2 rounded-xl">Tournaments</a>
+  <a th:href="@{/games}" class="w-[20%] text-center border-2 border-gray-400 hover:bg-amber-200 cursor-pointer p-2 rounded-xl">Games</a>
+  <a th:href="@{/players}" class="w-[20%] text-center border-2 border-gray-400 hover:bg-amber-200 cursor-pointer p-2 rounded-xl">Players</a>
+  <a th:href="@{/referees}" class="w-[20%] text-center border-2 border-gray-400 hover:bg-amber-200 cursor-pointer p-2 rounded-xl">Referees</a>
 </body>
 </html>

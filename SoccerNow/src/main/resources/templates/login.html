@@ -1,27 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>SoccerNow - Login</title>
+  <meta charset="UTF-8">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <title>SoccerNow - Login</title>
 </head>
-<body>
-  <div>
-    <p>Welcome back to SoccerNow!</p>
-    <form method="post" th:action="@{/login}">
-      <label for="email">Email:</label>
-      <input required
-             type="email"
-             name="email"
-             id="email">
+<body class="h-screen flex justify-center items-center text-2xl">
+<div class="border-2 border-gray-600 flex flex-col p-7 rounded-2xl">
+  <p class="mb-4">Welcome back to SoccerNow!</p>
 
-      <label for="password">Password</label>
-      <input required
-             type="password"
-             name="password"
-             id="password">
+  <form method="post" th:action="@{/login}" class="flex flex-col">
+    <label for="email">Email:</label>
+    <input required
+           type="email"
+           name="email"
+           id="email"
+           class="mb-4 border-2 border-gray-400 rounded-2xl pl-2 text-sm h-10">
 
-      <button type="submit">Login</button>
-    </form>
-  </div>
+    <label for="password">Password:</label>
+    <input required
+           type="password"
+           name="password"
+           id="password"
+           class="mb-4 border-2 border-gray-400 rounded-2xl pl-2 text-sm h-10">
+
+    <button type="submit" class="border-2 rounded-lg p-2 hover:bg-blue-200 cursor-pointer">Login</button>
+  </form>
+</div>
 </body>
 </html>
