@@ -3,55 +3,58 @@
       xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{styles.css}">
     <title>SoccerNow - Teams</title>
 </head>
 <body>
     <h1>SoccerNow: Teams</h1>
 
-    <form method="get" action="@{/teams}">
-        <div>
+    <h2 class="filters-title">Filters:</h2>
+
+    <form method="get" action="@{/teams}" class="filter-form">
+        <div class="filter-container">
             <label for="name">Name</label>
             <input type="text"
                    name="name"
                    id="name">
         </div>
 
-        <div>
+        <div class="filter-container">
             <label for="players">N players</label>
             <input type="number"
                    name="numPlayers"
                    id="players">
         </div>
 
-        <div>
+        <div class="filter-container">
             <label for="wins">N wins</label>
             <input type="number"
                    name="numVictories"
                    id="wins">
         </div>
 
-        <div>
+        <div class="filter-container">
             <label for="draws">N draws</label>
             <input type="number"
                    name="numDraws"
                    id="draws">
         </div>
 
-        <div>
+        <div class="filter-container">
             <label for="losses">N losses</label>
             <input type="number"
                    name="numLosses"
                    id="losses">
         </div>
 
-        <div>
+        <div class="filter-container">
             <label for="achievements">N achievements</label>
             <input type="number"
                    name="numAchievements"
                    id="achievements">
         </div>
 
-        <div>
+        <div class="filter-container">
             <label for="missing">Missing position</label>
             <select name="missingPositions" id="missing">
                 <option value=""></option>
@@ -63,7 +66,7 @@
             </select>
         </div>
 
-      <button type="submit">Filter</button>
+      <button type="submit" class="submit-filter-btn">Filter</button>
     </form>
 
     <hr>

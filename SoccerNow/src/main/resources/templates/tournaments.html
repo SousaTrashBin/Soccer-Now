@@ -3,41 +3,44 @@
       xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{styles.css}">
     <title>SoccerNow - Tournaments</title>
 </head>
 <body>
     <h1>SoccerNow: Tournaments</h1>
 
-    <form method="get" action="@{/tournaments}">
-        <div>
+    <h2 class="filters-title">Filters:</h2>
+
+    <form method="get" action="@{/tournaments}" class="filter-form">
+        <div class="filter-container">
             <label for="name">Name</label>
             <input type="text"
                    name="name"
                    id="name">
         </div>
 
-        <div>
+        <div class="filter-container">
             <label for="team">Team name</label>
             <input type="text"
                    name="teams"
                    id="team">
         </div>
 
-        <div>
+        <div class="filter-container">
             <label for="nGamesClosed">N games closed</label>
             <input type="number"
                    name="numGamesClosed"
                    id="nGamesClosed">
         </div>
 
-        <div>
+        <div class="filter-container">
             <label for="nGamesOpened">N games opened</label>
             <input type="number"
                    name="numGamesOpened"
                    id="nGamesOpened">
         </div>
 
-      <button type="submit">Filter</button>
+      <button type="submit" class="submit-filter-btn">Filter</button>
     </form>
 
     <hr>

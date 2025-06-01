@@ -3,34 +3,37 @@
       xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{styles.css}">
     <title>SoccerNow - Referees</title>
 </head>
 <body>
     <h1>SoccerNow: Referees</h1>
 
-    <form method="get" action="@{/referees}">
-      <div>
+    <h2 class="filters-title">Filters:</h2>
+
+    <form method="get" action="@{/referees}" class="filter-form">
+      <div class="filter-container">
         <label for="name">Name</label>
         <input type="text"
                name="name"
                id="name">
       </div>
 
-      <div>
+      <div class="filter-container">
         <label for="games">Officiated games</label>
         <input type="number"
                name="numGames"
                id="games">
       </div>
 
-      <div>
+      <div class="filter-container">
         <label for="cards">Cards given</label>
         <input type="number"
                name="numCardsGiven"
                id="cards">
       </div>
 
-      <button type="submit">Filter</button>
+      <button type="submit" class="submit-filter-btn">Filter</button>
     </form>
 
     <hr>

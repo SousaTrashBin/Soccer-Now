@@ -3,41 +3,44 @@
       xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{styles.css}">
     <title>SoccerNow - Games</title>
 </head>
 <body>
     <h1>SoccerNow: Games</h1>
 
-    <form method="get" action="@{/games}">
-        <div>
+    <h2 class="filters-title">Filters:</h2>
+
+    <form method="get" action="@{/games}" class="filter-form">
+        <div class="filter-container">
             <label for="closedGamesOnly">Closed Games</label>
             <input type="checkbox"
                    name="isClosed"
                    id="closedGamesOnly">
         </div>
 
-<!--        <div>-->
+<!--        <div class="filter-container">-->
 <!--            <label for="openedGames">Games to be played</label>-->
 <!--            <input type="number"-->
 <!--                   name="numGames???"-->
 <!--                   id="openedGames">-->
 <!--        </div>-->
 
-        <div>
+        <div class="filter-container">
             <label for="goals">N goals</label>
             <input type="number"
                    name="numGoals"
                    id="goals">
         </div>
 
-<!--        <div>-->
+<!--        <div class="filter-container">-->
 <!--            <label for="location">Location</label>-->
 <!--            <input type="text"-->
 <!--                   name="???"-->
 <!--                   id="location">-->
 <!--        </div>-->
 
-        <div>
+        <div class="filter-container">
             <label for="time">Time of day</label>
             <select name="timeOfDay" id="time">
                 <option value=""></option>
@@ -47,7 +50,7 @@
             </select>
         </div>
 
-      <button type="submit">Filter</button>
+      <button type="submit" class="submit-filter-btn">Filter</button>
     </form>
 
     <hr>

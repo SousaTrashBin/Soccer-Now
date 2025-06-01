@@ -42,3 +42,20 @@
 .submit-filter-btn:hover {
     background-color: rgb(255, 190, 69);
 }
+
+table {
+    margin-top: 30px;
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+th, td {
+    text-align: left;
+    padding: 7px;
+    word-wrap: break-word;
+}
+
+tr {
+    border: 1px solid #ccc;
+}
