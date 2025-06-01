@@ -1,0 +1,44 @@
+/* @import "tailwindcss"; */
+
+* {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.filters-title {
+    margin-bottom: 5px;
+    font-weight: normal;
+}
+
+.filter-form {
+    display: flex;
+    align-items: flex-end;
+    gap: 30px;
+}
+
+.filter-form input, .filter-form select {
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.filter-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-container label {
+    margin-bottom: 3px;
+}
+
+.submit-filter-btn {
+    padding: 7px 15px;
+    border-radius: 5px;
+    border: 1px solid gray;
+    background-color: rgb(255, 226, 172);
+    cursor: pointer;
+    font-size: large;
+}
+
+.submit-filter-btn:hover {
+    background-color: rgb(255, 190, 69);
+}

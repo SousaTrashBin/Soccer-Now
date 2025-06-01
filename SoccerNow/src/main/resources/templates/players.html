@@ -1,79 +1,82 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns:th="https://www.thymeleaf.org">
+<link rel="stylesheet" th:href="@{styles.css}">
 <head>
-    <meta charset="UTF-8">
-    <title>SoccerNow - Players</title>
+  <meta charset="UTF-8">
+  <title>SoccerNow - Players</title>
 </head>
 <body>
-    <h1>SoccerNow: Players</h1>
+<h1 id="title">SoccerNow: Players</h1>
 
-    <form method="get" action="@{/players}">
-      <div>
-        <label for="name">Name</label>
-        <input type="text"
-               name="name"
-               id="name">
-      </div>
+<h2 class="filters-title">Filters:</h2>
 
-      <div>
-        <label for="position">Position</label>
-        <select name="preferredPositions" id="position">
-          <option value=""></option>
-          <option value="GOALIE">Goalie</option>
-          <option value="LEFT_WINGER">Left Winger</option>
-          <option value="RIGHT_WINGER">Right Winger</option>
-          <option value="SWEEPER">Sweeper</option>
-          <option value="FORWARD">Forward</option>
-        </select>
-      </div>
+<form method="get" action="@{/players}" class="filter-form">
+  <div class="filter-container">
+    <label for="name">Name</label>
+    <input type="text"
+           name="name"
+           id="name">
+  </div>
 
-      <div>
-        <label for="goals">Scored goals</label>
-        <input type="number"
-               name="numScoredGoals"
-               id="goals">
-      </div>
+  <div class="filter-container">
+    <label for="position">Position</label>
+    <select name="preferredPositions" id="position">
+      <option value=""></option>
+      <option value="GOALIE">Goalie</option>
+      <option value="LEFT_WINGER">Left Winger</option>
+      <option value="RIGHT_WINGER">Right Winger</option>
+      <option value="SWEEPER">Sweeper</option>
+      <option value="FORWARD">Forward</option>
+    </select>
+  </div>
 
-      <div>
-        <label for="cards">Received cards</label>
-        <input type="number"
-               name="numReceivedCards"
-               id="cards">
-      </div>
+  <div class="filter-container">
+    <label for="goals">Scored goals</label>
+    <input type="number"
+           name="numScoredGoals"
+           id="goals">
+  </div>
 
-      <div>
-        <label for="games">Games played</label>
-        <input type="number"
-               name="numGames"
-               id="games">
-      </div>
+  <div class="filter-container">
+    <label for="cards">Received cards</label>
+    <input type="number"
+           name="numReceivedCards"
+           id="cards">
+  </div>
 
-      <button type="submit">Filter</button>
-    </form>
+  <div class="filter-container">
+    <label for="games">Games played</label>
+    <input type="number"
+           name="numGames"
+           id="games">
+  </div>
 
-    <hr>
+  <button type="submit" class="submit-filter-btn">Filter</button>
+</form>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Position</th>
-          <th>Goals scored</th>
-          <th>Cards received</th>
-          <th>Games played</th>
-        </tr>
-      </thead>
+<hr>
 
-      <tbody>
-        <tr th:each="p : ${players}">
-          <td th:text="${p.name}" />
-          <td th:text="${p.preferredPosition}" />
-          <td th:text="${p.scoredGoals}" />
-          <td th:text="${p.receivedCards}" />
-          <td th:text="${p.gamesPlayed}" />
-        </tr>
-      </tbody>
-    </table>
+<table>
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>Position</th>
+    <th>Goals scored</th>
+    <th>Cards received</th>
+    <th>Games played</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <tr th:each="p : ${players}">
+    <td th:text="${p.name}" />
+    <td th:text="${p.preferredPosition}" />
+    <td th:text="${p.scoredGoals}" />
+    <td th:text="${p.receivedCards}" />
+    <td th:text="${p.gamesPlayed}" />
+  </tr>
+  </tbody>
+</table>
 </body>
 </html>

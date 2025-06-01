@@ -58,13 +58,13 @@ public class ViewController {
             @ModelAttribute PlayerSearchParams params,
             Model model
     ) {
-        List<Player> filteredPlayers = playerService.findAllNotDeleted(params);
-        Stream<Player> playerStream = filteredPlayers.stream();
-
-        Stream<PlayerDTO> playerDTOStream = playerStream.map(playerMapper::toDTO);
-        List<PlayerDTO> players = params.getSize() != null ? playerDTOStream.limit(params.getSize()).toList() : playerDTOStream.toList();
-
-        model.addAttribute("players", players);
+//        List<Player> filteredPlayers = playerService.findAllNotDeleted(params);
+//        Stream<Player> playerStream = filteredPlayers.stream();
+//
+//        Stream<PlayerDTO> playerDTOStream = playerStream.map(playerMapper::toDTO);
+//        List<PlayerDTO> players = params.getSize() != null ? playerDTOStream.limit(params.getSize()).toList() : playerDTOStream.toList();
+//
+//        model.addAttribute("players", players);
 
         return "players";
     }
