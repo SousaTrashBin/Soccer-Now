@@ -222,4 +222,8 @@ public class Game extends SoftDeleteEntity {
     public boolean isClosed() {
         return status == GameStatusEnum.CLOSED;
     }
+
+    public void cancel() {
+        this.status = GameStatusEnum.CANCELLED;
+    }
 }
