@@ -87,4 +87,12 @@ public class GameController {
         return ResponseEntity.ok(allNotDeleted.stream().map(gameMapper::toDTO).toList());
     }
 
+    @PatchMapping("{gameId}/cancel")
+    @Operation(summary = "Cancel a game in its tournament")
+    public ResponseEntity<GameDTO> cancelGame(
+            @PathVariable @NotNull UUID gameId
+    ) {
+        Game updated = gameService.cancelTournamentGame(gameId);
+        return ResponseEntity.ok(gameMapper.toDTO(updated));
+    }
 }
