@@ -2,11 +2,11 @@ package pt.ul.fc.css.soccernow.mapper;
 
 import org.mapstruct.*;
 import pt.ul.fc.css.soccernow.domain.dto.user.RefereeDTO;
-import pt.ul.fc.css.soccernow.domain.entities.tournament.Tournament;
-import pt.ul.fc.css.soccernow.domain.entities.tournament.point.PointTournament;
 import pt.ul.fc.css.soccernow.domain.entities.user.Referee;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        componentModel = MappingConstants.ComponentModel.SPRING,
+        uses = TournamentMapper.class)
 public interface RefereeMapper {
     Referee toEntity(RefereeDTO refereeDTO);
 
@@ -24,8 +24,4 @@ public interface RefereeMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Referee partialUpdate(RefereeDTO refereeDTO, @MappingTarget Referee referee);
-
-    default Tournament createTournament() {
-        return new PointTournament();
-    }
 }

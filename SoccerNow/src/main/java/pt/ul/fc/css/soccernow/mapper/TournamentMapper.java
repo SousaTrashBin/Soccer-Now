@@ -1,6 +1,7 @@
 package pt.ul.fc.css.soccernow.mapper;
 
 import org.mapstruct.*;
+import pt.ul.fc.css.soccernow.domain.dto.tournament.PointTournamentDTO;
 import pt.ul.fc.css.soccernow.domain.dto.tournament.TournamentDTO;
 import pt.ul.fc.css.soccernow.domain.entities.tournament.Tournament;
 import pt.ul.fc.css.soccernow.domain.entities.tournament.point.PointTournament;
@@ -11,10 +12,15 @@ public interface TournamentMapper {
 
     @AfterMapping
     default void linkGames(@MappingTarget Tournament tournament) {
-        tournament.getGames().forEach(game -> game.setTournament(tournament));
+        if (tournament.getGames() != null) {
+            tournament.getGames().forEach(game -> game.setTournament(tournament));
+        }
     }
 
+    @SubclassMapping(source = PointTournament.class, target = PointTournamentDTO.class)
     TournamentDTO toDTO(Tournament tournament);
+
+    PointTournamentDTO toDTO(PointTournament tournament);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Tournament partialUpdate(TournamentDTO tournamentDTO, @MappingTarget Tournament tournament);
