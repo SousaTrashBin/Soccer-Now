@@ -68,11 +68,11 @@
 
   <tbody>
   <tr th:each="p : ${players}">
-    <td th:text="${p.name}" />
-    <td th:text="${p.preferredPosition}" />
-    <td th:text="${p.scoredGoals}" />
-    <td th:text="${p.receivedCards}" />
-    <td th:text="${p.gamesPlayed}" />
+    <td th:text="${p.getName()}" />
+    <td th:text="${p.getName()}" />
+    <td th:text="${p.getGoalsScored()}" />
+    <td th:text="${p.getTotalNumberOfReceivedCards()}" />
+    <td th:text="${p.getNumberOfPlayedGames()}" />
   </tr>
   </tbody>
 </table>
