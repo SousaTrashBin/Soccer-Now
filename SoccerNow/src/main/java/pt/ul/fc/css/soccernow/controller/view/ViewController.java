@@ -7,26 +7,59 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pt.ul.fc.css.soccernow.domain.dto.TeamDTO;
+import pt.ul.fc.css.soccernow.domain.dto.games.GameDTO;
+import pt.ul.fc.css.soccernow.domain.dto.tournament.TournamentDTO;
 import pt.ul.fc.css.soccernow.domain.dto.user.PlayerDTO;
+import pt.ul.fc.css.soccernow.domain.dto.user.RefereeDTO;
+import pt.ul.fc.css.soccernow.domain.entities.Team;
+import pt.ul.fc.css.soccernow.domain.entities.game.Game;
+import pt.ul.fc.css.soccernow.domain.entities.tournament.Tournament;
+import pt.ul.fc.css.soccernow.domain.entities.tournament.point.PointTournament;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
-import pt.ul.fc.css.soccernow.mapper.PlayerMapper;
-import pt.ul.fc.css.soccernow.service.PlayerService;
+import pt.ul.fc.css.soccernow.domain.entities.user.Referee;
+import pt.ul.fc.css.soccernow.mapper.*;
+import pt.ul.fc.css.soccernow.service.*;
 import pt.ul.fc.css.soccernow.util.*;
 
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 @Controller
 public class ViewController {
     private final PlayerService playerService;
+    private final RefereeService refereeService;
+    private final TeamService teamService;
+    private final GameService gameService;
+    private final PointTournamentService pointTournamentService;
     private final PlayerMapper playerMapper;
+    private final RefereeMapper refereeMapper;
+    private final TeamMapper teamMapper;
+    private final GameMapper gameMapper;
+    private final TournamentMapper tournamentMapper;
 
     public ViewController(
             PlayerService playerService,
-            PlayerMapper playerMapper
+            RefereeService refereeService,
+            TeamService teamService,
+            GameService gameService,
+            PointTournamentService pointTournamentService,
+            PlayerMapper playerMapper,
+            RefereeMapper refereeMapper,
+            TeamMapper teamMapper,
+            GameMapper gameMapper,
+            TournamentMapper tournamentMapper
     ) {
         this.playerService = playerService;
+        this.refereeService = refereeService;
+        this.teamService = teamService;
+        this.gameService = gameService;
+        this.pointTournamentService = pointTournamentService;
         this.playerMapper = playerMapper;
+        this.refereeMapper = refereeMapper;
+        this.teamMapper = teamMapper;
+        this.gameMapper = gameMapper;
+        this.tournamentMapper = tournamentMapper;
     }
 
     @GetMapping("/")
@@ -58,14 +91,12 @@ public class ViewController {
             @ModelAttribute PlayerSearchParams params,
             Model model
     ) {
-//        List<Player> filteredPlayers = playerService.findAllNotDeleted(params);
-//        Stream<Player> playerStream = filteredPlayers.stream();
-//
-//        Stream<PlayerDTO> playerDTOStream = playerStream.map(playerMapper::toDTO);
-//        List<PlayerDTO> players = params.getSize() != null ? playerDTOStream.limit(params.getSize()).toList() : playerDTOStream.toList();
-//
-//        model.addAttribute("players", players);
+        List<Player> filteredPlayers = playerService.findAllNotDeleted(params);
+        List<PlayerDTO> playersDTO = filteredPlayers.stream()
+                                                    .map(playerMapper::toDTO)
+                                                    .collect(Collectors.toList());
 
+        model.addAttribute("players", playersDTO);
         return "players";
     }
 
@@ -74,8 +105,12 @@ public class ViewController {
             @ModelAttribute RefereeSearchParams params,
             Model model
     ) {
-        // TODO
-        model.addAttribute("referees", null);
+        List<Referee> filteredReferees = refereeService.findAllNotDeleted(params);
+        List<RefereeDTO> refereesDTO = filteredReferees.stream()
+                                                       .map(refereeMapper::toDTO)
+                                                       .collect(Collectors.toList());
+
+        model.addAttribute("referees", refereesDTO);
         return "referees";
     }
 
@@ -84,8 +119,12 @@ public class ViewController {
             @ModelAttribute TeamSearchParams params,
             Model model
     ) {
-        // TODO
-        model.addAttribute("teams", null);
+        List<Team> filteredTeams = teamService.findAllNotDeleted(params);
+        List<TeamDTO> teamsDTO = filteredTeams.stream()
+                                              .map(teamMapper::toDTO)
+                                              .collect(Collectors.toList());
+
+        model.addAttribute("teams", teamsDTO);
         return "teams";
     }
 
@@ -94,8 +133,12 @@ public class ViewController {
             @ModelAttribute GameSearchParams params,
             Model model
     ) {
-        // TODO
-        model.addAttribute("games", null);
+        List<Game> filteredGames = gameService.findAllNotDeleted(params);
+        List<GameDTO> gamesDTO = filteredGames.stream()
+                                              .map(gameMapper::toDTO)
+                                              .collect(Collectors.toList());
+
+        model.addAttribute("games", gamesDTO);
         return "games";
     }
 
@@ -104,8 +147,12 @@ public class ViewController {
             @ModelAttribute TournamentSearchParams params,
             Model model
     ) {
-        // TODO
-        model.addAttribute("tournaments", null);
+        List<PointTournament> filteredTournaments = pointTournamentService.findAllNotDeleted(params);
+        List<TournamentDTO> tournamentsDTO = filteredTournaments.stream()
+                                                                .map(tournamentMapper::toDTO)
+                                                                .collect(Collectors.toList());
+
+        model.addAttribute("tournaments", tournamentsDTO);
         return "tournaments";
     }
 }
