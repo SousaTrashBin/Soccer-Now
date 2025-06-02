@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import org.hibernate.proxy.HibernateProxy;
 import pt.ul.fc.css.soccernow.domain.entities.game.Game;
 import pt.ul.fc.css.soccernow.domain.entities.tournament.Placement;
+import pt.ul.fc.css.soccernow.domain.entities.tournament.Tournament;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
+import pt.ul.fc.css.soccernow.util.PlacementEnum;
 import pt.ul.fc.css.soccernow.util.SoftDeleteEntity;
 
 import java.util.*;
@@ -28,7 +30,7 @@ public class Team extends SoftDeleteEntity {
     @OrderBy("name")
     private Set<Player> players = new LinkedHashSet<>();
 
-    @OneToMany(orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "team_id")
     private Set<Placement> placements = new LinkedHashSet<>();
 
@@ -161,5 +163,23 @@ public class Team extends SoftDeleteEntity {
 
     public void addGame(Game game) {
         games.add(game);
+    }
+
+    public void addTournament(Tournament tournament) {
+        Placement placement = new Placement();
+        placement.setTournament(tournament);
+        placement.setPlacementEnum(PlacementEnum.PENDING);
+        placements.add(placement);
+    }
+
+    public void removeTournament(Tournament tournament) {
+        placements.removeIf(p -> tournament.equals(p.getTournament()));
+    }
+
+    public Placement getPlacementForTournament(Tournament tournament) {
+        return placements.stream()
+                .filter(p -> p.getTournament().equals(tournament))
+                .findFirst()
+                .orElse(null);
     }
 }
