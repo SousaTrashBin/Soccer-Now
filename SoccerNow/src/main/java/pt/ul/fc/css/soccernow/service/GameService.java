@@ -11,6 +11,9 @@ import java.util.UUID;
 
 public interface GameService extends CrudService<Game> {
     @Transactional
+    Game cancelTournamentGame(UUID gameId);
+
+    @Transactional
     Game closeGame(UUID gameID, Set<PlayerGameStats> playerGameStats);
 
     List<Game> findAllNotDeleted(GameSearchParams params);
