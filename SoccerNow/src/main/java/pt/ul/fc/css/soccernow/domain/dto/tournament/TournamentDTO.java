@@ -1,7 +1,11 @@
 package pt.ul.fc.css.soccernow.domain.dto.tournament;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.Length;
 import pt.ul.fc.css.soccernow.domain.dto.games.GameInfoDTO;
 import pt.ul.fc.css.soccernow.domain.entities.tournament.Tournament;
+import pt.ul.fc.css.soccernow.util.TournamentStatusEnum;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,6 +17,11 @@ import java.util.UUID;
  * DTO for {@link Tournament}
  */
 public class TournamentDTO implements Serializable {
+    @Schema(example = "World Cup")
+    @Pattern(regexp = "^\\p{L}+( \\p{L}+)*$")
+    @Length(max = 100)
+    private String name;
+    private TournamentStatusEnum status = TournamentStatusEnum.OPEN;
     private UUID id;
     private Boolean isFinished = false;
     private List<GameInfoDTO> games = new ArrayList<>();
@@ -20,10 +29,14 @@ public class TournamentDTO implements Serializable {
     public TournamentDTO() {
     }
 
-    public TournamentDTO(UUID id, Boolean isFinished, List<GameInfoDTO> games) {
+    public TournamentDTO(
+            String name,
+            TournamentStatusEnum status, UUID id, Boolean isFinished, List<GameInfoDTO> games) {
         this.id = id;
         this.isFinished = isFinished;
         this.games = games;
+        this.name = name;
+        this.status = status;
     }
 
     public UUID getId() {
@@ -74,5 +87,23 @@ public class TournamentDTO implements Serializable {
                 "id = " + id + ", " +
                 "isFinished = " + isFinished + ", " +
                 "games = " + games + ")";
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public TournamentDTO setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public TournamentStatusEnum getStatus() {
+        return status;
+    }
+
+    public TournamentDTO setStatus(TournamentStatusEnum status) {
+        this.status = status;
+        return this;
     }
 }

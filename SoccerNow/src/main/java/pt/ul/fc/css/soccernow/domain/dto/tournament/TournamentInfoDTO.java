@@ -1,6 +1,7 @@
 package pt.ul.fc.css.soccernow.domain.dto.tournament;
 
 import jakarta.validation.constraints.NotNull;
+import pt.ul.fc.css.soccernow.util.TournamentStatusEnum;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -10,6 +11,8 @@ import java.util.UUID;
  * DTO for {@link pt.ul.fc.css.soccernow.domain.entities.tournament.Tournament}
  */
 public class TournamentInfoDTO implements Serializable {
+    private String name;
+    private TournamentStatusEnum status = TournamentStatusEnum.OPEN;
     private UUID id;
     @NotNull
     private Boolean isFinished = false;
@@ -17,9 +20,13 @@ public class TournamentInfoDTO implements Serializable {
     public TournamentInfoDTO() {
     }
 
-    public TournamentInfoDTO(UUID id, Boolean isFinished) {
+    public TournamentInfoDTO(
+            String name,
+            TournamentStatusEnum status, UUID id, Boolean isFinished) {
         this.id = id;
         this.isFinished = isFinished;
+        this.name = name;
+        this.status = status;
     }
 
     public UUID getId() {
@@ -59,5 +66,23 @@ public class TournamentInfoDTO implements Serializable {
         return getClass().getSimpleName() + "(" +
                 "id = " + id + ", " +
                 "isFinished = " + isFinished + ")";
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public TournamentInfoDTO setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public TournamentStatusEnum getStatus() {
+        return status;
+    }
+
+    public TournamentInfoDTO setStatus(TournamentStatusEnum status) {
+        this.status = status;
+        return this;
     }
 }
