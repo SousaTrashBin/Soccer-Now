@@ -1,5 +1,6 @@
 package pt.ul.fc.css.soccernow.domain.dto.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
@@ -104,5 +105,24 @@ public class PlayerDTO implements Serializable {
     public PlayerDTO setPlayerGameStats(List<PlayerGameStatsDTO> playerGameStats) {
         this.playerGameStats = playerGameStats;
         return this;
+    }
+
+    @JsonIgnore
+    public Integer getGoalsScored() {
+        return this.playerGameStats.stream()
+                                   .mapToInt(PlayerGameStatsDTO::getScoredGoals)
+                                   .sum();
+    }
+
+    @JsonIgnore
+    public Integer getTotalNumberOfReceivedCards() {
+        return this.playerGameStats.stream()
+                                   .mapToInt(PlayerGameStatsDTO::getNumberOfReceivedCards)
+                                   .sum();
+    }
+
+    @JsonIgnore
+    public Integer getNumberOfPlayedGames() {
+        return playerGameStats.size();
     }
 }
