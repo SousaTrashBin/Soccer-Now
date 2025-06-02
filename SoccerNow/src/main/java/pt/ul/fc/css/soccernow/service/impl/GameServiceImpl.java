@@ -3,6 +3,7 @@ package pt.ul.fc.css.soccernow.service.impl;
 import org.springframework.stereotype.Service;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
 import pt.ul.fc.css.soccernow.domain.entities.game.*;
+import pt.ul.fc.css.soccernow.domain.entities.tournament.Tournament;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.domain.entities.user.Referee;
 import pt.ul.fc.css.soccernow.domain.entities.user.User;
@@ -14,7 +15,9 @@ import pt.ul.fc.css.soccernow.service.GameService;
 import pt.ul.fc.css.soccernow.service.PlayerService;
 import pt.ul.fc.css.soccernow.service.RefereeService;
 import pt.ul.fc.css.soccernow.service.TeamService;
+import pt.ul.fc.css.soccernow.util.GameSearchParams;
 import pt.ul.fc.css.soccernow.util.GameStatusEnum;
+import pt.ul.fc.css.soccernow.util.TournamentStatusEnum;
 
 import java.util.*;
 import java.util.function.Function;
@@ -37,6 +40,19 @@ public class GameServiceImpl implements GameService {
         this.playerService = playerService;
         this.teamService = teamService;
         this.refereeService = refereeService;
+    }
+
+    @Override
+    public Game cancelTournamentGame(UUID gameId) {
+        Game savedGame = findNotDeletedById(gameId);
+        if (savedGame.getTournament() == null) {
+            throw new BadRequestException("Game is not part of a tournament");
+        }
+        if (savedGame.getTournament().getStatus() != TournamentStatusEnum.IN_PROGRESS) {
+            throw new BadRequestException("Tournament must be in progress");
+        }
+        savedGame.cancel();
+        return gameRepository.save(savedGame);
     }
 
     @Override
@@ -147,7 +163,26 @@ public class GameServiceImpl implements GameService {
         GameStats gameStats = calculateGameStats(game, incomingPlayerStats);
         game.setGameStats(gameStats);
         game.close();
+        updateTournamentScore(game);
         return gameRepository.save(game);
+    }
+
+    private void updateTournamentScore(Game game) {
+        Tournament tournament = game.getTournament();
+        if (tournament == null) {
+            return;
+        }
+
+        GameTeam gameTeamOne = game.getGameTeamOne();
+        GameTeam gameTeamTwo = game.getGameTeamTwo();
+
+        GameStats gameStats = game.getGameStats();
+        tournament.updateScore(gameTeamOne, gameTeamTwo, gameStats);
+    }
+
+    @Override
+    public List<Game> findAllNotDeleted(GameSearchParams params) {
+        return gameRepository.findAllNotDeleted(params);
     }
 
     private void valitePlayerGameStatsDTO(Game game, Set<PlayerGameStats> playerGameStatsDTOs) {

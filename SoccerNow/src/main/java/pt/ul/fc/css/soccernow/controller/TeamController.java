@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -20,13 +19,13 @@ import pt.ul.fc.css.soccernow.mapper.PlayerMapper;
 import pt.ul.fc.css.soccernow.mapper.TeamMapper;
 import pt.ul.fc.css.soccernow.service.PlayerService;
 import pt.ul.fc.css.soccernow.service.TeamService;
+import pt.ul.fc.css.soccernow.util.TeamSearchParams;
 
 import java.net.URI;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 @Tag(name = "Team", description = "Team related operations")
@@ -83,16 +82,11 @@ public class TeamController {
             @ApiImplicitParam(name = "sortBy", value = "Field to sort by (playerCards or victories)", paramType = "query")
     })
 
-    public ResponseEntity<List<TeamDTO>> getAllTeams(@Parameter(description = "Número máximo de jogadores") @RequestParam(name = "maxPlayers", required = false) @Min(0) Integer maxPlayers,
-                                                     @Parameter(description = "Tamanho do resultado") @RequestParam(name = "size", required = false) @Min(0) Integer size,
+    public ResponseEntity<List<TeamDTO>> getAllTeams(@ModelAttribute TeamSearchParams params,
                                                      @Parameter(description = "Ordem de apresentação: 'asc' para ordem crescente, 'dsc' para ordem decrescente", schema = @Schema(allowableValues = {"asc", "dsc"})) @RequestParam(name = "order", required = false, defaultValue = "dsc") String order,
                                                      @Parameter(description = "Tipo de ordenação: 'playerCards' para ordenar por tipo de cartas, 'victories' para ordenar por número de vitórias", schema = @Schema(allowableValues = {"playerCards", "victories"})) @RequestParam(name = "sortBy", required = false) String sortBy) {
 
-        Predicate<TeamDTO> filterPredicate = maxPlayers == null
-                ? team -> true
-                : team -> team.getPlayers().size() <= maxPlayers;
-
-        Stream<Team> teamStream = teamService.findAllNotDeleted().stream();
+        Stream<Team> teamStream = teamService.findAllNotDeleted(params).stream();
 
         teamStream = Optional.ofNullable(sortBy)
                 .filter(s -> List.of("playerCards", "victories").contains(s))
@@ -103,13 +97,7 @@ public class TeamController {
                 .map(teamStream::sorted)
                 .orElse(teamStream);
 
-        List<TeamDTO> teams = teamStream
-                .map(teamMapper::toDTO)
-                .filter(filterPredicate)
-                .limit(size != null ? size : Long.MAX_VALUE)
-                .toList();
-
-        return ResponseEntity.ok(teams);
+        return ResponseEntity.ok(teamStream.map(teamMapper::toDTO).toList());
     }
 
     @DeleteMapping("{teamId}")

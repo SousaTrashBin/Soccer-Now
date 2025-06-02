@@ -6,10 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameSearchParams {
-    private Integer numGames;
-    private Integer minGames;
-    private Integer maxGames;
-
     List<GameStatusEnum> statuses = new ArrayList<>();
 
     private Integer numGoals;
@@ -22,30 +18,6 @@ public class GameSearchParams {
     private String postalCode;
     @NotNull
     private TimeOfDay timeOfDay = TimeOfDay.MORNING;
-
-    public Integer getNumGames() {
-        return numGames;
-    }
-
-    public void setNumGames(Integer numGames) {
-        this.numGames = numGames;
-    }
-
-    public Integer getMinGames() {
-        return minGames;
-    }
-
-    public void setMinGames(Integer minGames) {
-        this.minGames = minGames;
-    }
-
-    public Integer getMaxGames() {
-        return maxGames;
-    }
-
-    public void setMaxGames(Integer maxGames) {
-        this.maxGames = maxGames;
-    }
 
     public List<GameStatusEnum> getStatuses() {
         return statuses;

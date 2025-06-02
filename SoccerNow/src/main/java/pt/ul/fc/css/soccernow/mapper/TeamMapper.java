@@ -3,10 +3,10 @@ package pt.ul.fc.css.soccernow.mapper;
 import org.mapstruct.*;
 import pt.ul.fc.css.soccernow.domain.dto.TeamDTO;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
-import pt.ul.fc.css.soccernow.domain.entities.tournament.Tournament;
-import pt.ul.fc.css.soccernow.domain.entities.tournament.point.PointTournament;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        componentModel = MappingConstants.ComponentModel.SPRING,
+        uses = TournamentMapper.class)
 public interface TeamMapper {
     Team toEntity(TeamDTO teamDTO);
 
@@ -15,7 +15,4 @@ public interface TeamMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Team partialUpdate(TeamDTO teamDTO, @MappingTarget Team team);
 
-    default Tournament createTournament() {
-        return new PointTournament();
-    }
 }

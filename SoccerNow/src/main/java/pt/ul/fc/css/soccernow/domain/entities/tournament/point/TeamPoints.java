@@ -2,6 +2,9 @@ package pt.ul.fc.css.soccernow.domain.entities.tournament.point;
 
 import jakarta.persistence.*;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
+import pt.ul.fc.css.soccernow.domain.entities.game.GameTeam;
+import pt.ul.fc.css.soccernow.domain.entities.tournament.Placement;
+import pt.ul.fc.css.soccernow.util.PlacementEnum;
 
 import java.util.UUID;
 
@@ -16,7 +19,7 @@ public class TeamPoints {
     @Column(name = "current_points", nullable = false)
     private Integer currentPoints;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "team_id")
     private Team team;
 
@@ -42,5 +45,34 @@ public class TeamPoints {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public void updatePoints(GameTeam gameTeamOne, GameTeam gameTeamTwo, Integer teamOneGoals, Integer teamTwoGoals) {
+        if (this.team.equals(gameTeamOne.getTeam())) {
+            this.currentPoints += calculatePoints(teamOneGoals, teamTwoGoals);
+        } else if (this.team.equals(gameTeamTwo.getTeam())) {
+            this.currentPoints += calculatePoints(teamTwoGoals, teamOneGoals);
+        }
+    }
+
+    private int calculatePoints(int g1, int g2) {
+        if (g1 > g2) return 3;
+        if (g1 == g2) return 1;
+        return 0;
+    }
+
+    public void updatePlacementForTournament(PointTournament tournament, int rank) {
+        PlacementEnum placement;
+        switch (rank) {
+            case 0 -> placement = PlacementEnum.FIRST;
+            case 1 -> placement = PlacementEnum.SECOND;
+            case 2 -> placement = PlacementEnum.THIRD;
+            default -> placement = PlacementEnum.PARTICIPATED;
+        }
+
+        Placement teamPlacement = this.getTeam().getPlacementForTournament(tournament);
+        if (teamPlacement != null) {
+            teamPlacement.setPlacementEnum(placement);
+        }
     }
 }

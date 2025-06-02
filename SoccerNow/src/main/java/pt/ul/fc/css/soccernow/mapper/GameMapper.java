@@ -3,10 +3,10 @@ package pt.ul.fc.css.soccernow.mapper;
 import org.mapstruct.*;
 import pt.ul.fc.css.soccernow.domain.dto.games.GameDTO;
 import pt.ul.fc.css.soccernow.domain.entities.game.Game;
-import pt.ul.fc.css.soccernow.domain.entities.tournament.Tournament;
-import pt.ul.fc.css.soccernow.domain.entities.tournament.point.PointTournament;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        componentModel = MappingConstants.ComponentModel.SPRING,
+        uses = TournamentMapper.class)
 public interface GameMapper {
     Game toEntity(GameDTO gameDTO);
 
@@ -14,8 +14,4 @@ public interface GameMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Game partialUpdate(GameDTO gameDTO, @MappingTarget Game game);
-
-    default Tournament createTournament() {
-        return new PointTournament();
-    }
 }
