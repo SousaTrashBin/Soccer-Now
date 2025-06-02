@@ -1,38 +1,36 @@
 package com.soccernow.ui.soccernowui.dto.games;
 
-import com.soccernow.ui.soccernowui.util.CardEnum;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
+import pt.ul.fc.css.soccernow.domain.dto.user.PlayerInfoDTO;
 
 import java.io.Serializable;
+import java.util.LinkedHashSet;
 import java.util.Objects;
-import java.util.UUID;
+import java.util.Set;
 
+/**
+ * DTO for {@link pt.ul.fc.css.soccernow.domain.entities.game.PlayerGameStats}
+ */
 public class PlayerGameStatsDTO implements Serializable {
-    @NotNull
-    private CardEnum givenCard = CardEnum.NONE;
-    @NotNull
-    @PositiveOrZero
+    private Set<CardInfoDTO> receivedCards = new LinkedHashSet<>();
     private Integer scoredGoals = 0;
-    @NotNull
-    private PlayerGameStatsDTO.PlayerInfoDTO player;
+    private PlayerInfoDTO player;
+    private GameInfoDTO game;
 
     public PlayerGameStatsDTO() {
     }
 
-    public PlayerGameStatsDTO(CardEnum givenCard, Integer scoredGoals, PlayerInfoDTO player) {
-        this.givenCard = givenCard;
+    public PlayerGameStatsDTO(
+            Set<CardInfoDTO> receivedCards, Integer scoredGoals, PlayerInfoDTO player, GameInfoDTO game) {
         this.scoredGoals = scoredGoals;
         this.player = player;
+        this.game = game;
+        this.receivedCards = receivedCards;
     }
 
-    public CardEnum getGivenCard() {
-        return givenCard;
-    }
-
-    public PlayerGameStatsDTO setGivenCard(CardEnum givenCard) {
-        this.givenCard = givenCard;
-        return this;
+    public PlayerGameStatsDTO(Integer scoredGoals, PlayerInfoDTO playerInfoDTO, Set<CardInfoDTO> receivedCards) {
+        this.scoredGoals = scoredGoals;
+        this.player = playerInfoDTO;
+        this.receivedCards = receivedCards;
     }
 
     public Integer getScoredGoals() {
@@ -53,69 +51,44 @@ public class PlayerGameStatsDTO implements Serializable {
         return this;
     }
 
+    public GameInfoDTO getGame() {
+        return game;
+    }
+
+    public PlayerGameStatsDTO setGame(GameInfoDTO game) {
+        this.game = game;
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PlayerGameStatsDTO entity = (PlayerGameStatsDTO) o;
-        return Objects.equals(this.givenCard, entity.givenCard) &&
-                Objects.equals(this.scoredGoals, entity.scoredGoals) &&
-                Objects.equals(this.player, entity.player);
+        return Objects.equals(this.scoredGoals, entity.scoredGoals) &&
+                Objects.equals(this.player, entity.player) &&
+                Objects.equals(this.game, entity.game);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(givenCard, scoredGoals, player);
+        return Objects.hash(scoredGoals, player, game);
     }
 
     @Override
     public String toString() {
         return getClass().getSimpleName() + "(" +
-                "givenCard = " + givenCard + ", " +
                 "scoredGoals = " + scoredGoals + ", " +
-                "player = " + player + ")";
+                "player = " + player + ", " +
+                "game = " + game + ")";
     }
 
-    /**
-     * DTO for {@link pt.ul.fc.css.soccernow.domain.entities.user.Player}
-     */
-    public static class PlayerInfoDTO implements Serializable {
-        @NotNull
-        private UUID id;
+    public Set<CardInfoDTO> getReceivedCards() {
+        return receivedCards;
+    }
 
-        public PlayerInfoDTO() {
-        }
-
-        public PlayerInfoDTO(UUID id) {
-            this.id = id;
-        }
-
-        public UUID getId() {
-            return id;
-        }
-
-        public PlayerInfoDTO setId(UUID id) {
-            this.id = id;
-            return this;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            PlayerInfoDTO entity = (PlayerInfoDTO) o;
-            return Objects.equals(this.id, entity.id);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(id);
-        }
-
-        @Override
-        public String toString() {
-            return getClass().getSimpleName() + "(" +
-                    "id = " + id + ")";
-        }
+    public PlayerGameStatsDTO setReceivedCards(Set<CardInfoDTO> receivedCards) {
+        this.receivedCards = receivedCards;
+        return this;
     }
 }
