@@ -11,7 +11,7 @@
 
     <h2 class="filters-title">Filters:</h2>
 
-    <form method="get" action="@{/referees}" class="filter-form">
+    <form method="get" th:action="@{/referees}" class="filter-form">
       <div class="filter-container">
         <label for="name">Name</label>
         <input type="text"
@@ -35,8 +35,6 @@
 
       <button type="submit" class="submit-filter-btn">Filter</button>
     </form>
-
-    <hr>
 
     <table>
       <thead>
