@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" prefHeight="600.0"
+    prefWidth="400.0" spacing="20.0"
+    styleClass="container"
+    xmlns="http://javafx.com/javafx/17.0.12"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.soccernow.ui.soccernowui.controller.RegisterReferee"
+    style="-fx-font-family: 'JetBrains Mono'; -fx-font-size: 14;">
+
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+
+    <ToolBar prefHeight="40.0" prefWidth="400.0">
+        <items>
+            <Button fx:id="BackButton" mnemonicParsing="false" onAction="#onBackClick" text="&lt; Back" />
+        </items>
+    </ToolBar>
+
+    <VBox prefWidth="360.0" spacing="15.0">
+
+        <VBox prefWidth="360.0" spacing="8.0" styleClass="form-group">
+            <Label styleClass="form-label" text="Referee Name:" />
+            <TextField fx:id="name" prefWidth="360.0" promptText="Enter referee name" styleClass="form-control" />
+        </VBox>
+
+        <VBox prefWidth="360.0" spacing="8.0" styleClass="form-group">
+            <Label styleClass="form-label" text="Has certificate:" />
+            <ComboBox fx:id="hasCertificateComboBox" maxWidth="360.0" promptText="Select option" styleClass="form-control">
+            </ComboBox>
+        </VBox>
+
+        <VBox alignment="CENTER" prefWidth="360.0" spacing="8.0" styleClass="form-group">
+            <padding>
+                <Insets top="15.0" />
+            </padding>
+            <Button fx:id="registerButton" onAction="#onRegisterClick" prefWidth="200.0" styleClass="btn btn-primary btn-lg" text="Register Referee" />
+        </VBox>
+
+    </VBox>
+</VBox>
