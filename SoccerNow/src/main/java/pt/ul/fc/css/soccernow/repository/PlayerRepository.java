@@ -7,6 +7,8 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import pt.ul.fc.css.soccernow.domain.entities.game.QCard;
+import pt.ul.fc.css.soccernow.domain.entities.game.QPlayerGameStats;
 import pt.ul.fc.css.soccernow.domain.entities.user.Player;
 import pt.ul.fc.css.soccernow.util.CardEnum;
 import pt.ul.fc.css.soccernow.util.PlayerSearchParams;
@@ -14,8 +16,6 @@ import pt.ul.fc.css.soccernow.util.PlayerSearchParams;
 import java.util.ArrayList;
 import java.util.List;
 
-import static pt.ul.fc.css.soccernow.domain.entities.game.QCard.card;
-import static pt.ul.fc.css.soccernow.domain.entities.game.QPlayerGameStats.playerGameStats;
 import static pt.ul.fc.css.soccernow.domain.entities.user.QPlayer.player;
 
 public interface PlayerRepository extends SoftDeletedRepository<Player> {
@@ -40,12 +40,15 @@ public interface PlayerRepository extends SoftDeletedRepository<Player> {
 
         conditions.add(positionCondition);
 
+        QPlayerGameStats statsCardSub = new QPlayerGameStats("statsCardSub");
+        QCard cardSub = new QCard("cardSub");
+
         JPQLQuery<Long> cardCountSubquery = JPAExpressions
-                .select(card.count())
-                .from(playerGameStats)
-                .join(playerGameStats.receivedCards, card)
-                .where(playerGameStats.player.eq(player)
-                        .and(card.cardType.ne(CardEnum.NONE)));
+                .select(cardSub.count())
+                .from(statsCardSub)
+                .join(statsCardSub.receivedCards, cardSub)
+                .where(statsCardSub.player.eq(player)
+                        .and(cardSub.cardType.ne(CardEnum.NONE)));
 
         if (params.getNumReceivedCards() != null) {
             conditions.add(cardCountSubquery.eq(params.getNumReceivedCards().longValue()));
@@ -57,10 +60,12 @@ public interface PlayerRepository extends SoftDeletedRepository<Player> {
             conditions.add(cardCountSubquery.lt(params.getMaxReceivedCards().longValue()));
         }
 
+        QPlayerGameStats statsGoalSub = new QPlayerGameStats("statsGoalSub");
+
         JPQLQuery<Integer> goalCountQuery = JPAExpressions
-                .select(playerGameStats.scoredGoals.sum().coalesce(0))
-                .from(playerGameStats)
-                .where(playerGameStats.player.eq(player));
+                .select(statsGoalSub.scoredGoals.sum().coalesce(0))
+                .from(statsGoalSub)
+                .where(statsGoalSub.player.eq(player));
 
         if (params.getNumScoredGoals() != null) {
             conditions.add(goalCountQuery.eq(params.getNumScoredGoals()));
@@ -72,10 +77,12 @@ public interface PlayerRepository extends SoftDeletedRepository<Player> {
             conditions.add(goalCountQuery.lt(params.getMaxScoredGoals()));
         }
 
+        QPlayerGameStats statsGameSub = new QPlayerGameStats("statsGameSub");
+
         JPQLQuery<Long> gameCountQuery = JPAExpressions
-                .select(playerGameStats.count().coalesce(0L))
-                .from(playerGameStats)
-                .where(playerGameStats.player.eq(player));
+                .select(statsGameSub.count().coalesce(0L))
+                .from(statsGameSub)
+                .where(statsGameSub.player.eq(player));
 
         if (params.getNumGames() != null) {
             conditions.add(gameCountQuery.eq(params.getNumGames().longValue()));

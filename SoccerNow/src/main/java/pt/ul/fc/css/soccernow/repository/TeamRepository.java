@@ -7,7 +7,11 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import pt.ul.fc.css.soccernow.domain.entities.QTeam;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
+import pt.ul.fc.css.soccernow.domain.entities.game.QGame;
+import pt.ul.fc.css.soccernow.domain.entities.tournament.QPlacement;
+import pt.ul.fc.css.soccernow.domain.entities.user.QPlayer;
 import pt.ul.fc.css.soccernow.util.PlacementEnum;
 import pt.ul.fc.css.soccernow.util.TeamSearchParams;
 
@@ -15,9 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static pt.ul.fc.css.soccernow.domain.entities.QTeam.team;
-import static pt.ul.fc.css.soccernow.domain.entities.game.QGame.game;
-import static pt.ul.fc.css.soccernow.domain.entities.tournament.QPlacement.placement;
-import static pt.ul.fc.css.soccernow.domain.entities.user.QPlayer.player;
 import static pt.ul.fc.css.soccernow.util.PlacementEnum.*;
 
 public interface TeamRepository extends SoftDeletedRepository<Team> {
@@ -31,12 +32,14 @@ public interface TeamRepository extends SoftDeletedRepository<Team> {
             conditions.add(team.name.containsIgnoreCase(params.getName()));
         }
 
-        JPQLQuery<Long> getPlayerCountSubquery = JPAExpressions
-                .select(player.count())
-                .from(team)
-                .join(team.players, player)
-                .where(team.eq(team));
+        QTeam teamSub = new QTeam("teamSub");
+        QPlayer playerSub = new QPlayer("playerSub");
 
+        JPQLQuery<Long> getPlayerCountSubquery = JPAExpressions
+                .select(playerSub.count())
+                .from(teamSub)
+                .join(teamSub.players, playerSub)
+                .where(teamSub.eq(team));
         if (params.getNumPlayers() != null) {
             conditions.add(getPlayerCountSubquery.eq(params.getNumPlayers().longValue()));
         }
@@ -47,11 +50,17 @@ public interface TeamRepository extends SoftDeletedRepository<Team> {
             conditions.add(getPlayerCountSubquery.lt(params.getMaxPlayers().longValue()));
         }
 
+        QTeam teamDrawsSub = new QTeam("teamDrawsSub");
+        QGame gameDrawsSub = new QGame("gameDrawsSub");
+
         JPQLQuery<Long> getNumberOfDrawsSubquery = JPAExpressions
-                .select(game.count())
-                .from(team)
-                .join(team.games, game)
-                .where(game.gameStats.teamOneGoals.eq(game.gameStats.teamTwoGoals));
+                .select(gameDrawsSub.count())
+                .from(teamDrawsSub)
+                .join(teamDrawsSub.games, gameDrawsSub)
+                .where(
+                        teamDrawsSub.eq(team)
+                                .and(gameDrawsSub.gameStats.teamOneGoals.eq(gameDrawsSub.gameStats.teamTwoGoals))
+                );
         if (params.getNumDraws() != null) {
             conditions.add(getNumberOfDrawsSubquery.eq(params.getNumDraws().longValue()));
         }
@@ -62,14 +71,20 @@ public interface TeamRepository extends SoftDeletedRepository<Team> {
             conditions.add(getNumberOfDrawsSubquery.lt(params.getMaxDraws().longValue()));
         }
 
+        QTeam teamWinsSub = new QTeam("teamWinsSub");
+        QGame gameWinsSub = new QGame("gameWinsSub");
+
         JPQLQuery<Long> getNumberOfVictoriesSubquery = JPAExpressions
-                .select(game.count())
-                .from(team)
-                .join(team.games, game)
-                .where(
-                        (game.gameTeamOne.team.eq(team).and(game.gameStats.teamOneGoals.gt(game.gameStats.teamTwoGoals)))
-                                .or(game.gameTeamTwo.team.eq(team).and(game.gameStats.teamTwoGoals.gt(game.gameStats.teamOneGoals)))
-                );
+                .select(gameWinsSub.count())
+                .from(teamWinsSub)
+                .join(teamWinsSub.games, gameWinsSub)
+                .where(teamWinsSub.eq(team).and(
+                        gameWinsSub.gameTeamOne.team.eq(teamWinsSub)
+                                .and(gameWinsSub.gameStats.teamOneGoals.gt(gameWinsSub.gameStats.teamTwoGoals))
+                                .or(gameWinsSub.gameTeamTwo.team.eq(teamWinsSub)
+                                        .and(gameWinsSub.gameStats.teamTwoGoals.gt(gameWinsSub.gameStats.teamOneGoals)))
+                ));
+
         if (params.getNumVictories() != null) {
             conditions.add(getNumberOfVictoriesSubquery.eq(params.getNumVictories().longValue()));
         }
@@ -80,14 +95,19 @@ public interface TeamRepository extends SoftDeletedRepository<Team> {
             conditions.add(getNumberOfVictoriesSubquery.lt(params.getMaxVictories().longValue()));
         }
 
+        QTeam teamLossesSub = new QTeam("teamLossesSub");
+        QGame gameLossesSub = new QGame("gameLossesSub");
+
         JPQLQuery<Long> getNumberOfLossesSubquery = JPAExpressions
-                .select(game.count())
-                .from(team)
-                .join(team.games, game)
-                .where(
-                        (game.gameTeamOne.team.eq(team).and(game.gameStats.teamOneGoals.lt(game.gameStats.teamTwoGoals)))
-                                .or(game.gameTeamTwo.team.eq(team).and(game.gameStats.teamTwoGoals.lt(game.gameStats.teamOneGoals)))
-                );
+                .select(gameLossesSub.count())
+                .from(teamLossesSub)
+                .join(teamLossesSub.games, gameLossesSub)
+                .where(teamLossesSub.eq(team).and(
+                        gameLossesSub.gameTeamOne.team.eq(teamLossesSub)
+                                .and(gameLossesSub.gameStats.teamOneGoals.lt(gameLossesSub.gameStats.teamTwoGoals))
+                                .or(gameLossesSub.gameTeamTwo.team.eq(teamLossesSub)
+                                        .and(gameLossesSub.gameStats.teamTwoGoals.lt(gameLossesSub.gameStats.teamOneGoals)))
+                ));
         if (params.getNumLosses() != null) {
             conditions.add(getNumberOfLossesSubquery.eq(params.getNumLosses().longValue()));
         }
@@ -98,25 +118,30 @@ public interface TeamRepository extends SoftDeletedRepository<Team> {
             conditions.add(getNumberOfLossesSubquery.lt(params.getMaxLosses().longValue()));
         }
 
+        QTeam teamPosSub = new QTeam("teamPosSub");
+        QPlayer playerPosSub = new QPlayer("playerPosSub");
+
         BooleanExpression missingAnyPosition = params.getMissingPositions().stream()
-                .map(futsalPositionEnum -> {
-                    JPQLQuery<Long> positionCountSubquery = JPAExpressions
-                            .select(player.count())
-                            .from(team)
-                            .join(team.players, player)
-                            .where(player.preferredPosition.eq(futsalPositionEnum));
-                    return positionCountSubquery.eq(0L);
-                })
+                .map(pos -> JPAExpressions
+                        .select(playerPosSub.count())
+                        .from(teamPosSub)
+                        .join(teamPosSub.players, playerPosSub)
+                        .where(teamPosSub.eq(team).and(playerPosSub.preferredPosition.eq(pos)))
+                        .eq(0L))
                 .reduce(BooleanExpression::or)
                 .orElse(Expressions.TRUE);
+
         conditions.add(missingAnyPosition);
+
+        QTeam teamAchSub = new QTeam("teamAchSub");
+        QPlacement placementSub = new QPlacement("placementSub");
 
         List<PlacementEnum> achievementPlacements = List.of(FIRST, SECOND, THIRD);
         JPQLQuery<Long> achievementCountSubquery = JPAExpressions
-                .select(placement.count())
-                .from(team)
-                .join(team.placements, placement)
-                .where(placement.value.in(achievementPlacements));
+                .select(placementSub.count())
+                .from(teamAchSub)
+                .join(teamAchSub.placements, placementSub)
+                .where(teamAchSub.eq(team).and(placementSub.value.in(achievementPlacements)));
 
         if (params.getNumAchievements() != null) {
             conditions.add(achievementCountSubquery.eq(params.getNumAchievements().longValue()));

@@ -7,22 +7,24 @@ import com.querydsl.jpa.JPQLQuery;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import pt.ul.fc.css.soccernow.domain.entities.Address;
+import pt.ul.fc.css.soccernow.domain.entities.QAddress;
 import pt.ul.fc.css.soccernow.domain.entities.game.Game;
+import pt.ul.fc.css.soccernow.domain.entities.game.QGame;
+import pt.ul.fc.css.soccernow.domain.entities.game.QGameStats;
 import pt.ul.fc.css.soccernow.util.GameSearchParams;
 import pt.ul.fc.css.soccernow.util.TimeOfDay;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static pt.ul.fc.css.soccernow.domain.entities.QAddress.address;
 import static pt.ul.fc.css.soccernow.domain.entities.game.QGame.game;
-import static pt.ul.fc.css.soccernow.domain.entities.game.QGameStats.gameStats;
 
 public interface GameRepository extends SoftDeletedRepository<Game> {
     default List<Game> findAllNotDeleted(GameSearchParams params) {
         List<BooleanExpression> conditions = new ArrayList<>();
 
         conditions.add(game.deletedAt.isNull());
+
         if (params.getTimeOfDay() != null) {
             TimeOfDay.TimeSpan span = TimeOfDay.toTimeSpan(params.getTimeOfDay());
 
@@ -48,9 +50,14 @@ public interface GameRepository extends SoftDeletedRepository<Game> {
             conditions.add(game.status.in(params.getStatuses()));
         }
 
-        JPQLQuery<Integer> numberOfGoals = JPAExpressions.select(gameStats.teamOneGoals.add(gameStats.teamTwoGoals))
-                .from(game)
-                .join(game.gameStats, gameStats);
+        QGame goalSubGame = new QGame("goalSubGame");
+        QGameStats goalSubStats = new QGameStats("goalSubStats");
+
+        JPQLQuery<Integer> numberOfGoals = JPAExpressions
+                .select(goalSubStats.teamOneGoals.add(goalSubStats.teamTwoGoals))
+                .from(goalSubGame)
+                .join(goalSubGame.gameStats, goalSubStats)
+                .where(goalSubGame.eq(game));
 
         if (params.getNumGoals() != null) {
             conditions.add(numberOfGoals.eq(params.getNumGoals()));
@@ -62,20 +69,35 @@ public interface GameRepository extends SoftDeletedRepository<Game> {
             conditions.add(numberOfGoals.lt(params.getMaxGoals()));
         }
 
-        JPQLQuery<Address> gameAddressSubquery = JPAExpressions.select(game.locatedIn).from(game).join(game.locatedIn, address);
+        QGame addressSubGame = new QGame("addressSubGame");
+        QAddress addressSub = new QAddress("addressSub");
+
+        JPQLQuery<Address> gameAddressSubquery = JPAExpressions
+                .select(addressSubGame.locatedIn)
+                .from(addressSubGame)
+                .join(addressSubGame.locatedIn, addressSub)
+                .where(addressSubGame.eq(game));
+
+        List<BooleanExpression> addressConditions = new ArrayList<>();
         if (params.getPostalCode() != null) {
-            gameAddressSubquery.where(address.postalCode.eq(params.getPostalCode()));
+            addressConditions.add(addressSub.postalCode.eq(params.getPostalCode()));
         }
         if (params.getCity() != null) {
-            gameAddressSubquery.where(address.city.eq(params.getCity()));
+            addressConditions.add(addressSub.city.eq(params.getCity()));
         }
         if (params.getCountry() != null) {
-            gameAddressSubquery.where(address.country.eq(params.getCountry()));
+            addressConditions.add(addressSub.country.eq(params.getCountry()));
         }
         if (params.getStreet() != null) {
-            gameAddressSubquery.where(address.street.eq(params.getStreet()));
+            addressConditions.add(addressSub.street.eq(params.getStreet()));
         }
-        conditions.add(game.locatedIn.in(gameAddressSubquery));
+
+        if (!addressConditions.isEmpty()) {
+            BooleanBuilder addressPredicate = new BooleanBuilder();
+            addressConditions.forEach(addressPredicate::and);
+            gameAddressSubquery.where(addressPredicate);
+            conditions.add(game.locatedIn.in(gameAddressSubquery));
+        }
 
         BooleanBuilder predicate = conditions.stream()
                 .reduce(BooleanExpression::and)
