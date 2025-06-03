@@ -88,13 +88,13 @@ public class PlayerGameStatsDTO implements Serializable {
         return receivedCards;
     }
 
-    @JsonIgnore
-    public Integer getNumberOfReceivedCards() {
-        return receivedCards.size();
-    }
-
     public PlayerGameStatsDTO setReceivedCards(Set<CardInfoDTO> receivedCards) {
         this.receivedCards = receivedCards;
         return this;
+    }
+
+    @JsonIgnore
+    public Integer getNumberOfReceivedCards() {
+        return receivedCards.size();
     }
 }

@@ -1,5 +1,6 @@
 package pt.ul.fc.css.soccernow.domain.dto.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -117,5 +118,15 @@ public class RefereeDTO implements Serializable {
     public RefereeDTO setSecondaryRefereeGames(Set<GameInfoDTO> secondaryRefereeGames) {
         this.secondaryRefereeGames = secondaryRefereeGames;
         return this;
+    }
+
+    @JsonIgnore
+    public Integer getNumberOfGames() {
+        return primaryRefereeGames.size() + secondaryRefereeGames.size();
+    }
+
+    @JsonIgnore
+    public Integer getNumberOfIssuedCards() {
+        return issuedCards.size();
     }
 }
