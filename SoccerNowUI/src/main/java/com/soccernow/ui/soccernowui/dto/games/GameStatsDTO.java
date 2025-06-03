@@ -8,9 +8,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-/**
- * DTO for {@link pt.ul.fc.css.soccernow.domain.entities.game.GameStats}
- */
+
 public class GameStatsDTO implements Serializable {
     private UUID id;
     private Integer teamOneGoals = 0;

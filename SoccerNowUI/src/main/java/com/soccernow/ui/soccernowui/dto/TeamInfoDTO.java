@@ -4,9 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
-/**
- * DTO for {@link pt.ul.fc.css.soccernow.domain.entities.Team}
- */
+
 public class TeamInfoDTO implements Serializable {
     private UUID id;
     private String name;
