@@ -20,35 +20,35 @@
         </div>
 
         <div class="filter-container">
-            <label for="players">N players</label>
+            <label for="players">Number of players</label>
             <input type="number"
                    name="numPlayers"
                    id="players">
         </div>
 
         <div class="filter-container">
-            <label for="wins">N wins</label>
+            <label for="wins">Wins</label>
             <input type="number"
                    name="numVictories"
                    id="wins">
         </div>
 
         <div class="filter-container">
-            <label for="draws">N draws</label>
+            <label for="draws">Draws</label>
             <input type="number"
                    name="numDraws"
                    id="draws">
         </div>
 
         <div class="filter-container">
-            <label for="losses">N losses</label>
+            <label for="losses">Losses</label>
             <input type="number"
                    name="numLosses"
                    id="losses">
         </div>
 
         <div class="filter-container">
-            <label for="achievements">N achievements</label>
+            <label for="achievements">Achievements</label>
             <input type="number"
                    name="numAchievements"
                    id="achievements">
@@ -69,26 +69,29 @@
       <button type="submit" class="submit-filter-btn">Filter</button>
     </form>
 
-    <hr>
-
     <table>
       <thead>
         <tr>
           <th>Name</th>
-          <th>N Players</th>
-          <th>N Wins</th>
-          <th>N Losses</th>
-          <th>N Achievements</th>
+          <th>Number of Players</th>
+          <th>Wins</th>
+          <th>Draws</th>
+          <th>Losses</th>
+          <th>Achievements</th>
         </tr>
       </thead>
 
       <tbody>
         <tr th:each="t : ${teams}">
-          <td th:text="${t.name}" />
+          <td th:text="${t.getName()}" />
+          <td th:text="${t.getNumberOfPlayers()}" />
+          <td>teste</td>
+          <td>teste</td>
+          <td>teste</td>
 <!--          <td th:text="${t.}" />-->
 <!--          <td th:text="${t.}" />-->
 <!--          <td th:text="${t.}" />-->
-<!--          <td th:text="${t.}" />-->
+          <td th:text="${t.getNumberOfAchievements()}" />
         </tr>
       </tbody>
     </table>
