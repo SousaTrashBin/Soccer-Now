@@ -13,21 +13,16 @@
 
     <form method="get" action="@{/games}" class="filter-form">
         <div class="filter-container">
-            <label for="closedGamesOnly">Closed Games</label>
-            <input type="checkbox"
-                   name="isClosed"
-                   id="closedGamesOnly">
+            <label for="status">Game status</label>
+            <select name="statuses" id="status">
+                <option value=""></option>
+                <option value="OPENED">Opened</option>
+                <option value="CLOSED">Closed</option>
+            </select>
         </div>
 
-<!--        <div class="filter-container">-->
-<!--            <label for="openedGames">Games to be played</label>-->
-<!--            <input type="number"-->
-<!--                   name="numGames???"-->
-<!--                   id="openedGames">-->
-<!--        </div>-->
-
         <div class="filter-container">
-            <label for="goals">N goals</label>
+            <label for="goals">Goals scored</label>
             <input type="number"
                    name="numGoals"
                    id="goals">
@@ -58,19 +53,19 @@
     <table>
       <thead>
         <tr>
-          <th>Closed</th>
+          <th>Closed game</th>
           <th>Goals Scored</th>
+          <th>Location (city)</th>
           <th>Time of day</th>
         </tr>
       </thead>
 
       <tbody>
         <tr th:each="g : ${games}">
-          <td th:text="${g.isClosed}" />
-<!--            <td th:text="${g.isClosed}" />-->
-<!--            <td th:text="${g.isClosed}" />-->
-<!--            <td th:text="${g.isClosed}" />-->
-<!--            <td th:text="${g.isClosed}" />-->
+          <td th:text="${g.getIsClosed()}" />
+          <td th:text="${g.getGameStats().getNumberOfGoalsScored()}" />
+          <td th:text="${g.getLocatedIn().getCity()}" />
+          <td th:text="${g.getTimeOfDay().toString()}" />
         </tr>
       </tbody>
     </table>

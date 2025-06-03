@@ -1,7 +1,9 @@
 package pt.ul.fc.css.soccernow.domain.dto.games;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import pt.ul.fc.css.soccernow.domain.dto.tournament.TournamentInfoDTO;
 import pt.ul.fc.css.soccernow.domain.dto.user.RefereeInfoDTO;
+import pt.ul.fc.css.soccernow.util.TimeOfDay;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -165,5 +167,10 @@ public class GameDTO implements Serializable {
     public GameDTO setGameTeamTwo(GameTeamDTO gameTeamTwo) {
         this.gameTeamTwo = gameTeamTwo;
         return this;
+    }
+
+    @JsonIgnore
+    public TimeOfDay getTimeOfDay() {
+        return TimeOfDay.fromDateTime(happensIn);
     }
 }

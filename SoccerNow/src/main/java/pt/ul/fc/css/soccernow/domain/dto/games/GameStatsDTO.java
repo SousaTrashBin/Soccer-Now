@@ -1,5 +1,6 @@
 package pt.ul.fc.css.soccernow.domain.dto.games;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Size;
 
 import java.io.Serializable;
@@ -87,5 +88,10 @@ public class GameStatsDTO implements Serializable {
                 "teamOneGoals = " + teamOneGoals + ", " +
                 "teamTwoGoals = " + teamTwoGoals + ", " +
                 "playerGameStats = " + playerGameStats + ")";
+    }
+
+    @JsonIgnore
+    public Integer getNumberOfGoalsScored() {
+        return teamOneGoals + teamTwoGoals;
     }
 }
