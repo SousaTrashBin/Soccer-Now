@@ -1,22 +1,18 @@
 package com.soccernow.ui.soccernowui.dto.user;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import com.soccernow.ui.soccernowui.dto.games.CardInfoDTO;
+import com.soccernow.ui.soccernowui.dto.games.GameInfoDTO;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
-import pt.ul.fc.css.soccernow.domain.dto.games.CardInfoDTO;
-import pt.ul.fc.css.soccernow.domain.dto.games.GameInfoDTO;
 
 import java.io.Serializable;
 import java.util.*;
 
-/**
- * DTO for {@link pt.ul.fc.css.soccernow.domain.entities.user.Referee}
- */
+
 public class RefereeDTO implements Serializable {
     private Set<GameInfoDTO> secondaryRefereeGames = new HashSet<>();
     private UUID id;
-    @Schema(example = "Sofia Reia")
     @Pattern(regexp = "^\\p{L}+( \\p{L}+)*$")
     @Length(max = 100)
     private String name;

@@ -1,23 +1,17 @@
 package com.soccernow.ui.soccernowui.dto.user;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import com.soccernow.ui.soccernowui.dto.TeamInfoDTO;
+import com.soccernow.ui.soccernowui.dto.games.PlayerGameStatsDTO;
+import com.soccernow.ui.soccernowui.util.FutsalPositionEnum;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
-import pt.ul.fc.css.soccernow.domain.dto.TeamInfoDTO;
-import pt.ul.fc.css.soccernow.domain.dto.games.PlayerGameStatsDTO;
-import pt.ul.fc.css.soccernow.domain.entities.user.Player;
-import pt.ul.fc.css.soccernow.util.FutsalPositionEnum;
 
 import java.io.Serializable;
 import java.util.*;
 
-/**
- * DTO for {@link Player}
- */
 public class PlayerDTO implements Serializable {
     private List<PlayerGameStatsDTO> playerGameStats = new ArrayList<>();
     private UUID id;
-    @Schema(example = "Sofia Reia")
     @Pattern(regexp = "^\\p{L}+( \\p{L}+)*$")
     @Length(max = 100)
     private String name;

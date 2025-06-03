@@ -1,15 +1,13 @@
 package com.soccernow.ui.soccernowui.dto.tournament;
 
+import com.soccernow.ui.soccernowui.util.TournamentStatusEnum;
 import jakarta.validation.constraints.NotNull;
-import pt.ul.fc.css.soccernow.util.TournamentStatusEnum;
 
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
-/**
- * DTO for {@link pt.ul.fc.css.soccernow.domain.entities.tournament.Tournament}
- */
+
 public class TournamentInfoDTO implements Serializable {
     private String name;
     private TournamentStatusEnum status = TournamentStatusEnum.OPEN;

@@ -1,7 +1,8 @@
 package com.soccernow.ui.soccernowui.dto.games;
 
-import pt.ul.fc.css.soccernow.domain.dto.tournament.TournamentInfoDTO;
-import pt.ul.fc.css.soccernow.domain.dto.user.RefereeInfoDTO;
+
+import com.soccernow.ui.soccernowui.dto.tournament.TournamentInfoDTO;
+import com.soccernow.ui.soccernowui.dto.user.RefereeInfoDTO;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -10,9 +11,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-/**
- * DTO for {@link pt.ul.fc.css.soccernow.domain.entities.game.Game}
- */
+
 public class GameDTO implements Serializable {
     private GameTeamDTO gameTeamTwo;
     private UUID id;

@@ -5,11 +5,5 @@ public enum FutsalPositionEnum {
     SWEEPER,
     LEFT_WINGER,
     RIGHT_WINGER,
-    FORWARD;
-
-    @Override
-    public String toString() {
-        String name = name().replace('_', ' ').toLowerCase();
-        return Character.toUpperCase(name.charAt(0)) + name.substring(1);
-    }
+    FORWARD
 }

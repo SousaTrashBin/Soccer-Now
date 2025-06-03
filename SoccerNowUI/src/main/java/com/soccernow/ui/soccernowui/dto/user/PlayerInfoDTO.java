@@ -1,14 +1,12 @@
 package com.soccernow.ui.soccernowui.dto.user;
 
-import pt.ul.fc.css.soccernow.util.FutsalPositionEnum;
+import com.soccernow.ui.soccernowui.util.FutsalPositionEnum;
 
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
-/**
- * DTO for {@link pt.ul.fc.css.soccernow.domain.entities.user.Player}
- */
+
 public class PlayerInfoDTO implements Serializable {
     private UUID id;
     private String name;

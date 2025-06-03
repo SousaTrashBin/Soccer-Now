@@ -1,14 +1,12 @@
 package com.soccernow.ui.soccernowui.dto.tournament;
 
+import com.soccernow.ui.soccernowui.util.PlacementEnum;
 import jakarta.validation.constraints.NotNull;
-import pt.ul.fc.css.soccernow.util.PlacementEnum;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * DTO for {@link pt.ul.fc.css.soccernow.domain.entities.tournament.Placement}
- */
+
 public class PlacementInfoDTO implements Serializable {
     private PlacementEnum value = PlacementEnum.PENDING;
     @NotNull

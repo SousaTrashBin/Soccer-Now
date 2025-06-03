@@ -1,11 +1,9 @@
 package com.soccernow.ui.soccernowui.dto.tournament;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import com.soccernow.ui.soccernowui.dto.games.GameInfoDTO;
+import com.soccernow.ui.soccernowui.util.TournamentStatusEnum;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
-import pt.ul.fc.css.soccernow.domain.dto.games.GameInfoDTO;
-import pt.ul.fc.css.soccernow.domain.entities.tournament.Tournament;
-import pt.ul.fc.css.soccernow.util.TournamentStatusEnum;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,11 +11,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-/**
- * DTO for {@link Tournament}
- */
+
 public class TournamentDTO implements Serializable {
-    @Schema(example = "World Cup")
     @Pattern(regexp = "^\\p{L}+( \\p{L}+)*$")
     @Length(max = 100)
     private String name;

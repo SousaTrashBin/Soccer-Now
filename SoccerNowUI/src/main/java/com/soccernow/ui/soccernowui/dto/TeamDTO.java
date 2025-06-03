@@ -1,12 +1,10 @@
 package com.soccernow.ui.soccernowui.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+import com.soccernow.ui.soccernowui.dto.games.GameInfoDTO;
+import com.soccernow.ui.soccernowui.dto.tournament.PlacementInfoDTO;
+import com.soccernow.ui.soccernowui.dto.user.PlayerInfoDTO;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
-import pt.ul.fc.css.soccernow.domain.dto.games.GameInfoDTO;
-import pt.ul.fc.css.soccernow.domain.dto.tournament.PlacementInfoDTO;
-import pt.ul.fc.css.soccernow.domain.dto.user.PlayerInfoDTO;
-import pt.ul.fc.css.soccernow.domain.entities.Team;
 
 import java.io.Serializable;
 import java.util.LinkedHashSet;
@@ -14,14 +12,10 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-/**
- * DTO for {@link Team}
- */
 public class TeamDTO implements Serializable {
     private UUID id;
     private Set<PlayerInfoDTO> players = new LinkedHashSet<>();
     private Set<PlacementInfoDTO> placements = new LinkedHashSet<>();
-    @Schema(example = "Sporting")
     @Pattern(regexp = "^\\p{L}+( \\p{L}+)*$")
     @Length(max = 100)
     private String name;

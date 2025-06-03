@@ -1,15 +1,14 @@
 package com.soccernow.ui.soccernowui.dto.games;
 
-import pt.ul.fc.css.soccernow.domain.dto.user.PlayerInfoDTO;
+
+import com.soccernow.ui.soccernowui.dto.user.PlayerInfoDTO;
 
 import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
-/**
- * DTO for {@link pt.ul.fc.css.soccernow.domain.entities.game.PlayerGameStats}
- */
+
 public class PlayerGameStatsDTO implements Serializable {
     private Set<CardInfoDTO> receivedCards = new LinkedHashSet<>();
     private Integer scoredGoals = 0;
