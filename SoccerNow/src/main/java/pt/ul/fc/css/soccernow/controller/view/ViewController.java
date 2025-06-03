@@ -152,7 +152,13 @@ public class ViewController {
                                                                 .map(tournamentMapper::toDTO)
                                                                 .collect(Collectors.toList());
 
+        List<Team> allTeams = teamService.findAllNotDeleted();
+        List<TeamDTO> teamsDTO = allTeams.stream()
+                                         .map(teamMapper::toDTO)
+                                         .collect(Collectors.toList());
+
         model.addAttribute("tournaments", tournamentsDTO);
+        model.addAttribute("teams", teamsDTO);
         return "tournaments";
     }
 }

@@ -20,21 +20,24 @@
         </div>
 
         <div class="filter-container">
-            <label for="team">Team name</label>
-            <input type="text"
-                   name="teams"
-                   id="team">
+            <label for="team">Participating team</label>
+            <select name="teams" id="team">
+                <option value=""></option>
+                <option th:each="team : ${teams}"
+                        th:value="${team.getName()}"
+                        th:text="${team.getName()}"/>
+            </select>
         </div>
 
         <div class="filter-container">
-            <label for="nGamesClosed">N games closed</label>
+            <label for="nGamesClosed">Number of closed games</label>
             <input type="number"
                    name="numGamesClosed"
                    id="nGamesClosed">
         </div>
 
         <div class="filter-container">
-            <label for="nGamesOpened">N games opened</label>
+            <label for="nGamesOpened">Number of opened games</label>
             <input type="number"
                    name="numGamesOpened"
                    id="nGamesOpened">
@@ -49,17 +52,16 @@
       <thead>
         <tr>
           <th>Name</th>
-          <th>N games closed</th>
-          <th>N games closed</th>
+          <th>Number of closed games</th>
+          <th>Number of opened games</th>
         </tr>
       </thead>
 
       <tbody>
         <tr th:each="t : ${tournaments}">
-          <td th:text="${t.name}" />
-<!--            <td th:text="${t.name}" />-->
-<!--            <td th:text="${t.name}" />-->
-<!--            <td th:text="${t.name}" />-->
+          <td th:text="${t.getName()}" />
+          <td th:text="${t.getNumberOfClosedGames()}" />
+          <td th:text="${t.getNumberOfOpenedGames()}" />
         </tr>
       </tbody>
     </table>
