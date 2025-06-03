@@ -85,12 +85,9 @@
         <tr th:each="t : ${teams}">
           <td th:text="${t.getName()}" />
           <td th:text="${t.getNumberOfPlayers()}" />
-          <td>teste</td>
-          <td>teste</td>
-          <td>teste</td>
-<!--          <td th:text="${t.}" />-->
-<!--          <td th:text="${t.}" />-->
-<!--          <td th:text="${t.}" />-->
+          <td th:text="${gameResultsByTeam.get(t.getId())[0]}" />
+          <td th:text="${gameResultsByTeam.get(t.getId())[1]}" />
+          <td th:text="${gameResultsByTeam.get(t.getId())[2]}" />
           <td th:text="${t.getNumberOfAchievements()}" />
         </tr>
       </tbody>

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pt.ul.fc.css.soccernow.domain.dto.TeamDTO;
 import pt.ul.fc.css.soccernow.domain.dto.games.GameDTO;
+import pt.ul.fc.css.soccernow.domain.dto.games.GameInfoDTO;
 import pt.ul.fc.css.soccernow.domain.dto.tournament.TournamentDTO;
 import pt.ul.fc.css.soccernow.domain.dto.user.PlayerDTO;
 import pt.ul.fc.css.soccernow.domain.dto.user.RefereeDTO;
@@ -22,7 +23,10 @@ import pt.ul.fc.css.soccernow.mapper.*;
 import pt.ul.fc.css.soccernow.service.*;
 import pt.ul.fc.css.soccernow.util.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Controller
@@ -124,7 +128,30 @@ public class ViewController {
                                               .map(teamMapper::toDTO)
                                               .collect(Collectors.toList());
 
+        Map<UUID, int[]> gameResultsByTeam = new HashMap<>();
+
+        for (TeamDTO teamDTO : teamsDTO) {
+            // [WINS, DRAWS, LOSSES]
+            int[] results = new int[3];
+
+            for (GameInfoDTO gameInfoDTO : teamDTO.getGames()) {
+                Game g = gameService.findById(gameInfoDTO.getId());
+
+                if (g.isClosed()) {
+                    if(g.whoWonId() == null)
+                        results[1]++;
+                    else if(g.whoWonId() == teamDTO.getId())
+                        results[0]++;
+                    else
+                        results[2]++;
+                }
+            }
+
+            gameResultsByTeam.put(teamDTO.getId(), results);
+        }
+
         model.addAttribute("teams", teamsDTO);
+        model.addAttribute("gameResultsByTeam", gameResultsByTeam);
         return "teams";
     }
 
