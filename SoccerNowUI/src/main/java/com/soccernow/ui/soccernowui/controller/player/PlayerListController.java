@@ -28,20 +28,17 @@ import static com.soccernow.ui.soccernowui.util.FXMLUtils.executeWithErrorHandli
 public class PlayerListController {
 
     @FXML
-    private VBox createPlayerVBox;
-
+    private TableColumn<PlayerDTO, String> idColumn;
     @FXML
     private TableColumn<PlayerDTO, String> nameColumn;
-
     @FXML
     private TableColumn<PlayerDTO, String> positionColumn;
-
     @FXML
     private TableView<PlayerDTO> playerTableView;
 
     public void initialize() {
+        idColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getId().toString()));
         nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
-
         positionColumn.setCellValueFactory(cellData -> {
             FutsalPositionEnum pos = cellData.getValue().getPreferredPosition();
             String posName = pos != null ? pos.name() : "None";
