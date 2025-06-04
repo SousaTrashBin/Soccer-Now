@@ -10,24 +10,23 @@ public class CreateGame {
 
     @FXML
     private ComboBox<String> teamOneComboBox;
-
-    @FXML
+;    @FXML
     private ComboBox<String> teamTwoComboBox;
-
     @FXML
     private ComboBox<String> primaryRefereeComboBox;
-
     @FXML
     private ListView<String> secondaryRefereesListView;
-
     @FXML
     private ComboBox<String> addressComboBox;
-
     @FXML
     private DatePicker datePicker;
-
     @FXML
     private TextField timeField;
+
+    @FXML
+    private void initialize() {
+
+    }
 
     @FXML
     public void onCreateGameClick(ActionEvent event) {
