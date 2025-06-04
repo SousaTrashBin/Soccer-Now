@@ -46,11 +46,6 @@
     </VBox>
 
     <HBox spacing="10" alignment="CENTER_LEFT">
-        <Label text="Tournament:"/>
-        <ComboBox fx:id="tournamentComboBox" promptText="Select Tournament" prefWidth="300"/>
-    </HBox>
-
-    <HBox spacing="10" alignment="CENTER_LEFT">
             <Label text="Address:"/>
             <ComboBox fx:id="addressComboBox" promptText="Select Tournament" prefWidth="300"/>
         </HBox>
