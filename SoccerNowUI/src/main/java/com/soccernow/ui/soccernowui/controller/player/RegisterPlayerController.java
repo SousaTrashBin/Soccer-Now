@@ -1,6 +1,7 @@
 package com.soccernow.ui.soccernowui.controller.player;
 
 import com.soccernow.ui.soccernowui.SoccerNowApp;
+import com.soccernow.ui.soccernowui.api.PlayerApiController;
 import com.soccernow.ui.soccernowui.dto.user.PlayerDTO;
 import com.soccernow.ui.soccernowui.util.FXMLUtils;
 import com.soccernow.ui.soccernowui.util.FutsalPositionEnum;
@@ -13,6 +14,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
+import java.io.IOException;
 import java.util.Set;
 
 public class RegisterPlayerController {
@@ -37,29 +39,25 @@ public class RegisterPlayerController {
         playerDTO.setName(name.getText());
         playerDTO.setPreferredPosition(positionComboBox.getValue());
 
-        Set<ConstraintViolation<PlayerDTO>> violations = validator.validate(playerDTO);
-
-        if (!violations.isEmpty()) {
-            StringBuilder errorMessage = new StringBuilder("Please correct the following errors:\n");
-            for (ConstraintViolation<PlayerDTO> violation : violations) {
-                errorMessage.append("- ").append(violation.getMessage()).append("\n");
-            }
-
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Validation Error");
-            alert.setHeaderText("Invalid Player Data");
-            alert.setContentText(errorMessage.toString());
-            alert.showAndWait();
-            System.err.println(errorMessage);
+        boolean isValid = FXMLUtils.validateAndShowAlert(playerDTO, validator);
+        if (!isValid) {
+            System.err.println("Validation failed for: " + playerDTO);
             return;
+        }
+
+        PlayerDTO savedDTO;
+        try {
+            savedDTO = PlayerApiController.INSTANCE.registerPlayer(playerDTO);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
         System.out.printf(playerDTO.toString());
 
         Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
         successAlert.setTitle("Success");
-        successAlert.setHeaderText("Player Registered");
-        successAlert.setContentText("Player " + playerDTO.getName() + " registered successfully!");
+        successAlert.setHeaderText("Player Successfully Registered");
+        successAlert.setContentText("Player " + savedDTO.getName() + " registered successfully!");
         successAlert.showAndWait();
     }
 
