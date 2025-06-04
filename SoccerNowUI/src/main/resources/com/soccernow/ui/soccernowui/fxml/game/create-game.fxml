@@ -1,50 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.embed.swing.SwingNode?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ButtonBar?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Pos?>
 
-<VBox alignment="CENTER" prefHeight="600.0" prefWidth="400.0" spacing="20.0" styleClass="container"
-      xmlns="http://javafx.com/javafx/17.0.12"
+<VBox xmlns="http://javafx.com/javafx/17.0.12"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.soccernow.ui.soccernowui.controller.RegisterPlayer"
-      style="-fx-font-family: 'JetBrains Mono'; -fx-font-size: 12;">
+      fx:controller="com.soccernow.ui.soccernowui.controller.CreateGameController"
+      alignment="CENTER"
+      spacing="15"
+      prefWidth="500"
+      prefHeight="600"
+      style="-fx-padding: 20; -fx-font-family: 'JetBrains Mono'; -fx-font-size: 12;">
 
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-    </padding>
+    <Label text="Create Game" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
 
-    <ToolBar prefHeight="40.0" prefWidth="400.0">
-        <items>
-            <Button fx:id="BackButton" onAction="#onBackClick" mnemonicParsing="false" text="&lt; Back" />
-        </items>
-    </ToolBar>
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Team One:"/>
+        <ComboBox fx:id="teamOneComboBox" promptText="Select Team One" prefWidth="300"/>
+    </HBox>
 
-    <VBox spacing="15.0" prefWidth="360.0">
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Team Two:"/>
+        <ComboBox fx:id="teamTwoComboBox" promptText="Select Team Two" prefWidth="300"/>
+    </HBox>
 
-        <VBox spacing="8.0" styleClass="form-group" prefWidth="360.0">
-            <Label styleClass="form-label" text="Player Name:" />
-            <TextField fx:id="name" prefWidth="360.0" promptText="Enter player name" styleClass="form-control" />
-        </VBox>
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Primary Referee:"/>
+        <ComboBox fx:id="primaryRefereeComboBox" promptText="Select Referee" prefWidth="300"/>
+    </HBox>
 
-        <VBox spacing="8.0" styleClass="form-group" prefWidth="360.0">
-            <Label styleClass="form-label" text="Preferred Position:" />
-            <ComboBox fx:id="positionComboBox" maxWidth="360.0" promptText="None" styleClass="form-control" />
-        </VBox>
-
-        <VBox alignment="CENTER" spacing="8.0" styleClass="form-group" prefWidth="360.0">
-            <padding>
-                <Insets top="15.0" />
-            </padding>
-            <Button fx:id="registerButton" onAction="#onRegisterClick" styleClass="btn btn-primary btn-lg"
-                    prefWidth="200.0" text="Register Player" />
-        </VBox>
-
+    <VBox spacing="5" alignment="CENTER_LEFT">
+        <Label text="Secondary Referees:"/>
+        <VBox fx:id="secondaryRefereesContainer" spacing="5" prefWidth="300"/>
     </VBox>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Tournament:"/>
+        <ComboBox fx:id="tournamentComboBox" promptText="Select Tournament" prefWidth="300"/>
+    </HBox>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Address:"/>
+            <ComboBox fx:id="addressComboBox" promptText="Select Tournament" prefWidth="300"/>
+        </HBox>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Date and Time:"/>
+        <DatePicker fx:id="datePicker"/>
+        <TextField fx:id="timeField" promptText="HH:MM" prefWidth="80"/>
+    </HBox>
+
+    <HBox spacing="15" alignment="CENTER">
+        <Button text="Back" onAction="#onBackClick" styleClass="btn btn-secondary"/>
+        <Button text="Create Game" onAction="#onCreateGameClick" styleClass="btn btn-primary"/>
+    </HBox>
+
 </VBox>

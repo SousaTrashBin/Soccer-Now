@@ -8,8 +8,7 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.soccernow.ui.soccernowui.fxml.CreateTeam"
-            style="-fx-font-family: 'JetBrains Mono'; -fx-font-size: 12;"
+            fx:controller="com.soccernow.ui.soccernowui.fxml.team.RegisterTeam"
             prefHeight="400.0" prefWidth="600.0" >
 
 </AnchorPane>

@@ -9,7 +9,7 @@
 
 <VBox xmlns="http://javafx.com/javafx/17.0.12"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.soccernow.ui.soccernowui.controller.HomeScreen"
+      fx:controller="com.soccernow.ui.soccernowui.controller.home.HomeScreen"
       style="-fx-font-family: 'JetBrains Mono'; -fx-font-size: 12;"
       alignment="CENTER"
       prefHeight="600.0"
