@@ -1,7 +1,9 @@
 package com.soccernow.ui.soccernowui.controller.referee;
 
+import com.soccernow.ui.soccernowui.util.FXMLUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 
 import java.util.Objects;
@@ -30,6 +32,7 @@ public class RegisterReferee {
 
     @FXML
     public void onBackClick(ActionEvent actionEvent) {
-        return;
+        FXMLUtils.switchScene("/com/soccernow/ui/soccernowui/fxml/home/home-screen.fxml",
+                (Node) actionEvent.getSource());
     }
 }
