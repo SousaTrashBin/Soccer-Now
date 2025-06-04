@@ -95,6 +95,6 @@ public class HomeScreen {
 
     @FXML
     private void onViewTournamentClick(ActionEvent event) {
-        navigate(event, "/com/soccernow/ui/soccernowui/fxml/tournament/tournament-details-list.fxml");
+        navigate(event, "/com/soccernow/ui/soccernowui/fxml/tournament/tournament-list.fxml");
     }
 }

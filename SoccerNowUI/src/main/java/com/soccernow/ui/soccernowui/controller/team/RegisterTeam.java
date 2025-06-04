@@ -1,11 +1,23 @@
 package com.soccernow.ui.soccernowui.controller.team;
 
 import com.soccernow.ui.soccernowui.util.FXMLUtils;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.*;
 
 public class RegisterTeam {
+
+    @FXML
+    private TextField teamNameField;
+
+    @FXML
+    private ListView<String> playerListView;
+
+    private final ObservableList<String> players = FXCollections.observableArrayList();
+
 
     @FXML
     public void onAddPlayerClick(ActionEvent actionEvent) {

@@ -4,11 +4,17 @@ import com.soccernow.ui.soccernowui.util.FXMLUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.*;
 
 import java.util.Objects;
 
 public class RegisterReferee {
+
+    @FXML
+    private TextField name;
+
+    @FXML
+    private Button registerButton;
 
     @FXML
     private ComboBox<String> hasCertificateComboBox;

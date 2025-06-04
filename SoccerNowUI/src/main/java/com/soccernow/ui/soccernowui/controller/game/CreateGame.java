@@ -4,9 +4,30 @@ import com.soccernow.ui.soccernowui.util.FXMLUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-
+import javafx.scene.control.*;
 
 public class CreateGame {
+
+    @FXML
+    private ComboBox<String> teamOneComboBox;
+
+    @FXML
+    private ComboBox<String> teamTwoComboBox;
+
+    @FXML
+    private ComboBox<String> primaryRefereeComboBox;
+
+    @FXML
+    private ListView<String> secondaryRefereesListView;
+
+    @FXML
+    private ComboBox<String> addressComboBox;
+
+    @FXML
+    private DatePicker datePicker;
+
+    @FXML
+    private TextField timeField;
 
     @FXML
     public void onCreateGameClick(ActionEvent event) {
