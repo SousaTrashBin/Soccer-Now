@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.Map;
 
 public class ApiUtils {
-    public static final String baseURL = "localhost:8080/";
+    public static final String baseURL = "http://localhost:8080/api/";
     private static final OkHttpClient client = new OkHttpClient();
     private static final ObjectMapper objectMapper = new ObjectMapper();
 

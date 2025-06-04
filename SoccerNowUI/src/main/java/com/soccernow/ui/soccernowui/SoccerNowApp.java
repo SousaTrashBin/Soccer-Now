@@ -1,5 +1,8 @@
 package com.soccernow.ui.soccernowui;
 
+import com.soccernow.ui.soccernowui.api.PlayerApiController;
+import com.soccernow.ui.soccernowui.dto.user.PlayerDTO;
+import com.soccernow.ui.soccernowui.util.FutsalPositionEnum;
 import jakarta.validation.Validation;
 import jakarta.validation.ValidatorFactory;
 import javafx.application.Application;
@@ -16,7 +19,7 @@ public class SoccerNowApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         validatorFactory = Validation.buildDefaultValidatorFactory();
-        FXMLLoader fxmlLoader = new FXMLLoader(SoccerNowApp.class.getResource("fxml/home/home-screen.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(SoccerNowApp.class.getResource("fxml/player/register-player.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 300, 400);
 
         scene.getRoot().setStyle("-fx-background-color: white;");
@@ -26,6 +29,7 @@ public class SoccerNowApp extends Application {
         stage.setScene(scene);
         stage.show();
     }
+
 
     @Override
     public void stop() {
@@ -38,7 +42,7 @@ public class SoccerNowApp extends Application {
         return validatorFactory;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         launch();
     }
 }

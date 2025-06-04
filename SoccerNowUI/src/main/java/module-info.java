@@ -1,4 +1,4 @@
-module com.soccernow.ui.soccernowui {
+open module com.soccernow.ui.soccernowui {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
@@ -17,22 +17,11 @@ module com.soccernow.ui.soccernowui {
     requires okhttp3;
     requires com.fasterxml.jackson.databind;
 
-    opens com.soccernow.ui.soccernowui to javafx.fxml;
-    opens com.soccernow.ui.soccernowui.dto.user to org.hibernate.validator;
-    opens com.soccernow.ui.soccernowui.dto.games to org.hibernate.validator;
-    opens com.soccernow.ui.soccernowui.dto to org.hibernate.validator;
-
-
-    opens com.soccernow.ui.soccernowui.controller.game to javafx.fxml;
-    opens com.soccernow.ui.soccernowui.controller.home to javafx.fxml;
-    opens com.soccernow.ui.soccernowui.controller.player to javafx.fxml;
-    opens com.soccernow.ui.soccernowui.controller.referee to javafx.fxml;
-    opens com.soccernow.ui.soccernowui.controller.team to javafx.fxml;
-    opens com.soccernow.ui.soccernowui.controller.tournament to javafx.fxml;
-
     exports com.soccernow.ui.soccernowui;
     exports com.soccernow.ui.soccernowui.util;
     exports com.soccernow.ui.soccernowui.dto;
+    exports com.soccernow.ui.soccernowui.dto.user;
+    exports com.soccernow.ui.soccernowui.dto.games;
 
     exports com.soccernow.ui.soccernowui.controller.game;
     exports com.soccernow.ui.soccernowui.controller.home;
@@ -40,5 +29,4 @@ module com.soccernow.ui.soccernowui {
     exports com.soccernow.ui.soccernowui.controller.referee;
     exports com.soccernow.ui.soccernowui.controller.team;
     exports com.soccernow.ui.soccernowui.controller.tournament;
-
 }

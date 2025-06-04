@@ -12,7 +12,7 @@ import java.util.*;
 public class PlayerDTO implements Serializable {
     private List<PlayerGameStatsDTO> playerGameStats = new ArrayList<>();
     private UUID id;
-    @Pattern(regexp = "^\\p{L}+( \\p{L}+)*$")
+    @Pattern(regexp = "^\\p{L}+( \\p{L}+)*$", message = "Player name must only contain letters")
     @Length(max = 100)
     private String name;
     private FutsalPositionEnum preferredPosition;

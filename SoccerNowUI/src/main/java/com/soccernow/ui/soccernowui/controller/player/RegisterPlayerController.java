@@ -52,7 +52,7 @@ public class RegisterPlayerController {
             throw new RuntimeException(e);
         }
 
-        System.out.printf(playerDTO.toString());
+        System.out.printf(savedDTO.toString());
 
         Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
         successAlert.setTitle("Success");
