@@ -15,6 +15,7 @@ module com.soccernow.ui.soccernowui {
     requires jakarta.validation;
     requires org.hibernate.validator;
     requires okhttp3;
+    requires com.fasterxml.jackson.databind;
 
     opens com.soccernow.ui.soccernowui to javafx.fxml;
     opens com.soccernow.ui.soccernowui.dto.user to org.hibernate.validator;
