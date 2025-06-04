@@ -31,7 +31,7 @@
 
     <HBox spacing="10" alignment="CENTER_LEFT">
         <Label text="Name:"/>
-        <TextField fx:id="refereeNameField" promptText="Referee name" prefWidth="200"/>
+        <TextField fx:id="refereeNameField" promptText="Referee name" prefWidth="250"/>
     </HBox>
 
     <HBox spacing="10" alignment="CENTER_LEFT">
@@ -40,7 +40,6 @@
     </HBox>
 
     <HBox spacing="20" alignment="CENTER">
-        <Button text="Cancel" onAction="#onCancelClick" styleClass="btn btn-secondary"/>
         <Button text="Save Changes" onAction="#onSaveClick" styleClass="btn btn-primary"/>
     </HBox>
 </VBox>
