@@ -1,5 +1,6 @@
 package com.soccernow.ui.soccernowui.controller.team;
 
+import com.soccernow.ui.soccernowui.dto.user.PlayerDTO;
 import com.soccernow.ui.soccernowui.util.FXMLUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,11 +13,14 @@ public class RegisterTeam {
 
     @FXML
     private TextField teamNameField;
+    @FXML
+    private ListView<PlayerDTO> playerListView;
+    private final ObservableList<PlayerDTO> players = FXCollections.observableArrayList();
 
     @FXML
-    private ListView<String> playerListView;
+    private void initialize() {
 
-    private final ObservableList<String> players = FXCollections.observableArrayList();
+    }
 
 
     @FXML
