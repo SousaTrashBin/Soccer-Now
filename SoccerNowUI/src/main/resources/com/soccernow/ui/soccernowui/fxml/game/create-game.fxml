@@ -40,10 +40,10 @@
         <ComboBox fx:id="primaryRefereeComboBox" promptText="Select Referee" prefWidth="300"/>
     </HBox>
 
-    <VBox spacing="5" alignment="CENTER_LEFT">
-        <Label text="Secondary Referees:"/>
-        <VBox fx:id="secondaryRefereesContainer" spacing="5" prefWidth="300"/>
-    </VBox>
+    <VBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Secondary Referees:"/>
+            <ListView fx:id="secondaryRefereesListView" prefHeight="120" prefWidth="300"/>
+        </VBox>
 
     <HBox spacing="10" alignment="CENTER_LEFT">
             <Label text="Address:"/>
