@@ -2,6 +2,7 @@ package com.soccernow.ui.soccernowui.api;
 
 import com.soccernow.ui.soccernowui.dto.TeamDTO;
 import com.soccernow.ui.soccernowui.dto.user.RefereeDTO;
+import com.soccernow.ui.soccernowui.util.ErrorException;
 import okhttp3.Response;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ public enum TeamApiController {
     INSTANCE;
     private final String teamsURL = baseURL + "teams/";
 
-    public TeamDTO registerTeam(TeamDTO teamDTO) throws IOException {
+    public TeamDTO registerTeam(TeamDTO teamDTO) throws IOException, ErrorException {
         try (Response response = postJsonRequest(teamsURL, teamDTO)) {
             if (!response.isSuccessful()) {
                 throwApiException(response, "Register team failed");
@@ -24,7 +25,7 @@ public enum TeamApiController {
         }
     }
 
-    public TeamDTO getTeamById(UUID teamId) throws IOException {
+    public TeamDTO getTeamById(UUID teamId) throws IOException, ErrorException {
         try (Response response = getRequest(teamsURL + teamId)) {
             if (!response.isSuccessful()) {
                 throwApiException(response, "Get team by ID failed");
@@ -34,7 +35,7 @@ public enum TeamApiController {
         }
     }
 
-    public List<TeamDTO> getAllTeams() throws IOException {
+    public List<TeamDTO> getAllTeams() throws IOException, ErrorException {
         try (Response response = getRequest(teamsURL)) {
             if (!response.isSuccessful()) {
                 throwApiException(response, "Get all teams failed");
@@ -44,7 +45,7 @@ public enum TeamApiController {
         }
     }
 
-    public TeamDTO updateTeamById(UUID teamId, TeamDTO teamDTO) throws IOException {
+    public TeamDTO updateTeamById(UUID teamId, TeamDTO teamDTO) throws IOException, ErrorException {
         try (Response response = putJsonRequest(teamsURL + teamId, teamDTO)) {
             if (!response.isSuccessful()) {
                 throwApiException(response, "Update team failed");
@@ -54,7 +55,7 @@ public enum TeamApiController {
         }
     }
 
-    public void deleteTeamById(UUID teamId) throws IOException {
+    public void deleteTeamById(UUID teamId) throws IOException, ErrorException {
         try (Response response = deleteRequest(teamsURL + teamId)) {
             if (!response.isSuccessful()) {
                 throwApiException(response, "Delete team failed");
@@ -62,7 +63,7 @@ public enum TeamApiController {
         }
     }
 
-    public void addPlayerToTeam(UUID teamId, UUID playerId) throws IOException {
+    public void addPlayerToTeam(UUID teamId, UUID playerId) throws IOException, ErrorException {
         try (Response response = postJsonRequest(teamsURL + teamId + "/players/" + playerId, null)) {
             if (!response.isSuccessful()) {
                 throwApiException(response, "Add player to team failed");
@@ -70,7 +71,7 @@ public enum TeamApiController {
         }
     }
 
-    public void removePlayerFromTeam(UUID teamId, UUID playerId) throws IOException {
+    public void removePlayerFromTeam(UUID teamId, UUID playerId) throws IOException, ErrorException {
         try (Response response = deleteRequest(teamsURL + teamId + "/players/" + playerId)) {
             if (!response.isSuccessful()) {
                 throwApiException(response, "Remove player from team failed");

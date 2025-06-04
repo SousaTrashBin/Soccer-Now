@@ -1,6 +1,7 @@
 package com.soccernow.ui.soccernowui.api;
 
 import com.soccernow.ui.soccernowui.dto.user.RefereeDTO;
+import com.soccernow.ui.soccernowui.util.ErrorException;
 import okhttp3.Response;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ public enum RefereeApiController {
     INSTANCE;
     private final String refereesURL = baseURL + "referees/";
 
-    public RefereeDTO registerReferee(RefereeDTO refereeDTO) throws IOException {
+    public RefereeDTO registerReferee(RefereeDTO refereeDTO) throws IOException, ErrorException {
         try (Response response = postJsonRequest(refereesURL, refereeDTO)) {
             if (!response.isSuccessful()) {
                 throwApiException(response, "Register referee failed");
@@ -24,7 +25,7 @@ public enum RefereeApiController {
         }
     }
 
-    public RefereeDTO getRefereeById(UUID refereeId) throws IOException {
+    public RefereeDTO getRefereeById(UUID refereeId) throws IOException, ErrorException {
         try (Response response = getRequest(refereesURL + refereeId)) {
             if (!response.isSuccessful()) {
                 throwApiException(response, "Get referee by ID failed");
@@ -34,7 +35,7 @@ public enum RefereeApiController {
         }
     }
 
-    public List<RefereeDTO> getAllReferees() throws IOException {
+    public List<RefereeDTO> getAllReferees() throws IOException, ErrorException {
         try (Response response = getRequest(refereesURL)) {
             if (!response.isSuccessful()) {
                 throwApiException(response, "Get all referees failed");
@@ -44,7 +45,7 @@ public enum RefereeApiController {
         }
     }
 
-    public RefereeDTO updateRefereeById(UUID refereeId, RefereeDTO refereeDTO) throws IOException {
+    public RefereeDTO updateRefereeById(UUID refereeId, RefereeDTO refereeDTO) throws IOException, ErrorException {
         try (Response response = putJsonRequest(refereesURL + refereeId, refereeDTO)) {
             if (!response.isSuccessful()) {
                 throwApiException(response, "Update referee failed");
@@ -54,7 +55,7 @@ public enum RefereeApiController {
         }
     }
 
-    public void deleteRefereeById(UUID refereeId) throws IOException {
+    public void deleteRefereeById(UUID refereeId) throws IOException, ErrorException {
         try (Response response = deleteRequest(refereesURL + refereeId)) {
             if (!response.isSuccessful()) {
                 throwApiException(response, "Delete referee failed");

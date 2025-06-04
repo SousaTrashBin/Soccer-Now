@@ -1,6 +1,6 @@
 package com.soccernow.ui.soccernowui.util;
 
-public class ErrorException extends RuntimeException {
+public class ErrorException extends Exception {
     private final int statusCode;
 
     public ErrorException(String message) {

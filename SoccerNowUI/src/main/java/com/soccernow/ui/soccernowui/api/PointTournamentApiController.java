@@ -3,6 +3,7 @@ package com.soccernow.ui.soccernowui.api;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.soccernow.ui.soccernowui.dto.tournament.PointTournamentDTO;
 import com.soccernow.ui.soccernowui.dto.user.PlayerDTO;
+import com.soccernow.ui.soccernowui.util.ErrorException;
 import jakarta.validation.constraints.NotNull;
 import okhttp3.Response;
 
@@ -17,7 +18,7 @@ public enum PointTournamentApiController {
     INSTANCE;
     private final String pointTournamentsURL = baseURL + "point-tournaments/";
 
-    public PointTournamentDTO getTournamentById(UUID tournamentId) throws IOException {
+    public PointTournamentDTO getTournamentById(UUID tournamentId) throws IOException, ErrorException {
         try (Response response = getRequest(pointTournamentsURL + tournamentId)) {
             if (!response.isSuccessful()) {
                 throwApiException(response, "Get tournament by ID failed");
@@ -27,7 +28,7 @@ public enum PointTournamentApiController {
         }
     }
 
-    public PointTournamentDTO createTournament(String name) throws IOException {
+    public PointTournamentDTO createTournament(String name) throws IOException, ErrorException {
         var createPayload = new CreatePointTournamentDTO(name);
         try (Response response = postJsonRequest(pointTournamentsURL, createPayload)) {
             if (!response.isSuccessful()) {
@@ -38,7 +39,7 @@ public enum PointTournamentApiController {
         }
     }
 
-    public PointTournamentDTO closeRegistrations(UUID tournamentId) throws IOException {
+    public PointTournamentDTO closeRegistrations(UUID tournamentId) throws IOException, ErrorException {
         try (Response response = patchRequest(pointTournamentsURL + tournamentId + "/close-registrations")) {
             if (!response.isSuccessful()) {
                 throwApiException(response, "Close tournament registrations failed");
@@ -48,7 +49,7 @@ public enum PointTournamentApiController {
         }
     }
 
-    public PointTournamentDTO endTournament(UUID tournamentId) throws IOException {
+    public PointTournamentDTO endTournament(UUID tournamentId) throws IOException, ErrorException {
         try (Response response = patchRequest(pointTournamentsURL + tournamentId + "/end")) {
             if (!response.isSuccessful()) {
                 throwApiException(response, "End tournament failed");
@@ -58,7 +59,7 @@ public enum PointTournamentApiController {
         }
     }
 
-    public List<PointTournamentDTO> getAllTournaments() throws IOException {
+    public List<PointTournamentDTO> getAllTournaments() throws IOException, ErrorException {
         try (Response response = getRequest(pointTournamentsURL)) {
             if (!response.isSuccessful()) {
                 throwApiException(response, "Get all tournaments failed");
@@ -68,7 +69,7 @@ public enum PointTournamentApiController {
         }
     }
 
-    public PointTournamentDTO addGameToTournament(UUID tournamentId, UUID gameId) throws IOException {
+    public PointTournamentDTO addGameToTournament(UUID tournamentId, UUID gameId) throws IOException, ErrorException {
         try (Response response = postJsonRequest(pointTournamentsURL + tournamentId + "/games/" + gameId, null)) {
             if (!response.isSuccessful()) {
                 throwApiException(response, "Add game to tournament failed");
@@ -78,7 +79,7 @@ public enum PointTournamentApiController {
         }
     }
 
-    public PointTournamentDTO removeGameFromTournament(UUID tournamentId, UUID gameId) throws IOException {
+    public PointTournamentDTO removeGameFromTournament(UUID tournamentId, UUID gameId) throws IOException, ErrorException {
         try (Response response = deleteRequest(pointTournamentsURL + tournamentId + "/games/" + gameId)) {
             if (!response.isSuccessful()) {
                 throwApiException(response, "Remove game from tournament failed");
@@ -88,7 +89,7 @@ public enum PointTournamentApiController {
         }
     }
 
-    public PointTournamentDTO addTeamToTournament(UUID tournamentId, UUID teamId) throws IOException {
+    public PointTournamentDTO addTeamToTournament(UUID tournamentId, UUID teamId) throws IOException, ErrorException {
         try (Response response = postJsonRequest(pointTournamentsURL + tournamentId + "/teams/" + teamId, null)) {
             if (!response.isSuccessful()) {
                 throwApiException(response, "Add team to tournament failed");
@@ -98,7 +99,7 @@ public enum PointTournamentApiController {
         }
     }
 
-    public PointTournamentDTO removeTeamFromTournament(UUID tournamentId, UUID teamId) throws IOException {
+    public PointTournamentDTO removeTeamFromTournament(UUID tournamentId, UUID teamId) throws IOException, ErrorException {
         try (Response response = deleteRequest(pointTournamentsURL + tournamentId + "/teams/" + teamId)) {
             if (!response.isSuccessful()) {
                 throwApiException(response, "Remove team from tournament failed");

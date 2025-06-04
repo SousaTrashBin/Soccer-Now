@@ -15,7 +15,7 @@ public enum CredentialsApiController {
 
     public record LoginRequest(@NotNull String username, @NotNull String password) {}
 
-    private void login(LoginRequest loginRequest) throws IOException {
+    private void login(LoginRequest loginRequest) throws IOException, ErrorException {
         try (Response response = ApiUtils.postJsonRequest(credentialsURL + "login", loginRequest)) {
             if (!response.isSuccessful()) {
                 ApiUtils.throwApiException(response, "Login failed");
