@@ -1,4 +1,4 @@
-package com.soccernow.ui.soccernowui.controller;
+package com.soccernow.ui.soccernowui.controller.referee;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

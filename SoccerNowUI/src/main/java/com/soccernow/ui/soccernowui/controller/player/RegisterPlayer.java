@@ -1,4 +1,4 @@
-package com.soccernow.ui.soccernowui.controller;
+package com.soccernow.ui.soccernowui.controller.player;
 
 import com.soccernow.ui.soccernowui.SoccerNowApp;
 import com.soccernow.ui.soccernowui.dto.user.PlayerDTO;

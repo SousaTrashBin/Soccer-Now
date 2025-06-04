@@ -1,6 +1,5 @@
-package com.soccernow.ui.soccernowui.controller;
+package com.soccernow.ui.soccernowui.controller.home;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 
