@@ -19,7 +19,7 @@ public class PlayerDetailsController {
     }
 
     @FXML
-    private void onSaveGameClick() {
+    private void onSaveClick() {
     }
 
     public void onBackClick(ActionEvent actionEvent) {
