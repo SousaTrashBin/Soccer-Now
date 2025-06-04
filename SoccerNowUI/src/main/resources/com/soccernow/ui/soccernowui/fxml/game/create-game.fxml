@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.embed.swing.SwingNode?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" prefHeight="600.0" prefWidth="400.0" spacing="20.0" styleClass="container"
+      xmlns="http://javafx.com/javafx/17.0.12"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.soccernow.ui.soccernowui.controller.RegisterPlayer"
+      style="-fx-font-family: 'JetBrains Mono'; -fx-font-size: 12;">
+
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+
+    <ToolBar prefHeight="40.0" prefWidth="400.0">
+        <items>
+            <Button fx:id="BackButton" onAction="#onBackClick" mnemonicParsing="false" text="&lt; Back" />
+        </items>
+    </ToolBar>
+
+    <VBox spacing="15.0" prefWidth="360.0">
+
+        <VBox spacing="8.0" styleClass="form-group" prefWidth="360.0">
+            <Label styleClass="form-label" text="Player Name:" />
+            <TextField fx:id="name" prefWidth="360.0" promptText="Enter player name" styleClass="form-control" />
+        </VBox>
+
+        <VBox spacing="8.0" styleClass="form-group" prefWidth="360.0">
+            <Label styleClass="form-label" text="Preferred Position:" />
+            <ComboBox fx:id="positionComboBox" maxWidth="360.0" promptText="None" styleClass="form-control" />
+        </VBox>
+
+        <VBox alignment="CENTER" spacing="8.0" styleClass="form-group" prefWidth="360.0">
+            <padding>
+                <Insets top="15.0" />
+            </padding>
+            <Button fx:id="registerButton" onAction="#onRegisterClick" styleClass="btn btn-primary btn-lg"
+                    prefWidth="200.0" text="Register Player" />
+        </VBox>
+
+    </VBox>
+</VBox>

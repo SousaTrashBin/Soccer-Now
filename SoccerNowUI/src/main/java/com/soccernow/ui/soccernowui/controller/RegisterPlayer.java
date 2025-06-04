@@ -60,4 +60,9 @@ public class RegisterPlayer {
         successAlert.setContentText("Player " + playerDTO.getName() + " registered successfully!");
         successAlert.showAndWait();
     }
+
+    @FXML
+    public void onBackClick(ActionEvent actionEvent) {
+        return;
+    }
 }
