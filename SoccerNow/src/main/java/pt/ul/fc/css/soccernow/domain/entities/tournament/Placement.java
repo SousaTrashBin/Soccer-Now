@@ -17,6 +17,14 @@ public class Placement {
     @Column(name = "value", nullable = false)
     private PlacementEnum value = PlacementEnum.PENDING;
 
+    @Override
+    public String toString() {
+        return "Placement{" +
+                "id=" + id +
+                ", value=" + value +
+                '}';
+    }
+
     @ManyToOne
     @JoinColumn(name = "tournament_id")
     private Tournament tournament;
@@ -29,11 +37,11 @@ public class Placement {
         this.tournament = tournament;
     }
 
-    public PlacementEnum getPlacementEnum() {
+    public PlacementEnum getValue() {
         return value;
     }
 
-    public void setPlacementEnum(PlacementEnum value) {
+    public void setValue(PlacementEnum value) {
         this.value = value;
     }
 
