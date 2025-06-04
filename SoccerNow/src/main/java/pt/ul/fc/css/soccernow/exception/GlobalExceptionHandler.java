@@ -72,7 +72,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(ResourceCouldNotBeDeletedException.class)
+    @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<ApiError> handleUnauthorizedException(UnauthorizedException exception) {
         ApiError error = new ApiError(
                 HttpStatus.UNAUTHORIZED.value(),
