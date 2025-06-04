@@ -12,55 +12,73 @@ import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    public record ApiError(int status, String message, Map<String, String> validationErrors) {}
+
     @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<Object> handleBadRequestException(BadRequestException exception) {
-        Map<String, Object> body = Map.of(
-                "status", HttpStatus.BAD_REQUEST.value(),
-                "error", "Bad Request",
-                "message", exception.getMessage()
+    public ResponseEntity<ApiError> handleBadRequestException(BadRequestException exception) {
+        ApiError error = new ApiError(
+                HttpStatus.BAD_REQUEST.value(),
+                exception.getMessage(),
+                null
         );
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Object> handleValidationExceptions(MethodArgumentNotValidException exception) {
+    public ResponseEntity<ApiError> handleValidationExceptions(MethodArgumentNotValidException exception) {
         Map<String, String> errors = new HashMap<>();
         exception.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+
+        ApiError error = new ApiError(
+                HttpStatus.BAD_REQUEST.value(),
+                "Validation failed",
+                errors
+        );
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ResourceAlreadyExistsException.class)
-    public ResponseEntity<Object> handleResourceAlreadyExistsException(ResourceAlreadyExistsException exception) {
-        Map<String, Object> body = Map.of(
-                "status", HttpStatus.CONFLICT.value(),
-                "error", "Conflict",
-                "message", exception.getMessage()
+    public ResponseEntity<ApiError> handleResourceAlreadyExistsException(ResourceAlreadyExistsException exception) {
+        ApiError error = new ApiError(
+                HttpStatus.CONFLICT.value(),
+                exception.getMessage(),
+                null
         );
-        return new ResponseEntity<>(body, HttpStatus.CONFLICT);
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(ResourceDoesNotExistException.class)
-    public ResponseEntity<Object> handleResourceDoesNotExistException(ResourceDoesNotExistException exception) {
-        Map<String, Object> body = Map.of(
-                "status", HttpStatus.NOT_FOUND.value(),
-                "error", "Not Found",
-                "message", exception.getMessage()
+    public ResponseEntity<ApiError> handleResourceDoesNotExistException(ResourceDoesNotExistException exception) {
+        ApiError error = new ApiError(
+                HttpStatus.NOT_FOUND.value(),
+                exception.getMessage(),
+                null
         );
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ResourceCouldNotBeDeletedException.class)
-    public ResponseEntity<Object> handleResourceCouldNotBeDeletedException(ResourceCouldNotBeDeletedException exception) {
-        Map<String, Object> body = Map.of(
-                "status", HttpStatus.CONFLICT.value(),
-                "error", "Conflict",
-                "message", exception.getMessage()
+    public ResponseEntity<ApiError> handleResourceCouldNotBeDeletedException(ResourceCouldNotBeDeletedException exception) {
+        ApiError error = new ApiError(
+                HttpStatus.CONFLICT.value(),
+                exception.getMessage(),
+                null
         );
-        return new ResponseEntity<>(body, HttpStatus.CONFLICT);
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(ResourceCouldNotBeDeletedException.class)
+    public ResponseEntity<ApiError> handleUnauthorizedException(UnauthorizedException exception) {
+        ApiError error = new ApiError(
+                HttpStatus.UNAUTHORIZED.value(),
+                exception.getMessage(),
+                null
+        );
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
 }
