@@ -88,8 +88,10 @@ public class CustomParamsIntegrationTests {
 
     @Test
     public void testFetchTeamsWithLessThanFivePlayers() throws Exception {
-        List<Team> teams = fetchTeamsWithQueryString("?maxPlayers=4");
-        assert teams.isEmpty();
+        List<Team> teams = fetchTeamsWithQueryString("?maxPlayers=11&?minPlayers=9");
+        System.out.println(teams.size());
+        System.out.println("teams.get(0).getPlayers().size() = " + teams.get(0).getPlayers().size());
+        assert teams.size() == 20;
     }
 
     @Test

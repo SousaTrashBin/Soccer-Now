@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pt.ul.fc.css.soccernow.domain.dto.tournament.PointTournamentDTO;
 import pt.ul.fc.css.soccernow.domain.entities.tournament.point.PointTournament;
-import pt.ul.fc.css.soccernow.mapper.GameMapper;
 import pt.ul.fc.css.soccernow.mapper.TournamentMapper;
 import pt.ul.fc.css.soccernow.service.PointTournamentService;
 import pt.ul.fc.css.soccernow.util.TournamentSearchParams;
@@ -25,8 +24,7 @@ public class PointTournamentController {
     private final TournamentMapper tournamentMapper;
 
     public PointTournamentController(PointTournamentService pointTournamentService,
-                                     TournamentMapper tournamentMapper,
-                                     GameMapper gameMapper) {
+                                     TournamentMapper tournamentMapper) {
         this.pointTournamentService = pointTournamentService;
         this.tournamentMapper = tournamentMapper;
     }
@@ -36,7 +34,7 @@ public class PointTournamentController {
             summary = "Get tournament by ID",
             description = "Returns the details of a tournament identified by the given UUID."
     )
-    public ResponseEntity<PointTournamentDTO> getPlayerById(@PathVariable @NotNull UUID tournamentId) {
+    public ResponseEntity<PointTournamentDTO> getTournamentById(@PathVariable @NotNull UUID tournamentId) {
         PointTournament pointTournament = pointTournamentService.findNotDeletedById(tournamentId);
         return ResponseEntity.ok(tournamentMapper.toDTO(pointTournament));
     }
@@ -51,16 +49,16 @@ public class PointTournamentController {
 
     @PatchMapping("{tournamentId}/close-registrations")
     @Operation(summary = "Close tournament registrations")
-    public ResponseEntity<PointTournament> closeRegistrations(@PathVariable @NotNull UUID tournamentId) {
+    public ResponseEntity<PointTournamentDTO> closeRegistrations(@PathVariable @NotNull UUID tournamentId) {
         PointTournament updatedPointTournament = pointTournamentService.closeRegistrations(tournamentId);
-        return ResponseEntity.ok(updatedPointTournament);
+        return ResponseEntity.ok(tournamentMapper.toDTO(updatedPointTournament));
     }
 
     @PatchMapping("{tournamentId}/end")
     @Operation(summary = "End tournament")
-    public ResponseEntity<PointTournament> endTournament(@PathVariable @NotNull UUID tournamentId) {
+    public ResponseEntity<PointTournamentDTO> endTournament(@PathVariable @NotNull UUID tournamentId) {
         PointTournament updatedPointTournament = pointTournamentService.endTournament(tournamentId);
-        return ResponseEntity.ok(updatedPointTournament);
+        return ResponseEntity.ok(tournamentMapper.toDTO(updatedPointTournament));
     }
 
     @GetMapping
@@ -74,35 +72,35 @@ public class PointTournamentController {
     }
 
     @PostMapping("{tournamentId}/games/{gameId}")
-    public ResponseEntity<PointTournament> addGameToTournament(
+    public ResponseEntity<PointTournamentDTO> addGameToTournament(
             @PathVariable @NotNull UUID tournamentId,
             @PathVariable @NotNull UUID gameId) {
         PointTournament updatedPointTournament = pointTournamentService.addGameToTournament(gameId, tournamentId);
-        return ResponseEntity.ok(updatedPointTournament);
+        return ResponseEntity.ok(tournamentMapper.toDTO(updatedPointTournament));
     }
 
     @DeleteMapping("{tournamentId}/games/{gameId}")
-    public ResponseEntity<PointTournament> removeGameFromTournament(
+    public ResponseEntity<PointTournamentDTO> removeGameFromTournament(
             @PathVariable @NotNull UUID tournamentId,
             @PathVariable @NotNull UUID gameId) {
         PointTournament updatedPointTournament = pointTournamentService.removeGameFromTournament(gameId, tournamentId);
-        return ResponseEntity.ok(updatedPointTournament);
+        return ResponseEntity.ok(tournamentMapper.toDTO(updatedPointTournament));
     }
 
     @PostMapping("{tournamentId}/teams/{teamId}")
-    public ResponseEntity<PointTournament> addTeamToTournament(
+    public ResponseEntity<PointTournamentDTO> addTeamToTournament(
             @PathVariable @NotNull UUID tournamentId,
             @PathVariable @NotNull UUID teamId) {
         PointTournament updatedPointTournament = pointTournamentService.addTeamToTournament(teamId, tournamentId);
-        return ResponseEntity.ok(updatedPointTournament);
+        return ResponseEntity.ok(tournamentMapper.toDTO(updatedPointTournament));
     }
 
     @DeleteMapping("{tournamentId}/teams/{teamId}")
-    public ResponseEntity<PointTournament> removeTeamFromTournament(
+    public ResponseEntity<PointTournamentDTO> removeTeamFromTournament(
             @PathVariable @NotNull UUID tournamentId,
             @PathVariable @NotNull UUID teamId) {
         PointTournament updatedPointTournament = pointTournamentService.removeTeamFromTournament(teamId, tournamentId);
-        return ResponseEntity.ok(updatedPointTournament);
+        return ResponseEntity.ok(tournamentMapper.toDTO(updatedPointTournament));
     }
 
     public record CreatePointTournamentDTO(@NotNull String name) {

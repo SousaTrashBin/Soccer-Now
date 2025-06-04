@@ -2,6 +2,8 @@ package pt.ul.fc.css.soccernow.util;
 
 import org.springframework.stereotype.Component;
 import pt.ul.fc.css.soccernow.domain.entities.Address;
+import pt.ul.fc.css.soccernow.domain.entities.Credentials;
+import pt.ul.fc.css.soccernow.domain.entities.CredentialsRepository;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
 import pt.ul.fc.css.soccernow.domain.entities.game.Game;
 import pt.ul.fc.css.soccernow.domain.entities.game.GameTeam;
@@ -27,12 +29,15 @@ public class DummyDataGenerator {
     private final PlayerService playerService;
     private final RefereeService refereeService;
     private final TeamService teamService;
+    private final CredentialsRepository credentialsRepository;
 
-    public DummyDataGenerator(GameService gameService, PlayerService playerService, RefereeService refereeService, TeamService teamService) {
+    public DummyDataGenerator(GameService gameService, PlayerService playerService, RefereeService refereeService, TeamService teamService,
+                              CredentialsRepository credentialsRepository) {
         this.gameService = gameService;
         this.playerService = playerService;
         this.refereeService = refereeService;
         this.teamService = teamService;
+        this.credentialsRepository = credentialsRepository;
     }
 
     public void generateDummyData() {
@@ -53,6 +58,11 @@ public class DummyDataGenerator {
         createNewGameWith(firstTeamPlayers, secondTeamPlayers, firstTeam, secondTeam, referees);
         Game closedGame = createNewGameWith(firstTeamPlayers, secondTeamPlayers, firstTeam, secondTeam, referees);
         gameService.closeGame(closedGame.getId(), getPlayerStats(firstTeamPlayers, secondTeamPlayers, closedGame));
+
+        Credentials adminCredentials = new Credentials();
+        adminCredentials.setUsername("admin");
+        adminCredentials.setPassword("admin");
+        credentialsRepository.save(adminCredentials);
     }
 
     private Set<PlayerGameStats> getPlayerStats(List<Player> firstTeamPlayers, List<Player> secondTeamPlayers, Game game) {

@@ -4,7 +4,6 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
-import jakarta.validation.constraints.Size;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
 import pt.ul.fc.css.soccernow.domain.entities.game.GameStats;
 import pt.ul.fc.css.soccernow.domain.entities.game.GameTeam;
@@ -16,7 +15,6 @@ import java.util.List;
 @Entity
 public class PointTournament extends Tournament {
     public static final int MINIMUM_TEAM_SIZE = 8;
-    @Size(min = 8)
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
     @OrderBy("currentPoints DESC")
     private List<TeamPoints> teamPoints = new ArrayList<>();

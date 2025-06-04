@@ -6,6 +6,9 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import pt.ul.fc.css.soccernow.domain.entities.game.QCard;
+import pt.ul.fc.css.soccernow.domain.entities.game.QGame;
+import pt.ul.fc.css.soccernow.domain.entities.user.QReferee;
 import pt.ul.fc.css.soccernow.domain.entities.user.Referee;
 import pt.ul.fc.css.soccernow.util.CardEnum;
 import pt.ul.fc.css.soccernow.util.GameStatusEnum;
@@ -14,8 +17,6 @@ import pt.ul.fc.css.soccernow.util.RefereeSearchParams;
 import java.util.ArrayList;
 import java.util.List;
 
-import static pt.ul.fc.css.soccernow.domain.entities.game.QCard.card;
-import static pt.ul.fc.css.soccernow.domain.entities.game.QGame.game;
 import static pt.ul.fc.css.soccernow.domain.entities.user.QReferee.referee;
 
 public interface RefereeRepository extends SoftDeletedRepository<Referee> {
@@ -23,14 +24,21 @@ public interface RefereeRepository extends SoftDeletedRepository<Referee> {
         List<BooleanExpression> conditions = new ArrayList<>();
 
         conditions.add(referee.deletedAt.isNull());
+
         if (params.getName() != null && !params.getName().isBlank()) {
             conditions.add(referee.name.containsIgnoreCase(params.getName()));
         }
+
+        QReferee refereeCardSub = new QReferee("refCardSub");
+        QCard cardSub = new QCard("cardSub");
+
         JPQLQuery<Long> cardCountSubquery = JPAExpressions
-                .select(card.count())
-                .from(referee)
-                .join(referee.issuedCards, card)
-                .where(card.cardType.ne(CardEnum.NONE));
+                .select(cardSub.count())
+                .from(refereeCardSub)
+                .join(refereeCardSub.issuedCards, cardSub)
+                .where(refereeCardSub.eq(referee)
+                        .and(cardSub.cardType.ne(CardEnum.NONE)));
+
         if (params.getNumCardsGiven() != null) {
             conditions.add(cardCountSubquery.eq(params.getNumCardsGiven().longValue()));
         }
@@ -40,12 +48,18 @@ public interface RefereeRepository extends SoftDeletedRepository<Referee> {
         if (params.getMaxCardsGiven() != null) {
             conditions.add(cardCountSubquery.lt(params.getMaxCardsGiven().longValue()));
         }
+
+        QGame gameSub = new QGame("gameSub");
+
         JPQLQuery<Long> gameCountSubquery = JPAExpressions
-                .select(game.count())
-                .from(game)
-                .where(game.status.eq(GameStatusEnum.CLOSED))
-                .where(game.primaryReferee.eq(referee)
-                        .or(game.secondaryReferees.contains(referee)));
+                .select(gameSub.count())
+                .from(gameSub)
+                .where(
+                        gameSub.status.eq(GameStatusEnum.CLOSED)
+                                .and(gameSub.primaryReferee.eq(referee)
+                                        .or(gameSub.secondaryReferees.contains(referee)))
+                );
+
         if (params.getNumGames() != null) {
             conditions.add(gameCountSubquery.eq(params.getNumGames().longValue()));
         }

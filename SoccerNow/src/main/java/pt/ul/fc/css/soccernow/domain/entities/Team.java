@@ -168,7 +168,7 @@ public class Team extends SoftDeleteEntity {
     public void addTournament(Tournament tournament) {
         Placement placement = new Placement();
         placement.setTournament(tournament);
-        placement.setPlacementEnum(PlacementEnum.PENDING);
+        placement.setValue(PlacementEnum.PENDING);
         placements.add(placement);
     }
 

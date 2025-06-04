@@ -60,7 +60,6 @@ public class GameServiceImpl implements GameService {
         Game newGame = new Game();
         newGame.setLocatedIn(entity.getLocatedIn());
         newGame.setHappensIn(entity.getHappensIn());
-        newGame.setTournament(entity.getTournament());
 
         UpdatedAndValidatedRefereesResult refereesResult = updatedAndValidatedReferees(entity);
         Referee primaryReferee = refereesResult.primaryReferee;
@@ -78,6 +77,7 @@ public class GameServiceImpl implements GameService {
 
         return gameRepository.save(newGame);
     }
+
 
     private void verifyNoPlayerOverlap(GameTeam validatedGameTeamOne, GameTeam validatedGameTeamTwo) {
         if (validatedGameTeamOne.getPlayers().stream().anyMatch(validatedGameTeamTwo::hasPlayer)) {
