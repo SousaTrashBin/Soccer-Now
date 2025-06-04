@@ -3,9 +3,6 @@ package com.soccernow.ui.soccernowui.dto.games;
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * DTO for {@link pt.ul.fc.css.soccernow.domain.entities.Address}
- */
 public class AddressDTO implements Serializable {
     private String country;
     private String city;

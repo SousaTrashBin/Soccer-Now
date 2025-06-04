@@ -1,13 +1,12 @@
 package com.soccernow.ui.soccernowui.dto.games;
 
-import com.soccernow.ui.soccernowui.dto.user.RefereeInfoDTO;
 import com.soccernow.ui.soccernowui.util.CardEnum;
 import jakarta.validation.constraints.NotNull;
+import com.soccernow.ui.soccernowui.dto.user.RefereeInfoDTO;
 
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
-
 
 public class CardInfoDTO implements Serializable {
     private UUID id;

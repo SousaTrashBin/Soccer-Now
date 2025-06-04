@@ -1,12 +1,10 @@
 package com.soccernow.ui.soccernowui.dto.games;
 
-
 import com.soccernow.ui.soccernowui.dto.user.PlayerInfoDTO;
 import com.soccernow.ui.soccernowui.util.FutsalPositionEnum;
 
 import java.io.Serializable;
 import java.util.Objects;
-
 
 public class GamePlayerDTO implements Serializable {
     private FutsalPositionEnum playedInPosition;

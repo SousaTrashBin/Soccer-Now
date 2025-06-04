@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
-
 public class TeamInfoDTO implements Serializable {
     private UUID id;
     private String name;

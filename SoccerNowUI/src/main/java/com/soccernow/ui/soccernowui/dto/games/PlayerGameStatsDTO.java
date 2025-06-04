@@ -1,13 +1,11 @@
 package com.soccernow.ui.soccernowui.dto.games;
 
-
 import com.soccernow.ui.soccernowui.dto.user.PlayerInfoDTO;
 
 import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
-
 
 public class PlayerGameStatsDTO implements Serializable {
     private Set<CardInfoDTO> receivedCards = new LinkedHashSet<>();

@@ -6,10 +6,9 @@ import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
-
 public class PlacementInfoDTO implements Serializable {
-    private PlacementEnum value = PlacementEnum.PENDING;
     @NotNull
+    private PlacementEnum value = PlacementEnum.PENDING;
     private TournamentInfoDTO tournament;
 
     public PlacementInfoDTO() {

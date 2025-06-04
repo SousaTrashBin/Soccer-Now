@@ -1,10 +1,10 @@
 package com.soccernow.ui.soccernowui.dto.user;
 
-import com.soccernow.ui.soccernowui.dto.TeamInfoDTO;
-import com.soccernow.ui.soccernowui.dto.games.PlayerGameStatsDTO;
 import com.soccernow.ui.soccernowui.util.FutsalPositionEnum;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
+import com.soccernow.ui.soccernowui.dto.TeamInfoDTO;
+import com.soccernow.ui.soccernowui.dto.games.PlayerGameStatsDTO;
 
 import java.io.Serializable;
 import java.util.*;
@@ -12,7 +12,7 @@ import java.util.*;
 public class PlayerDTO implements Serializable {
     private List<PlayerGameStatsDTO> playerGameStats = new ArrayList<>();
     private UUID id;
-    @Pattern(regexp = "^\\p{L}+( \\p{L}+)*$", message = "Player name must only contain letters")
+    @Pattern(regexp = "^\\p{L}+( \\p{L}+)*$")
     @Length(max = 100)
     private String name;
     private FutsalPositionEnum preferredPosition;

@@ -8,7 +8,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-
 public class GameStatsDTO implements Serializable {
     private UUID id;
     private Integer teamOneGoals = 0;

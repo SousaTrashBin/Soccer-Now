@@ -1,13 +1,12 @@
 package com.soccernow.ui.soccernowui.dto.games;
 
-import com.soccernow.ui.soccernowui.dto.tournament.TournamentInfoDTO;
 import jakarta.validation.constraints.NotNull;
+import com.soccernow.ui.soccernowui.dto.tournament.TournamentInfoDTO;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
-
 
 public class GameInfoDTO implements Serializable {
     private UUID id;

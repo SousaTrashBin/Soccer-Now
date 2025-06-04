@@ -1,6 +1,5 @@
 package com.soccernow.ui.soccernowui.dto.games;
 
-
 import com.soccernow.ui.soccernowui.dto.tournament.TournamentInfoDTO;
 import com.soccernow.ui.soccernowui.dto.user.RefereeInfoDTO;
 
@@ -10,7 +9,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-
 
 public class GameDTO implements Serializable {
     private GameTeamDTO gameTeamTwo;

@@ -1,15 +1,14 @@
 package com.soccernow.ui.soccernowui.dto.tournament;
 
-import com.soccernow.ui.soccernowui.dto.TeamInfoDTO;
 import jakarta.validation.constraints.NotNull;
+import com.soccernow.ui.soccernowui.dto.TeamInfoDTO;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-
 public class TeamPointsDTO implements Serializable {
     @NotNull
-    private Integer currentPoints;
+    private Integer currentPoints = 0;
     @NotNull
     private TeamInfoDTO team;
 

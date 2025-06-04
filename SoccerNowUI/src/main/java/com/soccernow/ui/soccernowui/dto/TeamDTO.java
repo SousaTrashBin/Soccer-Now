@@ -1,10 +1,10 @@
 package com.soccernow.ui.soccernowui.dto;
 
+import jakarta.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.Length;
 import com.soccernow.ui.soccernowui.dto.games.GameInfoDTO;
 import com.soccernow.ui.soccernowui.dto.tournament.PlacementInfoDTO;
 import com.soccernow.ui.soccernowui.dto.user.PlayerInfoDTO;
-import jakarta.validation.constraints.Pattern;
-import org.hibernate.validator.constraints.Length;
 
 import java.io.Serializable;
 import java.util.LinkedHashSet;

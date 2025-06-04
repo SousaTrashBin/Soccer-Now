@@ -1,13 +1,12 @@
 package com.soccernow.ui.soccernowui.dto.games;
 
-import com.soccernow.ui.soccernowui.dto.TeamInfoDTO;
 import jakarta.validation.constraints.Size;
+import com.soccernow.ui.soccernowui.dto.TeamInfoDTO;
 
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-
 
 public class GameTeamDTO implements Serializable {
     @Size(min = 5, max = 5)
