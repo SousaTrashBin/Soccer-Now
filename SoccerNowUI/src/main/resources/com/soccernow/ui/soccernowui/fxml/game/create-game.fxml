@@ -27,27 +27,27 @@
 
     <HBox spacing="10" alignment="CENTER_LEFT">
         <Label text="Team One:"/>
-        <ComboBox fx:id="teamOneComboBox" promptText="Select Team One" prefWidth="300"/>
+        <ComboBox fx:id="teamOneComboBox" promptText="Select Team One" prefWidth="200"/>
     </HBox>
 
     <HBox spacing="10" alignment="CENTER_LEFT">
         <Label text="Team Two:"/>
-        <ComboBox fx:id="teamTwoComboBox" promptText="Select Team Two" prefWidth="300"/>
+        <ComboBox fx:id="teamTwoComboBox" promptText="Select Team Two" prefWidth="200"/>
     </HBox>
 
     <HBox spacing="10" alignment="CENTER_LEFT">
         <Label text="Primary Referee:"/>
-        <ComboBox fx:id="primaryRefereeComboBox" promptText="Select Referee" prefWidth="300"/>
+        <ComboBox fx:id="primaryRefereeComboBox" promptText="Select Referee" prefWidth="200"/>
     </HBox>
 
     <VBox spacing="10" alignment="CENTER_LEFT">
             <Label text="Secondary Referees:"/>
-            <ListView fx:id="secondaryRefereesListView" prefHeight="120" prefWidth="300"/>
+            <ListView fx:id="secondaryRefereesListView" prefHeight="120" prefWidth="200"/>
         </VBox>
 
     <HBox spacing="10" alignment="CENTER_LEFT">
             <Label text="Address:"/>
-            <ComboBox fx:id="addressComboBox" promptText="Select Tournament" prefWidth="300"/>
+            <ComboBox fx:id="addressComboBox" promptText="Select Address" prefWidth="200"/>
         </HBox>
 
     <HBox spacing="10" alignment="CENTER_LEFT">
