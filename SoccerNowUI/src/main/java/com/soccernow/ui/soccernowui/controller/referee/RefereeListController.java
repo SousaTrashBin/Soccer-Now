@@ -44,7 +44,7 @@ public class RefereeListController {
     @FXML
     private void onAddClick(ActionEvent event) {
         FXMLUtils.switchScene(
-                "/com/soccernow/ui/soccernowui/fxml/game/register-referee.fxml",
+                "/com/soccernow/ui/soccernowui/fxml/referee/register-referee.fxml",
                 (Node) event.getSource()
         );
     }
