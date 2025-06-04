@@ -54,7 +54,7 @@ public class TeamListController {
             ObservableList<TeamDTO> teamsObservable = FXCollections.observableArrayList(teams);
             teamTableView.setItems(teamsObservable);
         } catch (IOException | ErrorException e) {
-            System.err.println("Failed to load referees: " + e.getMessage());
+            System.err.println("Failed to load teams: " + e.getMessage());
             teamTableView.setItems(FXCollections.observableArrayList());
         }
     }
@@ -74,7 +74,7 @@ public class TeamListController {
 
         Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmAlert.setTitle("Confirm Delete");
-        confirmAlert.setHeaderText("Delete Referee");
+        confirmAlert.setHeaderText("Delete Team");
         confirmAlert.setContentText("Are you sure you want to delete " + selectedTeam.getName() + "?");
 
         Optional<ButtonType> result = confirmAlert.showAndWait();
