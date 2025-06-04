@@ -23,6 +23,7 @@ open module com.soccernow.ui.soccernowui {
     exports com.soccernow.ui.soccernowui.dto;
     exports com.soccernow.ui.soccernowui.dto.user;
     exports com.soccernow.ui.soccernowui.dto.games;
+    exports com.soccernow.ui.soccernowui.dto.tournament;
 
     exports com.soccernow.ui.soccernowui.controller.game;
     exports com.soccernow.ui.soccernowui.controller.home;
