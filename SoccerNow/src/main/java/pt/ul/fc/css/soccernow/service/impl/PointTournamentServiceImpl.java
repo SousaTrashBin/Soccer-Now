@@ -15,7 +15,6 @@ import pt.ul.fc.css.soccernow.util.GameStatusEnum;
 import pt.ul.fc.css.soccernow.util.TournamentSearchParams;
 import pt.ul.fc.css.soccernow.util.TournamentStatusEnum;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -85,6 +84,10 @@ public class PointTournamentServiceImpl implements PointTournamentService {
         }
         if (savedPointTournament.hasGame(savedGame)) {
             throw new BadRequestException("Game is already in the tournament");
+        }
+        if (!savedPointTournament.hasTeam(savedGame.getGameTeamOne().getTeam())
+                || !savedPointTournament.hasTeam(savedGame.getGameTeamTwo().getTeam())) {
+            throw new BadRequestException("A tournament game must be between teams that are registered on it");
         }
         savedPointTournament.addGame(savedGame);
         return pointTournamentRepository.save(savedPointTournament);
@@ -157,11 +160,13 @@ public class PointTournamentServiceImpl implements PointTournamentService {
         }
         tournament.setStatus(TournamentStatusEnum.CLOSED);
 
-        List<TeamPoints> sortedTeamPoints = new ArrayList<>(tournament.getTeamPoints());
+        List<TeamPoints> sortedTeamPoints = tournament.getTeamPoints();
 
         for (int i = 0; i < sortedTeamPoints.size(); i++) {
-            sortedTeamPoints.get(i).updatePlacementForTournament(tournament, i);
+            TeamPoints teamPoints = sortedTeamPoints.get(i);
+            teamPoints.updatePlacementForTournament(tournament, i);
         }
+
         return pointTournamentRepository.save(tournament);
     }
 
