@@ -80,7 +80,6 @@ public class FXMLUtils {
     public static void executeWithErrorHandling(ConsumerWithExceptions consumer) {
         try {
             consumer.consume();
-            return;
         } catch (IOException e) {
             showError("Connection Error", "Unable to connect to the server. Please check your internet connection and try again.");
         } catch (ErrorException e) {
@@ -90,7 +89,6 @@ public class FXMLUtils {
         } catch (Exception e) {
             showError("Unexpected Error", e.getMessage());
         }
-        return;
     }
 
     @FunctionalInterface
