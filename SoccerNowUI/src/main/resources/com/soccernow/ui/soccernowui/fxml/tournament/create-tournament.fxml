@@ -26,7 +26,7 @@
 
     <HBox spacing="10" alignment="CENTER_LEFT">
         <Label text="Tournament Name:"/>
-        <TextField fx:id="tournamentNameField" promptText="Enter tournament name" prefWidth="300"/>
+        <TextField fx:id="tournamentNameField" promptText="Enter tournament name" prefWidth="200"/>
     </HBox>
 
     <HBox spacing="10" alignment="CENTER_LEFT">
