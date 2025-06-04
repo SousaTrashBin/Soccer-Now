@@ -42,9 +42,7 @@ public enum PlayerApiController {
                 throwApiException(response, "Get all players failed");
             }
             String json = response.body().string();
-            return ApiUtils.getObjectMapper().readValue(
-                    json,
-                    ApiUtils.getObjectMapper().getTypeFactory().constructCollectionType(List.class, PlayerDTO.class));
+            return ApiUtils.getObjectMapper().readValue(json, ApiUtils.getObjectMapper().getTypeFactory().constructCollectionType(List.class, PlayerDTO.class));
         }
     }
 
