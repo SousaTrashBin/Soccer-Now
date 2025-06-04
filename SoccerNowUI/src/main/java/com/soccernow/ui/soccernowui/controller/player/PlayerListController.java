@@ -11,6 +11,8 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
@@ -18,6 +20,7 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 public class PlayerListController {
@@ -43,14 +46,18 @@ public class PlayerListController {
             return new SimpleStringProperty(posName);
         });
 
-        List<PlayerDTO> players;
+        loadPlayers();
+    }
+
+    private void loadPlayers() {
         try {
-            players = PlayerApiController.INSTANCE.getAllPlayers();
+            List<PlayerDTO> players = PlayerApiController.INSTANCE.getAllPlayers();
+            ObservableList<PlayerDTO> playersObservable = FXCollections.observableArrayList(players);
+            playerTableView.setItems(playersObservable);
         } catch (IOException | ErrorException e) {
-            players = new ArrayList<>();
+            System.err.println("Failed to load players: " + e.getMessage());
+            playerTableView.setItems(FXCollections.observableArrayList());
         }
-        ObservableList<PlayerDTO> playersObservable = FXCollections.observableArrayList(players);
-        playerTableView.setItems(playersObservable);
     }
 
     @FXML
@@ -65,10 +72,32 @@ public class PlayerListController {
     private void onEditClick(ActionEvent event) {}
 
     @FXML
-    private void onRefreshClick(ActionEvent event) {}
+    private void onRefreshClick(ActionEvent event) {
+        loadPlayers();
+    }
 
     @FXML
-    private void onDeleteClick(ActionEvent event) {}
+    private void onDeleteClick(ActionEvent event) {
+        PlayerDTO selectedPlayer = playerTableView.getSelectionModel().getSelectedItem();
+        if (selectedPlayer == null) {
+            return;
+        }
+
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setTitle("Confirm Delete");
+        confirmAlert.setHeaderText("Delete Player");
+        confirmAlert.setContentText("Are you sure you want to delete " + selectedPlayer.getName() + "?");
+
+        Optional<ButtonType> result = confirmAlert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                PlayerApiController.INSTANCE.deletePlayerById(selectedPlayer.getId());
+                loadPlayers();
+            } catch (IOException | ErrorException e) {
+                System.err.println("Failed to delete player: " + e.getMessage());
+            }
+        }
+    }
 
     @FXML
     public void onBackClick(ActionEvent actionEvent) {
