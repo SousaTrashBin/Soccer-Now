@@ -31,16 +31,15 @@
 
     <HBox spacing="10" alignment="CENTER_LEFT">
         <Label text="Player Name:"/>
-        <TextField fx:id="playerNameField" promptText="Enter player name" prefWidth="200"/>
+        <TextField fx:id="playerNameField" promptText="Enter player name" prefWidth="220"/>
     </HBox>
 
     <HBox spacing="10" alignment="CENTER_LEFT">
         <Label text="Position:"/>
-        <ComboBox fx:id="positionComboBox" promptText="Select position" prefWidth="200"/>
+        <ComboBox fx:id="positionComboBox" promptText="Select position" prefWidth="250"/>
     </HBox>
 
     <HBox spacing="20" alignment="CENTER">
-        <Button text="Cancel" onAction="#onCancelClick" styleClass="btn btn-secondary"/>
         <Button text="Save Changes" onAction="#onSaveClick" styleClass="btn btn-primary"/>
     </HBox>
 </VBox>
