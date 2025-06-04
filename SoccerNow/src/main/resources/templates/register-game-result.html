@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{styles.css}">
+    <title>SoccerNow - Register game result</title>
+</head>
+<body>
+<h1 th:text="'Register result for game with ID:' + ${game.getId()}" />
+
+</body>
+</html>

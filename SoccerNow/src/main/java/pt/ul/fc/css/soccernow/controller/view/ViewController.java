@@ -2,10 +2,7 @@ package pt.ul.fc.css.soccernow.controller.view;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pt.ul.fc.css.soccernow.domain.dto.TeamDTO;
 import pt.ul.fc.css.soccernow.domain.dto.games.GameDTO;
@@ -88,6 +85,26 @@ public class ViewController {
     @GetMapping("/home")
     public String getHomePage() {
         return "home";
+    }
+
+    @GetMapping("/register-game-result")
+    public String getChooseGameToRegisterResultPage(Model model) {
+        List<Game> allNonClosedGames = gameService.findAllNotDeleted();
+        List<GameDTO> allNonClosedGamesDTO = allNonClosedGames.stream()
+                                                              .filter(g -> !g.isClosed())
+                                                              .map(gameMapper::toDTO)
+                                                              .toList();
+
+        model.addAttribute("games", allNonClosedGamesDTO);
+        return "choose-game-to-register-result";
+    }
+
+    @GetMapping("/register-game-result/{id}")
+    public String getRegisterResultByGameIdPage(@PathVariable UUID id, Model model) {
+        Game game = gameService.findById(id);
+
+        model.addAttribute("game", gameMapper.toDTO(game));
+        return "register-game-result";
     }
 
     @GetMapping("/players")
