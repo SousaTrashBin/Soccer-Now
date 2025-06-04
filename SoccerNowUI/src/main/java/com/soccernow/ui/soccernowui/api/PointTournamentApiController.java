@@ -109,5 +109,13 @@ public enum PointTournamentApiController {
         }
     }
 
+    public void deleteTournament(UUID tournamentId) throws IOException, ErrorException {
+        try (Response response = deleteRequest(pointTournamentsURL + tournamentId)) {
+            if (!response.isSuccessful()) {
+                throwApiException(response, "Tournament deletion failed");
+            }
+        }
+    }
+
     public record CreatePointTournamentDTO(@NotNull String name){}
 }
