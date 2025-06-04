@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.soccernow.ui.soccernowui.util.FXMLUtils.executeWithErrorHandling;
+
 
 public class PlayerListController {
 
@@ -90,12 +92,10 @@ public class PlayerListController {
 
         Optional<ButtonType> result = confirmAlert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            try {
+            FXMLUtils.executeWithErrorHandling(() -> {
                 PlayerApiController.INSTANCE.deletePlayerById(selectedPlayer.getId());
                 loadPlayers();
-            } catch (IOException | ErrorException e) {
-                System.err.println("Failed to delete player: " + e.getMessage());
-            }
+            });
         }
     }
 

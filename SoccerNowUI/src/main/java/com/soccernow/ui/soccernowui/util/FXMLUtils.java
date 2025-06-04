@@ -13,13 +13,13 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class FXMLUtils {
 
     public static void switchScene(String fxmlPath, Node sourceNode) {
         switchScene(fxmlPath, sourceNode, controller -> {});
     }
+
     public static void switchScene(String fxmlPath, Node sourceNode, Consumer<Object> controllerInitializer) {
         try {
             FXMLLoader loader = new FXMLLoader(FXMLUtils.class.getResource(fxmlPath));
@@ -77,9 +77,30 @@ public class FXMLUtils {
         return Optional.empty();
     }
 
+    public static void executeWithErrorHandling(ConsumerWithExceptions consumer) {
+        try {
+            consumer.consume();
+            return;
+        } catch (IOException e) {
+            showError("Connection Error", "Unable to connect to the server. Please check your internet connection and try again.");
+        } catch (ErrorException e) {
+            String message = e.getErrorMessage();
+            int statusCode = e.getStatusCode();
+            showError("Server Error (" + statusCode + ")", message);
+        } catch (Exception e) {
+            showError("Unexpected Error", e.getMessage());
+        }
+        return;
+    }
+
     @FunctionalInterface
     public interface SupplierWithExceptions<T> {
         T get() throws Exception;
+    }
+
+    @FunctionalInterface
+    public interface ConsumerWithExceptions {
+        void consume() throws Exception;
     }
 
     public static void showSuccess(String header, String content) {
