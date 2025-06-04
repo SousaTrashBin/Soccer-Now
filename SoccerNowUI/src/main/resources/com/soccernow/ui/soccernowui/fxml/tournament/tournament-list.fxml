@@ -32,10 +32,10 @@
         </TableView>
 
         <HBox spacing="8" alignment="CENTER" prefWidth="380" maxWidth="380">
-            <Button text="Add" onAction="#onAddClick" prefWidth="100"/>
-            <Button text="Edit" onAction="#onEditClick" prefWidth="80"/>
-            <Button text="Refresh" onAction="#onRefreshClick" prefWidth="80"/>
-            <Button text="Delete" onAction="#onDeleteClick" prefWidth="110"/>
+                    <Button text="Add" onAction="#onAddClick" prefWidth="80"/>
+                    <Button text="Edit" onAction="#onEditClick" prefWidth="80"/>
+                    <Button text="Refresh" onAction="#onRefreshClick" prefWidth="80"/>
+                    <Button text="Delete" onAction="#onDeleteClick" prefWidth="110"/>
         </HBox>
     </VBox>
 

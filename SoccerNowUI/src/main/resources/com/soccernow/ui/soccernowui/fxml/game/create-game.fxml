@@ -57,7 +57,6 @@
     </HBox>
 
     <HBox spacing="15" alignment="CENTER">
-        <Button text="Back" onAction="#onBackClick" styleClass="btn btn-secondary"/>
         <Button text="Create Game" onAction="#onCreateGameClick" styleClass="btn btn-primary"/>
     </HBox>
 
