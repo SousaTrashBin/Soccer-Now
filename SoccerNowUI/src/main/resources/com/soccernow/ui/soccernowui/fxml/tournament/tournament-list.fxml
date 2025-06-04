@@ -25,9 +25,9 @@
 
         <TableView fx:id="tournamentTableView" prefHeight="480" prefWidth="380">
             <columns>
+                <TableColumn fx:id="idColumn" text="Tournament ID" prefWidth="100"/>
                 <TableColumn fx:id="nameColumn" text="Tournament Name" prefWidth="180"/>
                 <TableColumn fx:id="statusColumn" text="Status" prefWidth="100"/>
-                <TableColumn fx:id="gamesCountColumn" text="Games" prefWidth="100"/>
             </columns>
         </TableView>
 

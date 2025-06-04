@@ -24,8 +24,9 @@
 
         <TableView fx:id="refereeTableView" prefHeight="480" prefWidth="380">
             <columns>
-                <TableColumn fx:id="nameColumn" text="Referee Name" prefWidth="240" />
-                <TableColumn fx:id="hasCertificateColumn" text="Has Certificate" prefWidth="140" />
+                <TableColumn fx:id="idColumn" text="Referee ID" prefWidth="80" />
+                <TableColumn fx:id="nameColumn" text="Referee Name" prefWidth="180" />
+                <TableColumn fx:id="hasCertificateColumn" text="Has Certificate" prefWidth="120" />
             </columns>
         </TableView>
 

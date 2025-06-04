@@ -24,8 +24,9 @@
 
         <TableView fx:id="playerTableView" prefHeight="480" prefWidth="380">
             <columns>
-                <TableColumn fx:id="nameColumn" text="Player Name" prefWidth="240" />
-                <TableColumn fx:id="positionColumn" text="Position" prefWidth="140" />
+                <TableColumn fx:id="idColumn" text="Player ID" prefWidth="100" />
+                <TableColumn fx:id="nameColumn" text="Player Name" prefWidth="180" />
+                <TableColumn fx:id="positionColumn" text="Position" prefWidth="100" />
             </columns>
         </TableView>
 
