@@ -11,9 +11,9 @@
       fx:controller="com.soccernow.ui.soccernowui.controller.game.CreateGameController"
       style="-fx-font-family: 'JetBrains Mono'; -fx-font-size: 12;">
 
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-    </padding>
+      <padding>
+            <Insets bottom="20.0" left="10.0" right="10.0" top="20.0" />
+      </padding>
 
     <ToolBar prefHeight="40.0" prefWidth="400.0">
         <items>
