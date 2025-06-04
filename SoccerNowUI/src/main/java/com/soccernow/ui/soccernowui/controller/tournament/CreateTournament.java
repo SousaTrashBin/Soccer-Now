@@ -1,6 +1,7 @@
 package com.soccernow.ui.soccernowui.controller.tournament;
 
 import com.soccernow.ui.soccernowui.util.FXMLUtils;
+import com.soccernow.ui.soccernowui.util.TournamentStatusEnum;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -8,21 +9,30 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 
+import java.util.Arrays;
+
 public class CreateTournament {
 
     @FXML
     private Button BackButton;
-
     @FXML
     private TextField tournamentNameField;
-
     @FXML
-    private ComboBox<String> statusComboBox;
-
+    private ComboBox<TournamentStatusEnum> statusComboBox;
     @FXML
     private ListView<String> gameListView;
 
     private final ObservableList<String> games = FXCollections.observableArrayList();
+
+    @FXML
+    public void initialize() {
+
+        statusComboBox.getItems().add(null);
+        statusComboBox.getItems().addAll(TournamentStatusEnum.values());
+        statusComboBox.setValue(TournamentStatusEnum.OPEN);
+
+        gameListView.setItems(games);
+    }
 
 
     @FXML
