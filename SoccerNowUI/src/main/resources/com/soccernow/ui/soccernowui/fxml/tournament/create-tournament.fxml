@@ -29,22 +29,7 @@
         <TextField fx:id="tournamentNameField" promptText="Enter tournament name" prefWidth="200"/>
     </HBox>
 
-    <HBox spacing="10" alignment="CENTER_LEFT">
-        <Label text="Status:"/>
-        <ComboBox fx:id="statusComboBox" prefWidth="200"/>
-    </HBox>
-
-    <VBox spacing="10" alignment="CENTER_LEFT">
-        <Label text="Games:"/>
-        <ListView fx:id="gameListView" prefHeight="120" prefWidth="300"/>
-        <HBox spacing="10">
-            <Button text="Add Game" onAction="#onAddGameClick"/>
-            <Button text="Remove Selected" onAction="#onRemoveGameClick"/>
-        </HBox>
-    </VBox>
-
     <HBox spacing="20" alignment="CENTER">
-        <Button text="Cancel" onAction="#onCancelClick" styleClass="btn btn-secondary"/>
         <Button text="Create Tournament" onAction="#onCreateClick" styleClass="btn btn-primary"/>
     </HBox>
 </VBox>
