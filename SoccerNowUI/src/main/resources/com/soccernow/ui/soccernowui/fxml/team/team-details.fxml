@@ -29,17 +29,23 @@
         <TextField fx:id="teamNameField" promptText="Team name" prefWidth="200"/>
     </HBox>
 
-    <VBox spacing="10" alignment="CENTER">
-            <Label text="Players:"/>
-            <ListView fx:id="playerListView" prefHeight="150" prefWidth="260"/> <!-- Reduced width -->
+    <VBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Players on team:"/>
+            <ListView fx:id="playersOnTeamListView" prefHeight="150" prefWidth="260"/>
             <HBox spacing="10" alignment="CENTER">
-                <Button text="Add" onAction="#onAddPlayerClick" prefWidth="90"/>
                 <Button text="Remove" onAction="#onRemovePlayerClick" prefWidth="120"/>
             </HBox>
+    </VBox>
+
+    <VBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Players not on team:"/>
+                <ListView fx:id="playersNotOnTeamListView" prefHeight="150" prefWidth="260"/>
+                <HBox spacing="10" alignment="CENTER">
+                    <Button text="Add" onAction="#onAddPlayerClick" prefWidth="90"/>
+                </HBox>
         </VBox>
 
     <HBox spacing="20" alignment="CENTER">
-        <Button text="Cancel" onAction="#onCancelClick" styleClass="btn btn-secondary"/>
         <Button text="Save Changes" onAction="#onSaveClick" styleClass="btn btn-primary"/>
     </HBox>
 </VBox>
