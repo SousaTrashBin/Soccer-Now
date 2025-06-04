@@ -79,4 +79,13 @@ public class ApiUtils {
         return objectMapper;
     }
 
+    public static void throwApiException(Response response, String message) throws IOException {
+        String errorBody = response.body().string();
+        try {
+            ApiUtils.ApiError apiError = ApiUtils.getObjectMapper().readValue(errorBody, ApiUtils.ApiError.class);
+            throw new ErrorException(message + ": " + apiError.toString(), response.code());
+        } catch (Exception e) {
+            throw new ErrorException(message + " with status code: " + response.code() + ". Response: " + errorBody, response.code());
+        }
+    }
 }
