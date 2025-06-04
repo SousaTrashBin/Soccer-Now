@@ -7,11 +7,11 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * DTO for {@link pt.ul.fc.css.soccernow.domain.entities.tournament.Placement}
+ * DTO for {@link PlacementInfoDTO}
  */
 public class PlacementInfoDTO implements Serializable {
-    private PlacementEnum value = PlacementEnum.PENDING;
     @NotNull
+    private PlacementEnum value = PlacementEnum.PENDING;
     private TournamentInfoDTO tournament;
 
     public PlacementInfoDTO() {

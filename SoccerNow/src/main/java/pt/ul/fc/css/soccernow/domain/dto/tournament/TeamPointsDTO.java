@@ -11,7 +11,7 @@ import java.util.Objects;
  */
 public class TeamPointsDTO implements Serializable {
     @NotNull
-    private Integer currentPoints;
+    private Integer currentPoints = 0;
     @NotNull
     private TeamInfoDTO team;
 

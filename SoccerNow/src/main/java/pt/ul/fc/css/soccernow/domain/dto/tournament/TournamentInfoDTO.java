@@ -1,6 +1,5 @@
 package pt.ul.fc.css.soccernow.domain.dto.tournament;
 
-import jakarta.validation.constraints.NotNull;
 import pt.ul.fc.css.soccernow.util.TournamentStatusEnum;
 
 import java.io.Serializable;
@@ -14,17 +13,15 @@ public class TournamentInfoDTO implements Serializable {
     private String name;
     private TournamentStatusEnum status = TournamentStatusEnum.OPEN;
     private UUID id;
-    @NotNull
-    private Boolean isFinished = false;
 
     public TournamentInfoDTO() {
     }
 
     public TournamentInfoDTO(
             String name,
-            TournamentStatusEnum status, UUID id, Boolean isFinished) {
+            TournamentStatusEnum status
+            , UUID id) {
         this.id = id;
-        this.isFinished = isFinished;
         this.name = name;
         this.status = status;
     }
@@ -38,13 +35,13 @@ public class TournamentInfoDTO implements Serializable {
         return this;
     }
 
-    public Boolean getIsFinished() {
-        return isFinished;
-    }
-
-    public TournamentInfoDTO setIsFinished(Boolean isFinished) {
-        this.isFinished = isFinished;
-        return this;
+    @Override
+    public String toString() {
+        return "TournamentInfoDTO(" +
+                "name = '" + name + '\'' +
+                ", status = " + status +
+                ", id = " + id +
+                ')';
     }
 
     @Override
@@ -53,19 +50,12 @@ public class TournamentInfoDTO implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         TournamentInfoDTO entity = (TournamentInfoDTO) o;
         return Objects.equals(this.id, entity.id) &&
-                Objects.equals(this.isFinished, entity.isFinished);
+                Objects.equals(this.status, entity.status);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, isFinished);
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "id = " + id + ", " +
-                "isFinished = " + isFinished + ")";
+        return Objects.hash(getName(), getStatus(), getId());
     }
 
     public String getName() {
