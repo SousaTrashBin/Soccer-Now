@@ -1,7 +1,12 @@
 package com.soccernow.ui.soccernowui.controller.team;
 
+import com.soccernow.ui.soccernowui.SoccerNowApp;
+import com.soccernow.ui.soccernowui.api.RefereeApiController;
+import com.soccernow.ui.soccernowui.api.TeamApiController;
+import com.soccernow.ui.soccernowui.dto.TeamDTO;
 import com.soccernow.ui.soccernowui.dto.user.PlayerDTO;
 import com.soccernow.ui.soccernowui.util.FXMLUtils;
+import jakarta.validation.Validator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,34 +18,28 @@ public class RegisterTeamController {
 
     @FXML
     private TextField teamNameField;
-    @FXML
-    private ListView<PlayerDTO> playerListView;
-    private final ObservableList<PlayerDTO> players = FXCollections.observableArrayList();
+    private Validator validator;
 
     @FXML
     private void initialize() {
-
-    }
-
-
-    @FXML
-    public void onAddPlayerClick(ActionEvent actionEvent) {
-        return;
-    }
-
-    @FXML
-    public void onRemovePlayerClick(ActionEvent actionEvent) {
-        return;
-    }
-
-    @FXML
-    public void onCancelClick(ActionEvent actionEvent) {
-        return;
+        this.validator = SoccerNowApp.getValidatorFactory().getValidator();
     }
 
     @FXML
     public void onRegisterClick(ActionEvent actionEvent) {
-        return;
+        TeamDTO teamDTO = new TeamDTO();
+        teamDTO.setName(teamNameField.getText());
+
+        boolean isValid = FXMLUtils.validateAndShowAlert(teamDTO, validator);
+        if (!isValid) {
+            return;
+        }
+
+        FXMLUtils.executeWithErrorHandling(() -> TeamApiController.INSTANCE.registerTeam(teamDTO))
+                .ifPresent(savedDTO -> {
+                    System.out.printf(savedDTO.toString());
+                    FXMLUtils.showSuccess("Team Successfully Registered", "Team " + savedDTO.getName() + " registered successfully!");
+                });
     }
 
     @FXML

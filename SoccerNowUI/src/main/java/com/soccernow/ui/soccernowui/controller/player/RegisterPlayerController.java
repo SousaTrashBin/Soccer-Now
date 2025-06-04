@@ -15,6 +15,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.Set;
 
 public class RegisterPlayerController {
@@ -41,24 +42,14 @@ public class RegisterPlayerController {
 
         boolean isValid = FXMLUtils.validateAndShowAlert(playerDTO, validator);
         if (!isValid) {
-            System.err.println("Validation failed for: " + playerDTO);
             return;
         }
 
-        PlayerDTO savedDTO;
-        try {
-            savedDTO = PlayerApiController.INSTANCE.registerPlayer(playerDTO);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        System.out.printf(savedDTO.toString());
-
-        Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-        successAlert.setTitle("Success");
-        successAlert.setHeaderText("Player Successfully Registered");
-        successAlert.setContentText("Player " + savedDTO.getName() + " registered successfully!");
-        successAlert.showAndWait();
+        FXMLUtils.executeWithErrorHandling(() -> PlayerApiController.INSTANCE.registerPlayer(playerDTO))
+                .ifPresent(savedDTO -> {
+                    System.out.printf(savedDTO.toString());
+                    FXMLUtils.showSuccess("Player Successfully Registered", "Player " + savedDTO.getName() + " registered successfully!");
+                });
     }
 
     public void onBackClick(ActionEvent actionEvent) {
