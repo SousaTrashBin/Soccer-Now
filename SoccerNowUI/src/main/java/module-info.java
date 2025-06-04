@@ -17,15 +17,19 @@ module com.soccernow.ui.soccernowui {
     requires okhttp3;
 
     opens com.soccernow.ui.soccernowui to javafx.fxml;
-
     opens com.soccernow.ui.soccernowui.dto.user to org.hibernate.validator;
     opens com.soccernow.ui.soccernowui.dto.games to org.hibernate.validator;
     opens com.soccernow.ui.soccernowui.dto to org.hibernate.validator;
 
-    opens com.soccernow.ui.soccernowui.controller to javafx.fxml;
+    opens com.soccernow.ui.soccernowui.controller.home to javafx.fxml;
+    opens com.soccernow.ui.soccernowui.controller.player to javafx.fxml;
+    opens com.soccernow.ui.soccernowui.controller.referee to javafx.fxml;
 
     exports com.soccernow.ui.soccernowui;
     exports com.soccernow.ui.soccernowui.util;
-    exports com.soccernow.ui.soccernowui.controller;
     exports com.soccernow.ui.soccernowui.dto;
+    exports com.soccernow.ui.soccernowui.controller.home;
+    exports com.soccernow.ui.soccernowui.controller.player;
+    exports com.soccernow.ui.soccernowui.controller.referee;
+
 }
