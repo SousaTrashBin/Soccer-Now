@@ -1,14 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.soccernow.ui.soccernowui.fxml.referee.RefereeDetails"
-            prefHeight="400.0" prefWidth="600.0" >
+<VBox fx:id="editRefereeVBox"
+      alignment="CENTER"
+      prefHeight="600.0"
+      prefWidth="400.0"
+      spacing="20.0"
+      styleClass="container"
+      xmlns="http://javafx.com/javafx/17.0.12"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.soccernow.ui.soccernowui.controller.referee.EditRefereeController"
+      style="-fx-font-family: 'JetBrains Mono'; -fx-font-size: 12;">
 
-</AnchorPane>
+    <padding>
+        <Insets top="20" bottom="20" left="10" right="10"/>
+    </padding>
+
+    <ToolBar prefHeight="40.0" prefWidth="360.0">
+        <items>
+            <Button fx:id="BackButton" onAction="#onBackClick" mnemonicParsing="false" text="&lt; Back"/>
+            <Label text="Edit &gt; Referee"/>
+        </items>
+    </ToolBar>
+
+    <Label text="Edit Referee Details" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Name:"/>
+        <TextField fx:id="refereeNameField" promptText="Referee name" prefWidth="200"/>
+    </HBox>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Certificate:"/>
+        <ComboBox fx:id="certificateComboBox" promptText="Select option" prefWidth="200"/>
+    </HBox>
+
+    <HBox spacing="20" alignment="CENTER">
+        <Button text="Cancel" onAction="#onCancelClick" styleClass="btn btn-secondary"/>
+        <Button text="Save Changes" onAction="#onSaveClick" styleClass="btn btn-primary"/>
+    </HBox>
+</VBox>
