@@ -38,29 +38,69 @@
               alignment="CENTER"
               visible="false"
               managed="false">
-            <Button text="Register Player" prefWidth="150"/>
-            <Button text="Register Referee" prefWidth="150"/>
-            <Button text="Register Team" prefWidth="150"/>
-            <Button text="Create Game" prefWidth="150"/>
-            <Button text="Create Tournament" prefWidth="150"/>
-    </VBox>
 
-    <Button text="Visualize"
-            fx:id="visualizeButton"
-            onAction="#onVisualizeClick"
+            <Button text="Register Player"
+                    fx:id="registerPlayerButton"
+                    onAction="#onRegisterPlayerClick"
+                    prefWidth="150"/>
+
+            <Button text="Register Referee"
+                    fx:id="registerRefereeButton"
+                    onAction="#onRegisterRefereeClick"
+                    prefWidth="150"/>
+
+            <Button text="Register Team"
+                    fx:id="registerTeamButton"
+                    onAction="#onRegisterTeamClick"
+                    prefWidth="150"/>
+
+            <Button text="Create Game"
+                    fx:id="createGameButton"
+                    onAction="#onCreateGameClick"
+                    prefWidth="150"/>
+
+            <Button text="Create Tournament"
+                    fx:id="createTournamentButton"
+                    onAction="#onCreateTournamentClick"
+                    prefWidth="150"/>
+        </VBox>
+
+    <Button text="View"
+            fx:id="viewButton"
+            onAction="#onViewClick"
             prefWidth="200"
             styleClass="btn btn-secondary"/>
 
-    <VBox fx:id="visualizeOptions"
-              spacing="10"
-              alignment="CENTER"
-              visible="false"
-              managed="false">
-            <Button text="Visualize Player" prefWidth="150"/>
-            <Button text="Visualize Referee" prefWidth="150"/>
-            <Button text="Visualize Team" prefWidth="150"/>
-            <Button text="Visualize Game" prefWidth="150"/>
-            <Button text="Visualize Tournament" prefWidth="150"/>
-    </VBox>
+    <VBox fx:id="viewOptions"
+                  spacing="10"
+                  alignment="CENTER"
+                  visible="false"
+                  managed="false">
+
+                <Button text="View Players"
+                        fx:id="viewPlayerButton"
+                        onAction="#onViewPlayerClick"
+                        prefWidth="150"/>
+
+                <Button text="View Referees"
+                        fx:id="viewRefereeButton"
+                        onAction="#onViewRefereeClick"
+                        prefWidth="150"/>
+
+                <Button text="View Teams"
+                        fx:id="viewTeamButton"
+                        onAction="#onViewTeamClick"
+                        prefWidth="150"/>
+
+                <Button text="View Games"
+                        fx:id="viewGameButton"
+                        onAction="#onViewGameClick"
+                        prefWidth="150"/>
+
+                <Button text="View Tournaments"
+                        fx:id="viewTournamentButton"
+                        onAction="#onViewTournamentClick"
+                        prefWidth="150"/>
+            </VBox>
 
 </VBox>
