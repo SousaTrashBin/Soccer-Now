@@ -15,7 +15,7 @@ public class CreateGameController {
     private VBox createGameVBox;
     @FXML
     private ComboBox<String> teamOneComboBox;
-;    @FXML
+    @FXML
     private ComboBox<String> teamTwoComboBox;
     @FXML
     private ComboBox<String> primaryRefereeComboBox;
