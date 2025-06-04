@@ -28,4 +28,7 @@ public interface PointTournamentService extends CrudService<PointTournament> {
 
     @Transactional
     PointTournament endTournament(@NotNull UUID tournamentId);
+
+    @Transactional
+    void deleteTournament(@NotNull UUID tournamentId);
 }

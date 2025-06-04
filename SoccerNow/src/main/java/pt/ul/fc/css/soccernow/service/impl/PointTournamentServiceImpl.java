@@ -170,4 +170,14 @@ public class PointTournamentServiceImpl implements PointTournamentService {
         return pointTournamentRepository.save(tournament);
     }
 
+    @Override
+    public void deleteTournament(UUID tournamentId) {
+        PointTournament savedPointTournament = findNotDeletedById(tournamentId);
+        if (savedPointTournament.getStatus() != TournamentStatusEnum.CLOSED) {
+            throw new BadRequestException("Tournament must be closed in order to be deleted");
+        }
+        savedPointTournament.delete();
+        pointTournamentRepository.save(savedPointTournament);
+    }
+
 }
