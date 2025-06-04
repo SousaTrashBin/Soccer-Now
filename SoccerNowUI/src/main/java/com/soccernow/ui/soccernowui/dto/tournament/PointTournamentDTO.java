@@ -1,9 +1,10 @@
 package com.soccernow.ui.soccernowui.dto.tournament;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PointTournamentDTO extends TournamentDTO {
-    private List<TeamPointsDTO> teamPoints;
+    private List<TeamPointsDTO> teamPoints = new ArrayList<>();
 
     public List<TeamPointsDTO> getTeamPoints() {
         return teamPoints;
