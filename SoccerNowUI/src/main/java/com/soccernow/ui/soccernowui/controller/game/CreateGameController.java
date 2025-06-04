@@ -1,13 +1,18 @@
 package com.soccernow.ui.soccernowui.controller.game;
 
+import com.soccernow.ui.soccernowui.dto.TeamDTO;
 import com.soccernow.ui.soccernowui.util.FXMLUtils;
+import com.soccernow.ui.soccernowui.util.TournamentStatusEnum;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 
 public class CreateGameController {
 
+    @FXML
+    private VBox createGameVBox;
     @FXML
     private ComboBox<String> teamOneComboBox;
 ;    @FXML

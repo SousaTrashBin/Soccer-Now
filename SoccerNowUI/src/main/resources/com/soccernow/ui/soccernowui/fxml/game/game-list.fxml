@@ -1,14 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.soccernow.ui.soccernowui.fxml.GameList"
-            prefHeight="400.0" prefWidth="600.0" >
+            fx:controller="com.soccernow.ui.soccernowui.controller.game.GameListController"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <VBox alignment="TOP_CENTER" spacing="10.0" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.bottomAnchor="10">
+        <Label text="Game List" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+
+        <TableView fx:id="gameTableView" prefHeight="350" prefWidth="600">
+                    <columns>
+                        <TableColumn fx:id="idColumn" text="ID" prefWidth="200"/>
+                        <TableColumn fx:id="teamsColumn" text="Teams" prefWidth="200"/>
+                        <TableColumn fx:id="statusColumn" text="Status" prefWidth="80"/>
+                    </columns>
+        </TableView>
+
+        <HBox spacing="15" alignment="CENTER">
+            <Button text="Add Game" onAction="#onAddClick"/>
+            <Button text="Edit" onAction="#onEditClick"/>
+            <Button text="Refresh" onAction="#onRefreshClick"/>
+            <Button text="Delete Selected" onAction="#onDeleteClick"/>
+        </HBox>
+    </VBox>
 
 </AnchorPane>
