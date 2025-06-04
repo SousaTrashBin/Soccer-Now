@@ -24,8 +24,8 @@
 
         <TableView fx:id="teamTableView" prefHeight="480" prefWidth="380">
             <columns>
+                <TableColumn fx:id="idColumn" text="Team ID" prefWidth="100" />
                 <TableColumn fx:id="teamNameColumn" text="Team Name" prefWidth="280" />
-                <TableColumn fx:id="playerCountColumn" text="Players" prefWidth="100" />
             </columns>
         </TableView>
 
