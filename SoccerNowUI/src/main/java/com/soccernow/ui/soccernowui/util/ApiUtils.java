@@ -1,6 +1,8 @@
 package com.soccernow.ui.soccernowui.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import okhttp3.*;
 
 import java.io.IOException;
@@ -9,7 +11,7 @@ import java.util.Map;
 public class ApiUtils {
     public static final String baseURL = "http://localhost:8080/api/";
     private static final OkHttpClient client = new OkHttpClient();
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static ObjectMapper objectMapper;
 
     public record ApiError(int status, String message, Map<String, String> validationErrors) {}
 
@@ -76,6 +78,11 @@ public class ApiUtils {
     }
 
     public static ObjectMapper getObjectMapper() {
+        if (objectMapper == null) {
+            objectMapper = new ObjectMapper();
+            objectMapper.registerModule(new JavaTimeModule());
+            objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        }
         return objectMapper;
     }
 

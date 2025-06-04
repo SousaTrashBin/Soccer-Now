@@ -16,6 +16,7 @@ open module com.soccernow.ui.soccernowui {
     requires org.hibernate.validator;
     requires okhttp3;
     requires com.fasterxml.jackson.databind;
+    requires com.fasterxml.jackson.datatype.jsr310;
 
     exports com.soccernow.ui.soccernowui;
     exports com.soccernow.ui.soccernowui.util;
