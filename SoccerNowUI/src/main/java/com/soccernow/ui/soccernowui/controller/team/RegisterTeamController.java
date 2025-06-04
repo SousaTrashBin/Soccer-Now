@@ -9,7 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 
-public class RegisterTeam {
+public class RegisterTeamController {
 
     @FXML
     private TextField teamNameField;

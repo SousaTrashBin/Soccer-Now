@@ -1,4 +1,4 @@
 package com.soccernow.ui.soccernowui.controller.player;
 
-public class PlayerList {
+public class PlayerDetailsController {
 }

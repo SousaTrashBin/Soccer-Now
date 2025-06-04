@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class HomeScreen {
+public class HomeScreenController {
 
     @FXML private VBox createOptions;
     @FXML private VBox viewOptions;

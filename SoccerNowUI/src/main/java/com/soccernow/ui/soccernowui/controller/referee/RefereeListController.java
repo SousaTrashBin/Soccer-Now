@@ -1,4 +1,4 @@
 package com.soccernow.ui.soccernowui.controller.referee;
 
-public class RefereeDetails {
+public class RefereeListController {
 }
