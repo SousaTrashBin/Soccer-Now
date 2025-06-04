@@ -17,7 +17,7 @@ public class TeamPoints {
     private UUID id;
 
     @Column(name = "current_points", nullable = false)
-    private Integer currentPoints;
+    private Integer currentPoints = 0;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "team_id")
@@ -61,7 +61,7 @@ public class TeamPoints {
         return 0;
     }
 
-    public void updatePlacementForTournament(PointTournament tournament, int rank) {
+    public Placement updatePlacementForTournament(PointTournament tournament, int rank) {
         PlacementEnum placement;
         switch (rank) {
             case 0 -> placement = PlacementEnum.FIRST;
@@ -72,7 +72,8 @@ public class TeamPoints {
 
         Placement teamPlacement = this.getTeam().getPlacementForTournament(tournament);
         if (teamPlacement != null) {
-            teamPlacement.setPlacementEnum(placement);
+            teamPlacement.setValue(placement);
         }
+        return teamPlacement;
     }
 }
