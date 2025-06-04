@@ -5,14 +5,14 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" prefHeight="600.0" prefWidth="400.0" spacing="20.0" styleClass="container"
+<VBox fx:id="registerTeamVbox" alignment="CENTER" prefHeight="600.0" prefWidth="400.0" spacing="20.0" styleClass="container"
       xmlns="http://javafx.com/javafx/17.0.12"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.soccernow.ui.soccernowui.controller.team.RegisterTeamController"
       style="-fx-font-family: 'JetBrains Mono'; -fx-font-size: 12;">
 
     <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+        <Insets bottom="20.0" left="10.0" right="10.0" top="20.0" />
     </padding>
 
     <ToolBar prefHeight="40.0" prefWidth="400.0">
@@ -24,12 +24,12 @@
 
     <Label text="Register New Team" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
 
-    <HBox spacing="10" alignment="CENTER_LEFT">
+    <HBox spacing="10" alignment="CENTER">
         <Label text="Team Name:"/>
         <TextField fx:id="teamNameField" promptText="Enter team name" prefWidth="200"/>
     </HBox>
 
-    <VBox spacing="10" alignment="CENTER_LEFT">
+    <VBox spacing="10" alignment="CENTER">
         <Label text="Players:"/>
         <ListView fx:id="playerListView" prefHeight="150" prefWidth="300"/>
         <HBox spacing="10">

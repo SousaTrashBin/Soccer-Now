@@ -28,4 +28,10 @@ public class GameListController {
 
     @FXML
     private void onDeleteClick(ActionEvent event) {}
+
+    @FXML
+    public void onBackClick(ActionEvent actionEvent) {
+        FXMLUtils.switchScene("/com/soccernow/ui/soccernowui/fxml/home/home-screen.fxml",
+                (Node) actionEvent.getSource());
+    }
 }
