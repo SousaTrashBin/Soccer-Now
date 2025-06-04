@@ -2,6 +2,7 @@ package com.soccernow.ui.soccernowui.api;
 
 import com.soccernow.ui.soccernowui.dto.user.PlayerDTO;
 import com.soccernow.ui.soccernowui.util.ApiUtils;
+import com.soccernow.ui.soccernowui.util.ErrorException;
 import jakarta.validation.constraints.NotNull;
 import okhttp3.Response;
 
@@ -16,7 +17,7 @@ public enum PlayerApiController {
     INSTANCE;
     private final String playersURL = baseURL + "players/";
 
-    public PlayerDTO registerPlayer(@NotNull PlayerDTO player) throws IOException {
+    public PlayerDTO registerPlayer(@NotNull PlayerDTO player) throws IOException, ErrorException {
         try (Response response = ApiUtils.postJsonRequest(playersURL, player)) {
             if (!response.isSuccessful()) {
                 throwApiException(response, "Register player failed");
@@ -26,7 +27,7 @@ public enum PlayerApiController {
         }
     }
 
-    public PlayerDTO getPlayerById(@NotNull UUID playerId) throws IOException {
+    public PlayerDTO getPlayerById(@NotNull UUID playerId) throws IOException, ErrorException {
         try (Response response = ApiUtils.getRequest(playersURL + playerId.toString())) {
             if (!response.isSuccessful()) {
                 throwApiException(response, "Get player by ID failed");
@@ -36,7 +37,7 @@ public enum PlayerApiController {
         }
     }
 
-    public List<PlayerDTO> getAllPlayers() throws IOException {
+    public List<PlayerDTO> getAllPlayers() throws IOException, ErrorException {
         try (Response response = ApiUtils.getRequest(playersURL)) {
             if (!response.isSuccessful()) {
                 throwApiException(response, "Get all players failed");
@@ -46,7 +47,7 @@ public enum PlayerApiController {
         }
     }
 
-    public void deletePlayerById(@NotNull UUID playerId) throws IOException {
+    public void deletePlayerById(@NotNull UUID playerId) throws IOException, ErrorException {
         try (Response response = ApiUtils.deleteRequest(playersURL + playerId.toString())) {
             if (!response.isSuccessful()) {
                 throwApiException(response, "Delete player failed");
@@ -54,7 +55,7 @@ public enum PlayerApiController {
         }
     }
 
-    public PlayerDTO updatePlayerById(@NotNull UUID playerId, @NotNull PlayerDTO playerDTO) throws IOException {
+    public PlayerDTO updatePlayerById(@NotNull UUID playerId, @NotNull PlayerDTO playerDTO) throws IOException, ErrorException {
         try (Response response = ApiUtils.putJsonRequest(playersURL + playerId, playerDTO)) {
             if (!response.isSuccessful()) {
                 throwApiException(response, "Update player failed");

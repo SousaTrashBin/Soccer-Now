@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.soccernow.ui.soccernowui.dto.games.GameDTO;
 import com.soccernow.ui.soccernowui.dto.games.PlayerGameStatsDTO;
 import com.soccernow.ui.soccernowui.dto.user.PlayerDTO;
+import com.soccernow.ui.soccernowui.util.ErrorException;
 import okhttp3.Response;
 
 import java.io.IOException;
@@ -19,7 +20,7 @@ public enum GameApiController {
     INSTANCE;
     private final String gamesURL = baseURL + "games/";
 
-    public GameDTO getGameById(UUID gameId) throws IOException {
+    public GameDTO getGameById(UUID gameId) throws IOException, ErrorException {
         try (Response response = getRequest(gamesURL + gameId)) {
             if (!response.isSuccessful()) {
                 throwApiException(response, "Get game by ID failed");
@@ -29,7 +30,7 @@ public enum GameApiController {
         }
     }
 
-    public GameDTO registerGame(GameDTO game) throws IOException {
+    public GameDTO registerGame(GameDTO game) throws IOException, ErrorException {
         try (Response response = postJsonRequest(gamesURL, game)) {
             if (!response.isSuccessful()) {
                 throwApiException(response, "Register game failed");
@@ -39,7 +40,7 @@ public enum GameApiController {
         }
     }
 
-    public GameDTO closeGameById(UUID gameId, Set<PlayerGameStatsDTO> stats) throws IOException {
+    public GameDTO closeGameById(UUID gameId, Set<PlayerGameStatsDTO> stats) throws IOException, ErrorException {
         stats = stats != null ? stats : new HashSet<>();
         try (Response response = postJsonRequest(gamesURL + gameId + "/close", stats)) {
             if (!response.isSuccessful()) {
@@ -50,7 +51,7 @@ public enum GameApiController {
         }
     }
 
-    public List<GameDTO> getAllGames() throws IOException {
+    public List<GameDTO> getAllGames() throws IOException, ErrorException {
         try (Response response = getRequest(gamesURL)) {
             if (!response.isSuccessful()) {
                 throwApiException(response, "Get all games failed");
@@ -60,7 +61,7 @@ public enum GameApiController {
         }
     }
 
-    public GameDTO cancelGameById(UUID gameId) throws IOException {
+    public GameDTO cancelGameById(UUID gameId) throws IOException, ErrorException {
         try (Response response = patchRequest(gamesURL + gameId + "/cancel")) {
             if (!response.isSuccessful()) {
                 throwApiException(response, "Cancel game failed");
