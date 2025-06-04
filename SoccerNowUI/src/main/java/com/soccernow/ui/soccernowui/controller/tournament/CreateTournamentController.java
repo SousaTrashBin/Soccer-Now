@@ -8,7 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 
-public class CreateTournament {
+public class CreateTournamentController {
 
     @FXML
     private Button BackButton;

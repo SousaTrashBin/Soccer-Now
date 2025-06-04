@@ -8,7 +8,7 @@ import javafx.scene.control.*;
 
 import java.util.Objects;
 
-public class RegisterReferee {
+public class RegisterRefereeController {
 
     @FXML
     private TextField name;

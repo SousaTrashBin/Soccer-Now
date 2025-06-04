@@ -6,7 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 
-public class CreateGame {
+public class CreateGameController {
 
     @FXML
     private ComboBox<String> teamOneComboBox;
