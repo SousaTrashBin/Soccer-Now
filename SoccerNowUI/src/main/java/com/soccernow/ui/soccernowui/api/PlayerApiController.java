@@ -1,5 +1,6 @@
 package com.soccernow.ui.soccernowui.api;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.soccernow.ui.soccernowui.dto.user.PlayerDTO;
 import com.soccernow.ui.soccernowui.util.ApiUtils;
 import com.soccernow.ui.soccernowui.util.ErrorException;
@@ -43,7 +44,7 @@ public enum PlayerApiController {
                 throwApiException(response, "Get all players failed");
             }
             String json = response.body().string();
-            return ApiUtils.getObjectMapper().readValue(json, ApiUtils.getObjectMapper().getTypeFactory().constructCollectionType(List.class, PlayerDTO.class));
+            return ApiUtils.getObjectMapper().readValue(json, new TypeReference<>() {});
         }
     }
 
