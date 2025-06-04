@@ -18,14 +18,9 @@ public enum CredentialsApiController {
     private void login(LoginRequest loginRequest) throws IOException {
         try (Response response = ApiUtils.postJsonRequest(credentialsURL + "login", loginRequest)) {
             if (!response.isSuccessful()) {
-                String errorBody = response.body().string();
-                try {
-                    ApiUtils.ApiError apiError = ApiUtils.getObjectMapper().readValue(errorBody, ApiUtils.ApiError.class);
-                    throw new ErrorException("Login failed: " + apiError.toString(), response.code());
-                } catch (Exception jsonException) {
-                    throw new ErrorException("Login failed with status code: " + response.code() + ". Response: " + errorBody, response.code());
-                }
+                ApiUtils.throwApiException(response, "Login failed");
             }
         }
     }
+
 }
