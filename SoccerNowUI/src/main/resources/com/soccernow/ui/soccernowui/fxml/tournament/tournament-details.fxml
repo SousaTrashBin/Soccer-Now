@@ -43,13 +43,12 @@
         <Label text="Games:"/>
         <ListView fx:id="gameListView" prefHeight="150" prefWidth="260"/>
         <HBox spacing="10" alignment="CENTER">
-            <Button text="Add" onAction="#onAddGameClick" prefWidth="90"/>
-            <Button text="Remove" onAction="#onRemoveGameClick" prefWidth="120"/>
+            <Button text="Add Game" onAction="#onAddGameClick" prefWidth="140"/>
+            <Button text="Cancel Game" onAction="#onCancelClick" prefWidth="140"/>
         </HBox>
     </VBox>
 
     <HBox spacing="20" alignment="CENTER">
-        <Button text="Cancel" onAction="#onCancelClick" styleClass="btn btn-secondary"/>
         <Button text="Save Changes" onAction="#onSaveClick" styleClass="btn btn-primary"/>
     </HBox>
 </VBox>
