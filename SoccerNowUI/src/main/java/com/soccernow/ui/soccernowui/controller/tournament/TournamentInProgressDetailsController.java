@@ -10,10 +10,10 @@ import javafx.scene.control.*;
 public class TournamentInProgressDetailsController {
 
     @FXML
-    private ListView<GameDTO> tournamentGameListView;
+    private TableView<GameDTO> tournamentGamesTableView;
 
     @FXML
-    private ListView<GameDTO> otherGamesListView;
+    private TableView<GameDTO> otherGamesTableView;
 
     @FXML
     public void initialize() {
