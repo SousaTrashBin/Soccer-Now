@@ -5,18 +5,12 @@ import com.soccernow.ui.soccernowui.api.PlayerApiController;
 import com.soccernow.ui.soccernowui.dto.user.PlayerDTO;
 import com.soccernow.ui.soccernowui.util.FXMLUtils;
 import com.soccernow.ui.soccernowui.util.FutsalPositionEnum;
-import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-
-import java.io.IOException;
-import java.util.Optional;
-import java.util.Set;
 
 public class RegisterPlayerController {
     @FXML

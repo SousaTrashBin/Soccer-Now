@@ -13,8 +13,6 @@ public class ApiUtils {
     private static final OkHttpClient client = new OkHttpClient();
     private static ObjectMapper objectMapper;
 
-    public record ApiError(int status, String message, Map<String, String> validationErrors) {}
-
     public static Response postJsonRequest(String url, Object bodyObject) throws IOException {
         String json = getObjectMapper().writeValueAsString(bodyObject);
 
@@ -94,5 +92,8 @@ public class ApiUtils {
         } catch (Exception e) {
             throw new ErrorException(message + " with status code: " + response.code() + ". Response: " + errorBody, response.code());
         }
+    }
+
+    public record ApiError(int status, String message, Map<String, String> validationErrors) {
     }
 }

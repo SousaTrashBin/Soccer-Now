@@ -17,7 +17,8 @@ import java.util.function.Consumer;
 public class FXMLUtils {
 
     public static void switchScene(String fxmlPath, Node sourceNode) {
-        switchScene(fxmlPath, sourceNode, controller -> {});
+        switchScene(fxmlPath, sourceNode, controller -> {
+        });
     }
 
     public static void switchScene(String fxmlPath, Node sourceNode, Consumer<Object> controllerInitializer) {
@@ -91,6 +92,14 @@ public class FXMLUtils {
         }
     }
 
+    public static void showSuccess(String header, String content) {
+        Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+        successAlert.setTitle("Success");
+        successAlert.setHeaderText(header);
+        successAlert.setContentText(content);
+        successAlert.showAndWait();
+    }
+
     @FunctionalInterface
     public interface SupplierWithExceptions<T> {
         T get() throws Exception;
@@ -99,13 +108,5 @@ public class FXMLUtils {
     @FunctionalInterface
     public interface ConsumerWithExceptions {
         void consume() throws Exception;
-    }
-
-    public static void showSuccess(String header, String content) {
-        Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-        successAlert.setTitle("Success");
-        successAlert.setHeaderText(header);
-        successAlert.setContentText(content);
-        successAlert.showAndWait();
     }
 }

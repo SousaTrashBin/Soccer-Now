@@ -1,8 +1,8 @@
 package com.soccernow.ui.soccernowui.controller.player;
 
 import com.soccernow.ui.soccernowui.SoccerNowApp;
-import com.soccernow.ui.soccernowui.api.TeamApiController;
 import com.soccernow.ui.soccernowui.api.PlayerApiController;
+import com.soccernow.ui.soccernowui.api.TeamApiController;
 import com.soccernow.ui.soccernowui.dto.TeamDTO;
 import com.soccernow.ui.soccernowui.dto.TeamInfoDTO;
 import com.soccernow.ui.soccernowui.dto.user.PlayerDTO;
@@ -16,7 +16,10 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,14 +39,14 @@ public class PlayerDetailsController {
     @FXML
     public TableColumn<TeamInfoDTO, String> playerTeamsIdColumn;
     @FXML
-    public TableColumn<TeamInfoDTO,String> playerTeamsNameColumn;
+    public TableColumn<TeamInfoDTO, String> playerTeamsNameColumn;
 
     @FXML
     public TableView<TeamInfoDTO> otherTeamsTableView;
     @FXML
     public TableColumn<TeamInfoDTO, String> otherTeamsIdColumn;
     @FXML
-    public TableColumn<TeamInfoDTO,String> otherTeamsNameColumn;
+    public TableColumn<TeamInfoDTO, String> otherTeamsNameColumn;
 
     public List<FXMLUtils.ConsumerWithExceptions> pendingOperations = new ArrayList<>();
 
@@ -74,7 +77,7 @@ public class PlayerDetailsController {
             FXMLUtils.executeWithErrorHandling(pendingOperation);
         }
 
-        FXMLUtils.executeWithErrorHandling(() -> PlayerApiController.INSTANCE.updatePlayerById(playerDTO.getId(),updatedDTO))
+        FXMLUtils.executeWithErrorHandling(() -> PlayerApiController.INSTANCE.updatePlayerById(playerDTO.getId(), updatedDTO))
                 .ifPresent(savedDTO -> {
                     System.out.printf(savedDTO.toString());
                     FXMLUtils.showSuccess("Player Details Successfully Updated", "Player " + savedDTO.getName() + " successfully updated!");
@@ -118,7 +121,7 @@ public class PlayerDetailsController {
         if (selectedTeam == null) {
             return;
         }
-        pendingOperations.add(() -> TeamApiController.INSTANCE.removePlayerFromTeam(selectedTeam.getId(),playerDTO.getId()));
+        pendingOperations.add(() -> TeamApiController.INSTANCE.removePlayerFromTeam(selectedTeam.getId(), playerDTO.getId()));
         this.playerTeamsTableView.getItems().remove(selectedTeam);
         this.otherTeamsTableView.getItems().add(selectedTeam);
     }
@@ -128,7 +131,7 @@ public class PlayerDetailsController {
         if (selectedTeam == null) {
             return;
         }
-        pendingOperations.add(() -> TeamApiController.INSTANCE.addPlayerToTeam(selectedTeam.getId(),playerDTO.getId()));
+        pendingOperations.add(() -> TeamApiController.INSTANCE.addPlayerToTeam(selectedTeam.getId(), playerDTO.getId()));
         this.playerTeamsTableView.getItems().add(selectedTeam);
         this.otherTeamsTableView.getItems().remove(selectedTeam);
     }

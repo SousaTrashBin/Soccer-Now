@@ -1,13 +1,11 @@
 package com.soccernow.ui.soccernowui.dto.games;
 
 import com.soccernow.ui.soccernowui.dto.user.PlayerInfoDTO;
-import com.soccernow.ui.soccernowui.util.CardEnum;
-import jakarta.validation.constraints.NotNull;
 import com.soccernow.ui.soccernowui.dto.user.RefereeInfoDTO;
+import com.soccernow.ui.soccernowui.util.CardEnum;
 
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
 
 public class CardInfoDTO implements Serializable {
     private CardEnum cardType = null;
@@ -15,7 +13,8 @@ public class CardInfoDTO implements Serializable {
     private PlayerInfoDTO playerPlayer = null;
     private RefereeInfoDTO referee = null;
 
-    public CardInfoDTO(){}
+    public CardInfoDTO() {
+    }
 
     public CardInfoDTO(CardEnum cardType, Integer playerScoredGoals, PlayerInfoDTO playerPlayer, RefereeInfoDTO referee) {
         this.cardType = cardType;

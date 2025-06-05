@@ -1,16 +1,16 @@
 package com.soccernow.ui.soccernowui.controller.referee;
 
 import com.soccernow.ui.soccernowui.SoccerNowApp;
-import com.soccernow.ui.soccernowui.api.PlayerApiController;
 import com.soccernow.ui.soccernowui.api.RefereeApiController;
-import com.soccernow.ui.soccernowui.dto.user.PlayerDTO;
 import com.soccernow.ui.soccernowui.dto.user.RefereeDTO;
 import com.soccernow.ui.soccernowui.util.FXMLUtils;
 import jakarta.validation.Validator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 
 import java.util.Objects;
 
@@ -28,7 +28,7 @@ public class RegisterRefereeController {
 
     @FXML
     public void initialize() {
-        hasCertificateComboBox.getItems().addAll("No","Yes");
+        hasCertificateComboBox.getItems().addAll("No", "Yes");
         hasCertificateComboBox.setValue("No");
 
         this.validator = SoccerNowApp.getValidatorFactory().getValidator();

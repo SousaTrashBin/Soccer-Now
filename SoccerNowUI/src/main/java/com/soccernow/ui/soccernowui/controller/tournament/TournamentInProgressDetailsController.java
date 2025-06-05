@@ -1,17 +1,10 @@
 package com.soccernow.ui.soccernowui.controller.tournament;
 
 import com.soccernow.ui.soccernowui.api.GameApiController;
-import com.soccernow.ui.soccernowui.api.PlayerApiController;
 import com.soccernow.ui.soccernowui.api.PointTournamentApiController;
-import com.soccernow.ui.soccernowui.api.TeamApiController;
-import com.soccernow.ui.soccernowui.dto.TeamDTO;
-import com.soccernow.ui.soccernowui.dto.TeamInfoDTO;
 import com.soccernow.ui.soccernowui.dto.games.GameDTO;
 import com.soccernow.ui.soccernowui.dto.games.GameInfoDTO;
 import com.soccernow.ui.soccernowui.dto.tournament.TournamentDTO;
-import com.soccernow.ui.soccernowui.dto.tournament.TournamentInfoDTO;
-import com.soccernow.ui.soccernowui.dto.user.PlayerDTO;
-import com.soccernow.ui.soccernowui.dto.user.PlayerInfoDTO;
 import com.soccernow.ui.soccernowui.util.ErrorException;
 import com.soccernow.ui.soccernowui.util.FXMLUtils;
 import com.soccernow.ui.soccernowui.util.GameStatusEnum;
@@ -21,7 +14,8 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,20 +24,19 @@ import java.util.List;
 public class TournamentInProgressDetailsController {
 
     @FXML
+    public TableColumn<GameInfoDTO, String> tournamentGamesIdColumn;
+    @FXML
+    public TableColumn<GameInfoDTO, String> tournamentGamesStatusColumn;
+    @FXML
+    public TableColumn<GameInfoDTO, String> otherGamesIdColumn;
+    @FXML
+    public TableColumn<GameInfoDTO, String> otherGamesStatusColumn;
+    public List<FXMLUtils.ConsumerWithExceptions> pendingOperations = new ArrayList<>();
+    @FXML
     private TableView<GameInfoDTO> tournamentGamesTableView;
     @FXML
-    public TableColumn<GameInfoDTO,String> tournamentGamesIdColumn;
-    @FXML
-    public TableColumn<GameInfoDTO,String> tournamentGamesStatusColumn;
-
-    @FXML
     private TableView<GameInfoDTO> otherGamesTableView;
-    @FXML
-    public TableColumn<GameInfoDTO,String> otherGamesIdColumn;
-    @FXML
-    public TableColumn<GameInfoDTO,String> otherGamesStatusColumn;
     private TournamentDTO tournamentDTO;
-    public List<FXMLUtils.ConsumerWithExceptions> pendingOperations = new ArrayList<>();
 
     @FXML
     public void initialize() {
@@ -118,7 +111,7 @@ public class TournamentInProgressDetailsController {
     }
 
     public void setTournamentDTO(TournamentDTO selectedTournament) {
-         this.tournamentDTO = selectedTournament;
+        this.tournamentDTO = selectedTournament;
 
         ObservableList<GameInfoDTO> tournamentGamesObservable = FXCollections.observableArrayList(tournamentDTO.getGames());
         tournamentGamesTableView.setItems(tournamentGamesObservable);
@@ -126,7 +119,7 @@ public class TournamentInProgressDetailsController {
         try {
             List<GameDTO> allGames = GameApiController.INSTANCE.getAllGames();
             List<GameInfoDTO> otherGames = allGames.stream()
-                    .map(gameDTO -> new GameInfoDTO(gameDTO.getId(),gameDTO.getLocatedIn(),gameDTO.getHappensIn(),gameDTO.getStatus(), gameDTO.getTournament()))
+                    .map(gameDTO -> new GameInfoDTO(gameDTO.getId(), gameDTO.getLocatedIn(), gameDTO.getHappensIn(), gameDTO.getStatus(), gameDTO.getTournament()))
                     .filter(gameInfoDTO -> !tournamentDTO.getGames().contains(gameInfoDTO))
                     .toList();
 

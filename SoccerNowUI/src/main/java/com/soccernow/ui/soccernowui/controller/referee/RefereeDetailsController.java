@@ -15,18 +15,16 @@ import java.util.Objects;
 
 public class RefereeDetailsController {
 
+    RefereeDTO refereeDTO;
     @FXML
     private TextField refereeNameField;
-
     @FXML
     private ComboBox<String> certificateComboBox;
-
-    RefereeDTO refereeDTO;
     private Validator validator;
 
     @FXML
     public void initialize() {
-        certificateComboBox.getItems().addAll("No","Yes");
+        certificateComboBox.getItems().addAll("No", "Yes");
         certificateComboBox.setValue("No");
 
         this.validator = SoccerNowApp.getValidatorFactory().getValidator();
@@ -60,7 +58,7 @@ public class RefereeDetailsController {
             return;
         }
 
-        FXMLUtils.executeWithErrorHandling(() -> RefereeApiController.INSTANCE.updateRefereeById(refereeDTO.getId(),updatedDTO))
+        FXMLUtils.executeWithErrorHandling(() -> RefereeApiController.INSTANCE.updateRefereeById(refereeDTO.getId(), updatedDTO))
                 .ifPresent(savedDTO -> {
                     System.out.printf(savedDTO.toString());
                     FXMLUtils.showSuccess("Referee Successfully Updated", "Referee " + savedDTO.getName() + " successfully updated!");

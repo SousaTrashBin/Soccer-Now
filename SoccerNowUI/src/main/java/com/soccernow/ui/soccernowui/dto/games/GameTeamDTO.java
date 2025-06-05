@@ -1,7 +1,7 @@
 package com.soccernow.ui.soccernowui.dto.games;
 
-import jakarta.validation.constraints.Size;
 import com.soccernow.ui.soccernowui.dto.TeamInfoDTO;
+import jakarta.validation.constraints.Size;
 
 import java.io.Serializable;
 import java.util.HashSet;

@@ -44,7 +44,8 @@ public enum PlayerApiController {
                 throwApiException(response, "Get all players failed");
             }
             String json = response.body().string();
-            return ApiUtils.getObjectMapper().readValue(json, new TypeReference<>() {});
+            return ApiUtils.getObjectMapper().readValue(json, new TypeReference<>() {
+            });
         }
     }
 

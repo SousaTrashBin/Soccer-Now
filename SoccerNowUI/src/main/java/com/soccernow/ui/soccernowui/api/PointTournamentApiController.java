@@ -1,8 +1,6 @@
 package com.soccernow.ui.soccernowui.api;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.soccernow.ui.soccernowui.dto.tournament.PointTournamentDTO;
-import com.soccernow.ui.soccernowui.dto.user.PlayerDTO;
 import com.soccernow.ui.soccernowui.util.ErrorException;
 import jakarta.validation.constraints.NotNull;
 import okhttp3.Response;
@@ -117,5 +115,6 @@ public enum PointTournamentApiController {
         }
     }
 
-    public record CreatePointTournamentDTO(@NotNull String name){}
+    public record CreatePointTournamentDTO(@NotNull String name) {
+    }
 }

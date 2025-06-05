@@ -1,7 +1,6 @@
 package com.soccernow.ui.soccernowui.api;
 
 import com.soccernow.ui.soccernowui.dto.TeamDTO;
-import com.soccernow.ui.soccernowui.dto.user.RefereeDTO;
 import com.soccernow.ui.soccernowui.util.ErrorException;
 import okhttp3.Response;
 

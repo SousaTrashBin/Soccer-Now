@@ -1,18 +1,14 @@
 package com.soccernow.ui.soccernowui.controller.team;
 
 import com.soccernow.ui.soccernowui.SoccerNowApp;
-import com.soccernow.ui.soccernowui.api.RefereeApiController;
 import com.soccernow.ui.soccernowui.api.TeamApiController;
 import com.soccernow.ui.soccernowui.dto.TeamDTO;
-import com.soccernow.ui.soccernowui.dto.user.PlayerDTO;
 import com.soccernow.ui.soccernowui.util.FXMLUtils;
 import jakarta.validation.Validator;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.TextField;
 
 public class RegisterTeamController {
 

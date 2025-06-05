@@ -1,9 +1,9 @@
 package com.soccernow.ui.soccernowui.dto.tournament;
 
+import com.soccernow.ui.soccernowui.dto.games.GameInfoDTO;
 import com.soccernow.ui.soccernowui.util.TournamentStatusEnum;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
-import com.soccernow.ui.soccernowui.dto.games.GameInfoDTO;
 
 import java.io.Serializable;
 import java.util.ArrayList;

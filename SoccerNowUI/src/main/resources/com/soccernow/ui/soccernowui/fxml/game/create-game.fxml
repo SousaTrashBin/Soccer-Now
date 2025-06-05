@@ -57,9 +57,9 @@
 
     <HBox spacing="10" alignment="CENTER">
          <Label text="Right Winger:"/>
-         <ComboBox fx:id="teamOneSweeperComboBox" promptText="Select Right Winger" prefWidth="200"/>
+         <ComboBox fx:id="teamOneRightWingerComboBox" promptText="Select Right Winger" prefWidth="200"/>
          <Label text="Right Winger:"/>
-         <ComboBox fx:id="teamTwoSweeperComboBox" promptText="Select Right Winger" prefWidth="200"/>
+         <ComboBox fx:id="teamTwoRightWingerComboBox" promptText="Select Right Winger" prefWidth="200"/>
     </HBox>
 
     <HBox spacing="10" alignment="CENTER">

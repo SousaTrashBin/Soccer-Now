@@ -1,13 +1,9 @@
 package com.soccernow.ui.soccernowui.controller.game;
 
 import com.soccernow.ui.soccernowui.api.GameApiController;
-import com.soccernow.ui.soccernowui.api.PlayerApiController;
-import com.soccernow.ui.soccernowui.controller.player.PlayerDetailsController;
 import com.soccernow.ui.soccernowui.dto.games.GameDTO;
-import com.soccernow.ui.soccernowui.dto.user.PlayerDTO;
 import com.soccernow.ui.soccernowui.util.ErrorException;
 import com.soccernow.ui.soccernowui.util.FXMLUtils;
-import com.soccernow.ui.soccernowui.util.FutsalPositionEnum;
 import com.soccernow.ui.soccernowui.util.GameStatusEnum;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -17,7 +13,6 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,13 +23,13 @@ public class GameListController {
     @FXML
     public TableView<GameDTO> gameTableView;
     @FXML
-    public TableColumn<GameDTO,String> idColumn;
+    public TableColumn<GameDTO, String> idColumn;
     @FXML
-    public TableColumn<GameDTO,String> teamOneColumn;
+    public TableColumn<GameDTO, String> teamOneColumn;
     @FXML
-    public TableColumn<GameDTO,String> teamTwoColumn;
+    public TableColumn<GameDTO, String> teamTwoColumn;
     @FXML
-    public TableColumn<GameDTO,String> statusColumn;
+    public TableColumn<GameDTO, String> statusColumn;
 
     public void initialize() {
         idColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getId().toString()));
@@ -64,15 +59,17 @@ public class GameListController {
                 (Node) event.getSource(),
                 controller -> {
                     if (controller instanceof RegisterGameResultsController registerGameResultsController) {
-                        //registerGameResultsController.setGameDTO(selectedGame);
+                        registerGameResultsController.setGameDTO(selectedGame);
                     }
                 });
     }
 
     @FXML
-    private void onRefreshClick(ActionEvent event) {}
+    private void onRefreshClick(ActionEvent event) {
+        loadGames();
+    }
 
-    public void loadGames(){
+    public void loadGames() {
         try {
             List<GameDTO> games = GameApiController.INSTANCE.getAllGames();
             ObservableList<GameDTO> gamesObservable = FXCollections.observableArrayList(games);

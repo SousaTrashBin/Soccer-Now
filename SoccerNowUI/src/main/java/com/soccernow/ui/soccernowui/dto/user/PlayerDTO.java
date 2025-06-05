@@ -1,10 +1,10 @@
 package com.soccernow.ui.soccernowui.dto.user;
 
+import com.soccernow.ui.soccernowui.dto.TeamInfoDTO;
+import com.soccernow.ui.soccernowui.dto.games.PlayerGameStatsDTO;
 import com.soccernow.ui.soccernowui.util.FutsalPositionEnum;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
-import com.soccernow.ui.soccernowui.dto.TeamInfoDTO;
-import com.soccernow.ui.soccernowui.dto.games.PlayerGameStatsDTO;
 
 import java.io.Serializable;
 import java.util.*;

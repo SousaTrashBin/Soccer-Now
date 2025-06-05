@@ -1,5 +1,6 @@
 package com.soccernow.ui.soccernowui.controller.game;
 
+import com.soccernow.ui.soccernowui.dto.games.GameDTO;
 import com.soccernow.ui.soccernowui.dto.user.PlayerInfoDTO;
 import com.soccernow.ui.soccernowui.dto.user.RefereeInfoDTO;
 import com.soccernow.ui.soccernowui.util.CardEnum;
@@ -7,7 +8,9 @@ import com.soccernow.ui.soccernowui.util.FXMLUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 
 public class RegisterGameResultsController {
 
@@ -27,6 +30,7 @@ public class RegisterGameResultsController {
     private ComboBox<RefereeInfoDTO> refereeComboBox;
     @FXML
     private ListView<String> playerCardsListView;
+    private GameDTO gameDTO;
 
     @FXML
     public void initialize() {
@@ -43,5 +47,9 @@ public class RegisterGameResultsController {
     public void onBackClick(ActionEvent actionEvent) {
         FXMLUtils.switchScene("/com/soccernow/ui/soccernowui/fxml/game/game-list.fxml",
                 (Node) actionEvent.getSource());
+    }
+
+    public void setGameDTO(GameDTO selectedGame) {
+        this.gameDTO = selectedGame;
     }
 }

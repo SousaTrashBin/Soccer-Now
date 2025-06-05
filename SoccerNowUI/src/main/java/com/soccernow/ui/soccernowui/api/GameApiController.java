@@ -1,9 +1,7 @@
 package com.soccernow.ui.soccernowui.api;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.soccernow.ui.soccernowui.dto.games.GameDTO;
 import com.soccernow.ui.soccernowui.dto.games.PlayerGameStatsDTO;
-import com.soccernow.ui.soccernowui.dto.user.PlayerDTO;
 import com.soccernow.ui.soccernowui.util.ErrorException;
 import okhttp3.Response;
 

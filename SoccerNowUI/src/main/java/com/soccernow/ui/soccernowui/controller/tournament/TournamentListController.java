@@ -1,11 +1,7 @@
 package com.soccernow.ui.soccernowui.controller.tournament;
 
 import com.soccernow.ui.soccernowui.api.PointTournamentApiController;
-import com.soccernow.ui.soccernowui.api.TeamApiController;
-import com.soccernow.ui.soccernowui.controller.team.TeamDetailsController;
-import com.soccernow.ui.soccernowui.dto.TeamDTO;
 import com.soccernow.ui.soccernowui.dto.tournament.PointTournamentDTO;
-import com.soccernow.ui.soccernowui.dto.tournament.TournamentDTO;
 import com.soccernow.ui.soccernowui.util.ErrorException;
 import com.soccernow.ui.soccernowui.util.FXMLUtils;
 import javafx.beans.property.SimpleStringProperty;
@@ -27,11 +23,11 @@ public class TournamentListController {
     @FXML
     public TableView<PointTournamentDTO> tournamentTableView;
     @FXML
-    public TableColumn<PointTournamentDTO,String> idColumn;
+    public TableColumn<PointTournamentDTO, String> idColumn;
     @FXML
-    public TableColumn<PointTournamentDTO,String> nameColumn;
+    public TableColumn<PointTournamentDTO, String> nameColumn;
     @FXML
-    public TableColumn<PointTournamentDTO,String> statusColumn;
+    public TableColumn<PointTournamentDTO, String> statusColumn;
 
     public void initialize() {
         idColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getId().toString()));
@@ -87,7 +83,9 @@ public class TournamentListController {
     }
 
     @FXML
-    private void onRefreshClick(ActionEvent event) {loadTournaments();}
+    private void onRefreshClick(ActionEvent event) {
+        loadTournaments();
+    }
 
     @FXML
     private void onDeleteClick(ActionEvent event) {

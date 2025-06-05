@@ -1,7 +1,7 @@
 package com.soccernow.ui.soccernowui.dto.tournament;
 
-import jakarta.validation.constraints.NotNull;
 import com.soccernow.ui.soccernowui.dto.TeamInfoDTO;
+import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
 import java.util.Objects;

@@ -1,8 +1,8 @@
 package com.soccernow.ui.soccernowui.dto.games;
 
+import com.soccernow.ui.soccernowui.dto.tournament.TournamentInfoDTO;
 import com.soccernow.ui.soccernowui.util.GameStatusEnum;
 import jakarta.validation.constraints.NotNull;
-import com.soccernow.ui.soccernowui.dto.tournament.TournamentInfoDTO;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

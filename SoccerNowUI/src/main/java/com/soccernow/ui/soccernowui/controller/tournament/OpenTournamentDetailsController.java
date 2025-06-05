@@ -1,17 +1,11 @@
 package com.soccernow.ui.soccernowui.controller.tournament;
 
-import com.soccernow.ui.soccernowui.SoccerNowApp;
-import com.soccernow.ui.soccernowui.api.PlayerApiController;
 import com.soccernow.ui.soccernowui.api.PointTournamentApiController;
 import com.soccernow.ui.soccernowui.api.TeamApiController;
 import com.soccernow.ui.soccernowui.dto.TeamDTO;
 import com.soccernow.ui.soccernowui.dto.TeamInfoDTO;
 import com.soccernow.ui.soccernowui.dto.tournament.PointTournamentDTO;
 import com.soccernow.ui.soccernowui.dto.tournament.TeamPointsDTO;
-import com.soccernow.ui.soccernowui.dto.tournament.TournamentDTO;
-import com.soccernow.ui.soccernowui.dto.user.PlayerDTO;
-import com.soccernow.ui.soccernowui.dto.user.PlayerInfoDTO;
-import com.soccernow.ui.soccernowui.util.ApiUtils;
 import com.soccernow.ui.soccernowui.util.ErrorException;
 import com.soccernow.ui.soccernowui.util.FXMLUtils;
 import javafx.beans.property.SimpleStringProperty;
@@ -20,7 +14,8 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,18 +29,18 @@ public class OpenTournamentDetailsController {
     @FXML
     public TableView<TeamInfoDTO> participatingTeamsListView;
     @FXML
-    public TableColumn<TeamInfoDTO,String> participatingTeamsIdColumn;
+    public TableColumn<TeamInfoDTO, String> participatingTeamsIdColumn;
     @FXML
-    public TableColumn<TeamInfoDTO,String> participatingTeamsNameColumn;
+    public TableColumn<TeamInfoDTO, String> participatingTeamsNameColumn;
 
     @FXML
     public TableView<TeamInfoDTO> availableTeamsListView;
     @FXML
-    public TableColumn<TeamInfoDTO,String> availableTeamsIdColumn;
+    public TableColumn<TeamInfoDTO, String> availableTeamsIdColumn;
     @FXML
-    public TableColumn<TeamInfoDTO,String> availableTeamsNameColumn;
-    private PointTournamentDTO tournamentDTO;
+    public TableColumn<TeamInfoDTO, String> availableTeamsNameColumn;
     public List<FXMLUtils.ConsumerWithExceptions> pendingOperations = new ArrayList<>();
+    private PointTournamentDTO tournamentDTO;
 
     @FXML
     public void initialize() {

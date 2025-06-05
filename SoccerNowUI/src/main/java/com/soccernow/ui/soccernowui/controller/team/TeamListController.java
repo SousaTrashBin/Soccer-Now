@@ -1,14 +1,9 @@
 package com.soccernow.ui.soccernowui.controller.team;
 
-import com.soccernow.ui.soccernowui.api.RefereeApiController;
 import com.soccernow.ui.soccernowui.api.TeamApiController;
-import com.soccernow.ui.soccernowui.controller.referee.RefereeDetailsController;
 import com.soccernow.ui.soccernowui.dto.TeamDTO;
-import com.soccernow.ui.soccernowui.dto.user.PlayerDTO;
-import com.soccernow.ui.soccernowui.dto.user.RefereeDTO;
 import com.soccernow.ui.soccernowui.util.ErrorException;
 import com.soccernow.ui.soccernowui.util.FXMLUtils;
-import com.soccernow.ui.soccernowui.util.FutsalPositionEnum;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,7 +14,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.util.List;
@@ -77,7 +71,9 @@ public class TeamListController {
     }
 
     @FXML
-    private void onRefreshClick(ActionEvent event) {loadTeams();}
+    private void onRefreshClick(ActionEvent event) {
+        loadTeams();
+    }
 
     @FXML
     private void onDeleteClick(ActionEvent event) {

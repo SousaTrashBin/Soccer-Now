@@ -1,9 +1,7 @@
 package com.soccernow.ui.soccernowui.controller.player;
 
 import com.soccernow.ui.soccernowui.api.PlayerApiController;
-import com.soccernow.ui.soccernowui.controller.referee.RefereeDetailsController;
 import com.soccernow.ui.soccernowui.dto.user.PlayerDTO;
-import com.soccernow.ui.soccernowui.dto.user.RefereeDTO;
 import com.soccernow.ui.soccernowui.util.ErrorException;
 import com.soccernow.ui.soccernowui.util.FXMLUtils;
 import com.soccernow.ui.soccernowui.util.FutsalPositionEnum;
@@ -17,14 +15,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.layout.VBox;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static com.soccernow.ui.soccernowui.util.FXMLUtils.executeWithErrorHandling;
 
 
 public class PlayerListController {

@@ -2,20 +2,14 @@ package com.soccernow.ui.soccernowui.controller.tournament;
 
 import com.soccernow.ui.soccernowui.SoccerNowApp;
 import com.soccernow.ui.soccernowui.api.PointTournamentApiController;
-import com.soccernow.ui.soccernowui.api.TeamApiController;
-import com.soccernow.ui.soccernowui.dto.TeamDTO;
-import com.soccernow.ui.soccernowui.dto.tournament.TournamentDTO;
 import com.soccernow.ui.soccernowui.util.FXMLUtils;
-import com.soccernow.ui.soccernowui.util.TournamentStatusEnum;
 import jakarta.validation.Validator;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import org.hibernate.validator.constraints.Length;
 
 public class CreateTournamentController {
@@ -37,7 +31,8 @@ public class CreateTournamentController {
                 @Pattern(regexp = "^\\p{L}+( \\p{L}+)*$")
                 @Length(max = 100)
                 String name
-        ) {}
+        ) {
+        }
         TournamentNameWrapper nameWrapper = new TournamentNameWrapper(tournamentNameField.getText());
 
         boolean isValid = FXMLUtils.validateAndShowAlert(nameWrapper, validator);

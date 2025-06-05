@@ -1,8 +1,5 @@
 package com.soccernow.ui.soccernowui;
 
-import com.soccernow.ui.soccernowui.api.PlayerApiController;
-import com.soccernow.ui.soccernowui.dto.user.PlayerDTO;
-import com.soccernow.ui.soccernowui.util.FutsalPositionEnum;
 import jakarta.validation.Validation;
 import jakarta.validation.ValidatorFactory;
 import javafx.application.Application;
@@ -15,6 +12,14 @@ import java.io.IOException;
 
 public class SoccerNowApp extends Application {
     private static ValidatorFactory validatorFactory;
+
+    public static ValidatorFactory getValidatorFactory() {
+        return validatorFactory;
+    }
+
+    public static void main(String[] args) throws IOException {
+        launch();
+    }
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -30,19 +35,10 @@ public class SoccerNowApp extends Application {
         stage.show();
     }
 
-
     @Override
     public void stop() {
         if (validatorFactory != null) {
             validatorFactory.close();
         }
-    }
-
-    public static ValidatorFactory getValidatorFactory() {
-        return validatorFactory;
-    }
-
-    public static void main(String[] args) throws IOException {
-        launch();
     }
 }
