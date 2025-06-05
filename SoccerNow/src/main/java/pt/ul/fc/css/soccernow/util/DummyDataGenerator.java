@@ -41,23 +41,23 @@ public class DummyDataGenerator {
     }
 
     public void generateDummyData() {
-        Team firstTeam = createTeamWithName("A");
-        Team secondTeam = createTeamWithName("B");
-        List<Player> firstTeamPlayers = new ArrayList<>();
-        for (char c = 'A'; c <= 'F'; c++) {
-            firstTeamPlayers.add(createPlayerWithName(String.valueOf(c), firstTeam));
-        }
-        List<Player> secondTeamPlayers = new ArrayList<>();
-        for (char c = 'F'; c <= 'J'; c++) {
-            secondTeamPlayers.add(createPlayerWithName(String.valueOf(c), secondTeam));
-        }
-        List<Referee> referees = new ArrayList<>();
-        for (char c = 'A'; c <= 'C'; c++) {
-            referees.add(createRefereeWithName(String.valueOf(c)));
-        }
-        createNewGameWith(firstTeamPlayers, secondTeamPlayers, firstTeam, secondTeam, referees);
-        Game closedGame = createNewGameWith(firstTeamPlayers, secondTeamPlayers, firstTeam, secondTeam, referees);
-        gameService.closeGame(closedGame.getId(), getPlayerStats(firstTeamPlayers, secondTeamPlayers, closedGame));
+//        Team firstTeam = createTeamWithName("A");
+//        Team secondTeam = createTeamWithName("B");
+//        List<Player> firstTeamPlayers = new ArrayList<>();
+//        for (char c = 'A'; c <= 'F'; c++) {
+//            firstTeamPlayers.add(createPlayerWithName(String.valueOf(c), firstTeam));
+//        }
+//        List<Player> secondTeamPlayers = new ArrayList<>();
+//        for (char c = 'F'; c <= 'J'; c++) {
+//            secondTeamPlayers.add(createPlayerWithName(String.valueOf(c), secondTeam));
+//        }
+//        List<Referee> referees = new ArrayList<>();
+//        for (char c = 'A'; c <= 'C'; c++) {
+//            referees.add(createRefereeWithName(String.valueOf(c)));
+//        }
+//        createNewGameWith(firstTeamPlayers, secondTeamPlayers, firstTeam, secondTeam, referees);
+//        Game closedGame = createNewGameWith(firstTeamPlayers, secondTeamPlayers, firstTeam, secondTeam, referees);
+//        gameService.closeGame(closedGame.getId(), getPlayerStats(firstTeamPlayers, secondTeamPlayers, closedGame));
 
         Credentials adminCredentials = new Credentials();
         adminCredentials.setUsername("admin");
