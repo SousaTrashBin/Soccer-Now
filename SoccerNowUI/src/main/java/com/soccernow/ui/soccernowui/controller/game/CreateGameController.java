@@ -7,6 +7,7 @@ import com.soccernow.ui.soccernowui.dto.user.PlayerInfoDTO;
 import com.soccernow.ui.soccernowui.dto.user.RefereeDTO;
 import com.soccernow.ui.soccernowui.dto.user.RefereeInfoDTO;
 import com.soccernow.ui.soccernowui.util.FXMLUtils;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -67,6 +68,16 @@ public class CreateGameController {
 
     @FXML
     private void initialize() {
+        secondaryRefereesIdColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getId().toString()));
+        secondaryRefereesNameColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getName()));
+
+        otherRefereesIdColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getId().toString()));
+        otherRefereesNameColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getName()));
+
         teamOnePlayerComboBoxes = List.of(teamOneGoalieComboBox, teamOneSweeperComboBox, teamOneLeftWingerComboBox, teamOneRightWingerComboBox, teamOneForwardComboBox);
         teamTwoPlayerComboBoxes = List.of(teamTwoGoalieComboBox, teamTwoSweeperComboBox, teamTwoLeftWingerComboBox, teamTwoRightWingerComboBox, teamTwoForwardComboBox);
 
@@ -122,8 +133,6 @@ public class CreateGameController {
         teamTwoComboBox.valueProperty().addListener((obs, oldTeam, newTeam) -> {
             updateTeamTwoPlayers();
         });
-
-        initializeTableColumns();
     }
 
     private void updateTeamOnePlayers() {
@@ -166,18 +175,6 @@ public class CreateGameController {
     @FXML
     public void onAddRefereeClick(ActionEvent actionEvent) {
 
-    }
-
-    private void initializeTableColumns() {
-        secondaryRefereesIdColumn.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(cellData.getValue().getId().toString()));
-        secondaryRefereesNameColumn.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(cellData.getValue().getName()));
-
-        otherRefereesIdColumn.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(cellData.getValue().getId().toString()));
-        otherRefereesNameColumn.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(cellData.getValue().getName()));
     }
 
 }
