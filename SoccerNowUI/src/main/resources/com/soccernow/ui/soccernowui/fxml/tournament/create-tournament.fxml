@@ -16,10 +16,8 @@
       </padding>
 
     <ToolBar prefHeight="40.0" prefWidth="400.0">
-        <items>
-            <Button fx:id="BackButton" onAction="#onBackClick" mnemonicParsing="false" text="&lt; Back" />
-            <Label text="Create &gt; Tournament" />
-        </items>
+        <Button fx:id="BackButton" onAction="#onBackClick" mnemonicParsing="false" text="&lt; Back"/>
+        <Label text="Create &gt; Tournament"/>
     </ToolBar>
 
     <Label text="Create New Tournament" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
