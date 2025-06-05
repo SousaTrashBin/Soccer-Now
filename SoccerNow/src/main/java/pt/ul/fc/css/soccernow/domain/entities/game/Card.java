@@ -18,11 +18,11 @@ public class Card {
     @Column(name = "card_type", nullable = false)
     private CardEnum cardType;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false,cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "player_id", nullable = false)
     private PlayerGameStats player;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false,cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "referee_id", nullable = false)
     private Referee referee;
 

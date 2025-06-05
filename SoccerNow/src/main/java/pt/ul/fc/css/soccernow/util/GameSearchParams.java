@@ -17,7 +17,7 @@ public class GameSearchParams {
     private String street;
     private String postalCode;
     @NotNull
-    private TimeOfDay timeOfDay = TimeOfDay.MORNING;
+    private TimeOfDay timeOfDay = null;
 
     public List<GameStatusEnum> getStatuses() {
         return statuses;
