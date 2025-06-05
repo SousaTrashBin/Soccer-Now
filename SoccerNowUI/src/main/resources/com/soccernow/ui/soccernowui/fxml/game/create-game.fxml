@@ -5,7 +5,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Pos?>
 
-<VBox alignment="CENTER" prefHeight="600.0" prefWidth="400.0" spacing="20.0" styleClass="container"
+<VBox alignment="CENTER" prefHeight="900.0" prefWidth="700.0" spacing="20.0" styleClass="container"
       xmlns="http://javafx.com/javafx/17.0.12"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.soccernow.ui.soccernowui.controller.game.CreateGameController"
@@ -22,18 +22,51 @@
         </items>
     </ToolBar>
 
-
     <Label text="Create Game" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
 
-    <HBox spacing="10" alignment="CENTER_LEFT">
+    <HBox spacing="10" alignment="CENTER">
         <Label text="Team One:"/>
         <ComboBox fx:id="teamOneComboBox" promptText="Select Team One" prefWidth="200"/>
-    </HBox>
-
-    <HBox spacing="10" alignment="CENTER_LEFT">
         <Label text="Team Two:"/>
         <ComboBox fx:id="teamTwoComboBox" promptText="Select Team Two" prefWidth="200"/>
     </HBox>
+
+    <HBox spacing="10" alignment="CENTER">
+            <Label text="Goalie:"/>
+            <ComboBox fx:id="teamOneGoalieComboBox" promptText="Select Goalie" prefWidth="200"/>
+            <Label text="Goalie:"/>
+            <ComboBox fx:id="teamTwoGoalieComboBox" promptText="Select Goalie" prefWidth="200"/>
+    </HBox>
+
+    <HBox spacing="10" alignment="CENTER">
+                <Label text="Sweeper:"/>
+                <ComboBox fx:id="teamOneSweeperComboBox" promptText="Select Sweeper" prefWidth="200"/>
+                <Label text="Sweeper:"/>
+                <ComboBox fx:id="teamTwoSweeperComboBox" promptText="Select Sweeper" prefWidth="200"/>
+    </HBox>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Label text="Left Winger:"/>
+        <ComboBox fx:id="teamOneLeftWingerComboBox" promptText="Select Left Winger" prefWidth="200"/>
+        <Label text="Left Winger:"/>
+        <ComboBox fx:id="teamTwoLeftWingerComboBox" promptText="Select Left Winger" prefWidth="200"/>
+    </HBox>
+
+    <HBox spacing="10" alignment="CENTER">
+         <Label text="Right Winger:"/>
+         <ComboBox fx:id="teamOneSweeperComboBox" promptText="Select Right Winger" prefWidth="200"/>
+         <Label text="Right Winger:"/>
+         <ComboBox fx:id="teamTwoSweeperComboBox" promptText="Select Right Winger" prefWidth="200"/>
+    </HBox>
+
+    <HBox spacing="10" alignment="CENTER">
+                <Label text="Forward:"/>
+                <ComboBox fx:id="teamOneForwardComboBox" promptText="Select Forward" prefWidth="200"/>
+                <Label text="Forward:"/>
+                <ComboBox fx:id="teamTwoForwardComboBox" promptText="Select Forward" prefWidth="200"/>
+    </HBox>
+
+    <Separator/>
 
     <HBox spacing="10" alignment="CENTER_LEFT">
         <Label text="Primary Referee:"/>
@@ -41,14 +74,55 @@
     </HBox>
 
     <VBox spacing="10" alignment="CENTER_LEFT">
-            <Label text="Secondary Referees:"/>
-            <ListView fx:id="secondaryRefereesListView" prefHeight="120" prefWidth="200"/>
-        </VBox>
+             <Label text="Secondary Referees:"/>
+    </VBox>
+
+        <TableView fx:id="secondaryRefereesTableView" prefHeight="180" prefWidth="380">
+             <columns>
+                  <TableColumn fx:id="secondaryRefereesIdColumn" text="ID" prefWidth="300"/>
+                  <TableColumn fx:id="secondaryRefereesNameColumn" text="Name" prefWidth="300"/>
+             </columns>
+        </TableView>
+
+    <HBox spacing="10" alignment="CENTER">
+             <Button text="Remove Referee" onAction="#onRemoveRefereeClick" prefWidth="120"/>
+    </HBox>
+
+    <VBox spacing="10" alignment="CENTER_LEFT">
+                 <Label text="Other Referees:"/>
+            </VBox>
+
+            <TableView fx:id="otherRefereesTableView" prefHeight="180" prefWidth="380">
+                 <columns>
+                      <TableColumn fx:id="otherRefereesIdColumn" text="ID" prefWidth="300"/>
+                      <TableColumn fx:id="otherRefereesNameColumn" text="Name" prefWidth="300"/>
+                 </columns>
+            </TableView>
+
+    <HBox spacing="10" alignment="CENTER">
+                 <Button text="Add Referee" onAction="#onAddRefereeClick" prefWidth="120"/>
+    </HBox>
+
+    <Separator/>
 
     <HBox spacing="10" alignment="CENTER_LEFT">
-            <Label text="Address:"/>
-            <ComboBox fx:id="addressComboBox" promptText="Select Address" prefWidth="200"/>
-        </HBox>
+            <Label text="Game Address:"/>
+    </HBox>
+
+    <HBox spacing="10" alignment="CENTER">
+                <Label text="Country:"/>
+                <TextField fx:id="countryField" promptText="Enter country" prefWidth="200"/>
+
+             <Label text="City:"/>
+             <TextField fx:id="cityField" promptText="Enter city" prefWidth="200"/>
+    </HBox>
+
+    <HBox spacing="10" alignment="CENTER">
+         <Label text="Street:"/>
+         <TextField fx:id="streetField" promptText="Enter street" prefWidth="200"/>
+         <Label text="Postal Code:"/>
+         <TextField fx:id="postalCodeField" promptText="Enter postal code" prefWidth="200"/>
+    </HBox>
 
     <HBox spacing="10" alignment="CENTER_LEFT">
         <Label text="Date and Time:"/>
@@ -56,8 +130,8 @@
         <TextField fx:id="timeField" promptText="HH:MM" prefWidth="80"/>
     </HBox>
 
-    <HBox spacing="15" alignment="CENTER">
-        <Button text="Create Game" onAction="#onCreateGameClick" styleClass="btn btn-primary"/>
+    <HBox spacing="15" alignment="CENTER_RIGHT">
+        <Button text="Create Game" onAction="#onCreateGameClick" prefWidth="200"/>
     </HBox>
 
 </VBox>
