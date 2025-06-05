@@ -2,6 +2,7 @@ package com.soccernow.ui.soccernowui.controller.team;
 
 import com.soccernow.ui.soccernowui.api.RefereeApiController;
 import com.soccernow.ui.soccernowui.api.TeamApiController;
+import com.soccernow.ui.soccernowui.controller.referee.RefereeDetailsController;
 import com.soccernow.ui.soccernowui.dto.TeamDTO;
 import com.soccernow.ui.soccernowui.dto.user.PlayerDTO;
 import com.soccernow.ui.soccernowui.dto.user.RefereeDTO;
@@ -60,7 +61,20 @@ public class TeamListController {
     }
 
     @FXML
-    private void onEditClick(ActionEvent event) {}
+    private void onEditClick(ActionEvent event) {
+        TeamDTO selectedTeam = teamTableView.getSelectionModel().getSelectedItem();
+        if (selectedTeam == null) {
+            return;
+        }
+        FXMLUtils.switchScene(
+                "/com/soccernow/ui/soccernowui/fxml/referee/referee-details.fxml",
+                (Node) event.getSource(),
+                controller -> {
+                    if (controller instanceof TeamDetailsController teamDetailsController) {
+                        teamDetailsController.setTeamDTO(selectedTeam);
+                    }
+                });
+    }
 
     @FXML
     private void onRefreshClick(ActionEvent event) {loadTeams();}
