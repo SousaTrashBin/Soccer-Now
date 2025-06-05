@@ -56,7 +56,8 @@
         <Button text="Add Team" onAction="#onAddTeamClick" prefWidth="140"/>
     </HBox>
 
-    <HBox spacing="20" alignment="CENTER_RIGHT">
+    <HBox spacing="20" alignment="CENTER">
+        <Button text="Save Team Changes" onAction="#onSaveTeamChangesClick" styleClass="btn btn-primary"/>
         <Button text="Start Tournament" onAction="#onStartTournamentClick" styleClass="btn btn-primary"/>
     </HBox>
 </VBox>
