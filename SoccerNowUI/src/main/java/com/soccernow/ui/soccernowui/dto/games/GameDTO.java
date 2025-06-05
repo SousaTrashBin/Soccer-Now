@@ -3,6 +3,7 @@ package com.soccernow.ui.soccernowui.dto.games;
 import com.soccernow.ui.soccernowui.dto.tournament.TournamentInfoDTO;
 import com.soccernow.ui.soccernowui.dto.user.RefereeInfoDTO;
 import com.soccernow.ui.soccernowui.util.GameStatusEnum;
+import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -12,13 +13,19 @@ import java.util.Set;
 import java.util.UUID;
 
 public class GameDTO implements Serializable {
+
+    @NotNull(message = "Team Two is required.")
     private GameTeamDTO gameTeamTwo;
     private UUID id;
+    @NotNull(message = "Team One is required.")
     private GameTeamDTO gameTeamOne;
     private GameStatsDTO gameStats;
+    @NotNull(message = "Game must have a Primary Referee.")
     private RefereeInfoDTO primaryReferee;
     private Set<RefereeInfoDTO> secondaryReferees = new HashSet<>();
+    @NotNull(message = "Address is required and requires the field Street.")
     private AddressDTO locatedIn;
+    @NotNull(message = "Date is required.")
     private LocalDateTime happensIn;
     private TournamentInfoDTO tournament;
     private GameStatusEnum status;

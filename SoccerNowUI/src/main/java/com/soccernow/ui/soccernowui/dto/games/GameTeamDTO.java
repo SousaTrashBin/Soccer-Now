@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.Set;
 
 public class GameTeamDTO implements Serializable {
-    @Size(min = 5, max = 5)
+    @Size(min = 5, max = 5, message = "Team must have exactly 5 players.")
     private Set<GamePlayerDTO> gamePlayers = new HashSet<>();
     private TeamInfoDTO team;
 

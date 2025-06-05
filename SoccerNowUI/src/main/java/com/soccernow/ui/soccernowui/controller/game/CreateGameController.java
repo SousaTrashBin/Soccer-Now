@@ -150,20 +150,14 @@ public class CreateGameController {
         LocalDateTime gameDateTime = getGameDateTime();
         AddressDTO addressDTO = getAddressFromFields();
 
-        if (!validateInputs(gameDateTime, addressDTO)) return;
-
         RefereeInfoDTO primaryReferee = mapPrimaryReferee();
         Set<RefereeInfoDTO> secondaryReferees = mapSecondaryReferees();
 
         GameTeamDTO teamOne = buildGameTeam(teamOneComboBox, teamOneGoalieComboBox, teamOneSweeperComboBox,
                 teamOneLeftWingerComboBox, teamOneRightWingerComboBox, teamOneForwardComboBox, "Team One");
 
-        if (teamOne == null) return;
-
         GameTeamDTO teamTwo = buildGameTeam(teamTwoComboBox, teamTwoGoalieComboBox, teamTwoSweeperComboBox,
                 teamTwoLeftWingerComboBox, teamTwoRightWingerComboBox, teamTwoForwardComboBox, "Team Two");
-
-        if (teamTwo == null) return;
 
         GameDTO gameDTO = new GameDTO();
         gameDTO.setHappensIn(gameDateTime);
@@ -181,30 +175,6 @@ public class CreateGameController {
 
         FXMLUtils.switchScene("/com/soccernow/ui/soccernowui/fxml/home/home-screen.fxml",
                 (Node) event.getSource());
-    }
-
-    private boolean validateInputs(LocalDateTime dateTime, AddressDTO address) {
-        if (dateTime == null) {
-            System.out.println("Invalid gameDateTime");
-            return false;
-        }
-        if (address == null) {
-            System.out.println("Invalid addressDTO");
-            return false;
-        }
-        if (primaryRefereeComboBox.getSelectionModel().getSelectedItem() == null) {
-            System.out.println("Invalid primaryReferee");
-            return false;
-        }
-        if (teamOneComboBox.getSelectionModel().getSelectedItem() == null) {
-            System.out.println("Invalid team one");
-            return false;
-        }
-        if (teamTwoComboBox.getSelectionModel().getSelectedItem() == null) {
-            System.out.println("Invalid team two");
-            return false;
-        }
-        return true;
     }
 
     private RefereeInfoDTO mapPrimaryReferee() {
@@ -240,11 +210,6 @@ public class CreateGameController {
                 new GamePlayerDTO(FutsalPositionEnum.RIGHT_WINGER, rightWinger.getValue()),
                 new GamePlayerDTO(FutsalPositionEnum.FORWARD, forward.getValue())
         );
-
-        if (gamePlayers.stream().anyMatch(dto -> dto.getPlayer() == null)) {
-            System.out.println(teamLabel + " must have 5 players selected.");
-            return null;
-        }
 
         Set<GamePlayerDTO> gamePlayerSet = gamePlayers.stream()
                 .map(dto -> dto.setPlayer(new PlayerInfoDTO(dto.getPlayer().getId())))
