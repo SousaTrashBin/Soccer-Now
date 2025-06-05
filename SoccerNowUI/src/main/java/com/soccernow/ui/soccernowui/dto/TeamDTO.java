@@ -96,11 +96,6 @@ public class TeamDTO implements Serializable {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "id = " + id + ", " +
-                "players = " + players + ", " +
-                "placements = " + placements + ", " +
-                "name = " + name + ", " +
-                "games = " + games + ")";
+        return name + " : " + getId();
     }
 }

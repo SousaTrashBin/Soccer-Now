@@ -74,9 +74,6 @@ public class PlayerInfoDTO implements Serializable {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "id = " + id + ", " +
-                "name = " + name + ", " +
-                "preferredPosition = " + preferredPosition + ")";
+        return name + " : " + getId();
     }
 }
