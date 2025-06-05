@@ -70,15 +70,15 @@ public class PlayerDetailsController {
             return;
         }
 
+        for (FXMLUtils.ConsumerWithExceptions pendingOperation : pendingOperations) {
+            FXMLUtils.executeWithErrorHandling(pendingOperation);
+        }
+
         FXMLUtils.executeWithErrorHandling(() -> PlayerApiController.INSTANCE.updatePlayerById(playerDTO.getId(),updatedDTO))
                 .ifPresent(savedDTO -> {
                     System.out.printf(savedDTO.toString());
                     FXMLUtils.showSuccess("Player Details Successfully Updated", "Player " + savedDTO.getName() + " successfully updated!");
                 });
-
-        for (FXMLUtils.ConsumerWithExceptions pendingOperation : pendingOperations) {
-            FXMLUtils.executeWithErrorHandling(pendingOperation);
-        }
 
         FXMLUtils.switchScene("/com/soccernow/ui/soccernowui/fxml/player/player-list.fxml",
                 (Node) actionEvent.getSource());

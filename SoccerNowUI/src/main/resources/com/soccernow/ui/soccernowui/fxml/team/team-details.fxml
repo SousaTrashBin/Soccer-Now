@@ -8,7 +8,7 @@
 <VBox alignment="CENTER" prefHeight="600.0" prefWidth="400.0" spacing="20.0" styleClass="container"
       xmlns="http://javafx.com/javafx/17.0.12"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.soccernow.ui.soccernowui.controller.team.EditTeamController"
+      fx:controller="com.soccernow.ui.soccernowui.controller.team.TeamDetailsController"
       style="-fx-font-family: 'JetBrains Mono'; -fx-font-size: 12;">
 
       <padding>
@@ -39,7 +39,7 @@
     </TableView>
 
     <HBox spacing="10" alignment="CENTER">
-         <Button text="Remove Player" onAction="#onRemovePlayerOnTeamClick" prefWidth="120"/>
+         <Button text="Remove Player" onAction="#onRemovePlayerClick" prefWidth="120"/>
     </HBox>
 
     <VBox spacing="10" alignment="CENTER_LEFT">
