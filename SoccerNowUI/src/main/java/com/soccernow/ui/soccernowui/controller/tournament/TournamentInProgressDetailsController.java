@@ -3,6 +3,8 @@ package com.soccernow.ui.soccernowui.controller.tournament;
 import com.soccernow.ui.soccernowui.api.PlayerApiController;
 import com.soccernow.ui.soccernowui.dto.TeamInfoDTO;
 import com.soccernow.ui.soccernowui.dto.games.GameDTO;
+import com.soccernow.ui.soccernowui.dto.games.GameInfoDTO;
+import com.soccernow.ui.soccernowui.dto.tournament.PointTournamentDTO;
 import com.soccernow.ui.soccernowui.dto.tournament.TournamentDTO;
 import com.soccernow.ui.soccernowui.dto.user.PlayerDTO;
 import com.soccernow.ui.soccernowui.dto.user.PlayerInfoDTO;
@@ -16,16 +18,26 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TournamentInProgressDetailsController {
 
     @FXML
-    private TableView<GameDTO> tournamentGamesTableView;
+    public TableView<GameInfoDTO> tournamentGamesTableView;
+    @FXML
+    public TableColumn<GameInfoDTO,String> tournamentGamesIdColumn;
+    @FXML
+    public TableColumn<GameInfoDTO,String> tournamentGamesNameColumn;
 
     @FXML
-    private TableView<GameDTO> otherGamesTableView;
-    private TournamentDTO tournamentDTO;
+    public TableView<GameInfoDTO> otherGamesTableView;
+    @FXML
+    public TableColumn<GameInfoDTO,String> availableTeamsIdColumn;
+    @FXML
+    public TableColumn<GameInfoDTO,String> availableTeamsNameColumn;
+
+    private PointTournamentDTO tournamentDTO;
 
     @FXML
     public void initialize() {
@@ -41,6 +53,10 @@ public class TournamentInProgressDetailsController {
 
     @FXML
     private void onAddGameClick() {
+    }
+
+    @FXML
+    private void onSaveGameChangesClick() {
     }
 
     @FXML

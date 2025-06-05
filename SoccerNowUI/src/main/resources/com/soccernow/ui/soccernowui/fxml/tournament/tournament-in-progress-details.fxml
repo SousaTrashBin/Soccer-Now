@@ -55,7 +55,8 @@
                     <Button text="Add Game" onAction="#onAddGameClick" prefWidth="140"/>
      </HBox>
 
-    <HBox spacing="20" alignment="CENTER_RIGHT">
+    <HBox spacing="20" alignment="CENTER">
+        <Button text="Save Game Changes" onAction="#onSaveGameChangesClick" styleClass="btn btn-primary"/>
         <Button text="End Tournament" onAction="#onEndTournamentClick" styleClass="btn btn-primary"/>
     </HBox>
 </VBox>
