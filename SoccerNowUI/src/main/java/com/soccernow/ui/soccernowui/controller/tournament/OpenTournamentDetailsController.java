@@ -63,8 +63,8 @@ public class OpenTournamentDetailsController {
             return;
         }
         pendingOperations.add(() -> PointTournamentApiController.INSTANCE.removeTeamFromTournament(tournamentDTO.getId(), selectedTeam.getId()));
-        this.availableTeamsListView.getItems().remove(selectedTeam);
-        this.participatingTeamsListView.getItems().add(selectedTeam);
+        this.participatingTeamsListView.getItems().remove(selectedTeam);
+        this.availableTeamsListView.getItems().add(selectedTeam);
     }
 
     @FXML
@@ -74,8 +74,8 @@ public class OpenTournamentDetailsController {
             return;
         }
         pendingOperations.add(() -> PointTournamentApiController.INSTANCE.addTeamToTournament(tournamentDTO.getId(), selectedTeam.getId()));
-        this.availableTeamsListView.getItems().add(selectedTeam);
-        this.participatingTeamsListView.getItems().remove(selectedTeam);
+        this.participatingTeamsListView.getItems().add(selectedTeam);
+        this.availableTeamsListView.getItems().remove(selectedTeam);
     }
 
     @FXML
