@@ -72,14 +72,14 @@ public class ViewController {
         return "login";
     }
 
-    @PostMapping("/login")
-    public String redirectToHomePage(
-            @RequestParam String email,
-            @RequestParam String password,
-            RedirectAttributes redirectAttributes
-    ) {
-        return "redirect:/home";
-    }
+//    @PostMapping("/login")
+//    public String redirectToHomePage(
+//            @RequestParam String email,
+//            @RequestParam String password,
+//            RedirectAttributes redirectAttributes
+//    ) {
+//        return "redirect:/home";
+//    }
 
     @GetMapping("/home")
     public String getHomePage() {
