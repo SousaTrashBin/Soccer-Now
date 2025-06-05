@@ -37,9 +37,18 @@
         }
 
         select, input[type="number"] {
-            width: 100%;
-            padding: 0.25rem;
+            padding: 0.5rem;
             margin-top: 0.25rem;
+            border-radius: 10px;
+            border: 1px solid gray;
+        }
+
+        select {
+            width: 100%;
+        }
+
+        input[type="number"] {
+            width: 100px;
         }
 
         .cards {
@@ -71,23 +80,53 @@
             background-color: white;
         }
 
-        .add-player-stats {
+        .add-card-btn {
+            background-color: rgb(255, 255, 208);
+        }
+
+        .add-card-btn:hover {
+            background-color: rgb(255, 255, 161);
+        }
+
+        .add-player-stats-btn {
+            background-color: rgb(186, 255, 232);
             width: 100%;
+        }
+
+        .add-player-stats-btn:hover {
+            background-color: rgb(138, 255, 216);
+        }
+
+        .submit-btn {
+            width: 100%;
+            background-color: #d6ff9a;
+        }
+
+        .submit-btn:hover {
+            background-color: #bbff54;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1 th:text="'Register result for game with ID:' + ${game.getId()}" />
+    <h1 th:text="'Register result for game with ID: ' + ${game.getId()}" />
 
-    <div id="stats-container">
-        <!-- Player stat inputs will go here -->
-    </div>
+    <form id="gameResultForm" onsubmit="submitStats(event)" th:attr="data-game-id=${game.id}">
+        <div id="stats-container"
+             th:data-players="${players}"
+             th:data-referees="${referees}">
+        </div>
 
-    <button class="add-player-stats" onclick="addPlayerStat()">+ Add player stat</button>
+        <button type="button" class="add-player-stats-btn" onclick="addPlayerStat()">+ Add player stat</button>
+        <button type="submit" class="submit-btn">Submit</button>
+    </form>
 </div>
 
-<script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const players = /*[[${players}]]*/ [];
+    const referees = /*[[${referees}]]*/ [];
+
     function addPlayerStat() {
         const container = document.getElementById('stats-container');
 
@@ -96,23 +135,29 @@
 
         const cardContainerId = `cards-${Date.now()}`;
 
+        // Create select options
+        const playerOptions = players.map(p =>
+            `<option value="${p.id}">${p.name}</option>`).join('');
+
+        const refereeOptions = referees.map(r =>
+            `<option value="${r.id}">${r.name}</option>`).join('');
+
         statDiv.innerHTML = `
         <label for="player">Player:</label>
-        <select id="player">
-        <option value="">Select a player</option>
-        <option value="1">Player 1</option>
-        <option value="2">Player 2</option>
+        <select id="player" name="playerId" required>
+            <option value="">Select a player</option>
+            ${playerOptions}
         </select>
 
         <label for="goals">Goals:</label>
-        <input id="goals" type="number" min="0" />
+        <input id="goals" type="number" name="scoredGoals" min="0" />
 
         <div class="cards">
           <label>Cards:</label>
           <div id="${cardContainerId}" class="card-container">
             <!-- dynamic card inputs go here -->
           </div>
-          <button type="button" onclick="addCard('${cardContainerId}')">+ Add card</button>
+          <button type="button" class="add-card-btn" onclick="addCard('${cardContainerId}')">+ Add card</button>
         </div>
       `;
 
@@ -127,6 +172,9 @@
 
         const uniqueName = `card-${Math.random().toString(36).substr(2, 9)}`;
 
+        const refereeOptions = referees.map(r =>
+            `<option value="${r.id}">${r.name}</option>`).join('');
+
         cardEntry.innerHTML = `
         <div class="card-group">
           <label><input type="radio" name="${uniqueName}" value="YELLOW"> Yellow</label>
@@ -134,15 +182,71 @@
         </div>
 
         <label>Referee:
-          <select>
+          <select name="refereeId" required>
             <option value="">Select referee</option>
-            <option value="r1">Referee A</option>
-            <option value="r2">Referee B</option>
+            ${refereeOptions}
           </select>
         </label>
       `;
 
         cardContainer.appendChild(cardEntry);
+    }
+
+    function submitStats(event) {
+        event.preventDefault();
+        const gameId = event.target.getAttribute("data-game-id");
+        const statBlocks = document.querySelectorAll('.stat-block');
+        const result = [];
+
+        statBlocks.forEach(block => {
+            const playerId = block.querySelector('select[name="playerId"]').value;
+            const goalsInput = block.querySelector('input[name="scoredGoals"]');
+            const goals = goalsInput && goalsInput.value ? parseInt(goalsInput.value) : null;
+
+            const cards = [];
+            const cardEntries = block.querySelectorAll('.card-entry');
+            cardEntries.forEach(entry => {
+                const cardType = entry.querySelector('input[type="radio"]:checked');
+                const refereeId = entry.querySelector('select[name="refereeId"]').value;
+                if (cardType && refereeId) {
+                    cards.push({
+                        cardType: cardType.value,
+                        referee: { id: refereeId }
+                    });
+                }
+            });
+
+            const stat = {
+                player: { id: playerId }
+            };
+
+            if (goals && goals > 0) stat.scoredGoals = goals;
+            if (cards.length > 0) stat.receivedCards = cards;
+
+            result.push(stat);
+        });
+
+        console.log(result);
+
+        fetch(`/api/games/${gameId}/close`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(result)
+        })
+        .then(res => {
+            if (!res.ok) throw new Error("Error closing game.");
+            return res.json();
+        })
+        .then(data => {
+            alert("Game closed successfully!");
+            window.location.href = `/register-game-result`;
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Failed to submit game stats.");
+        });
     }
 
     // Add one block on load

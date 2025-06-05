@@ -20,10 +20,7 @@ import pt.ul.fc.css.soccernow.mapper.*;
 import pt.ul.fc.css.soccernow.service.*;
 import pt.ul.fc.css.soccernow.util.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -103,7 +100,16 @@ public class ViewController {
     public String getRegisterResultByGameIdPage(@PathVariable UUID id, Model model) {
         Game game = gameService.findById(id);
 
+        List<PlayerDTO> players = game.getPlayers().stream().map(playerMapper::toDTO).toList();
+
+        List<Referee> refereesEntities = new LinkedList<>();
+        refereesEntities.add(game.getPrimaryReferee());
+        refereesEntities.addAll(game.getSecondaryReferees());
+        List<RefereeDTO> referees = refereesEntities.stream().map(refereeMapper::toDTO).toList();
+
         model.addAttribute("game", gameMapper.toDTO(game));
+        model.addAttribute("players", players);
+        model.addAttribute("referees", referees);
         return "register-game-result";
     }
 
