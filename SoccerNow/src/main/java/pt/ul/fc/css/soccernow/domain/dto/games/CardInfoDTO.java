@@ -31,6 +31,22 @@ public class CardInfoDTO implements Serializable {
         this.referee = refereeInfoDTO;
     }
 
+    public void setCardType(CardEnum cardType) {
+        this.cardType = cardType;
+    }
+
+    public void setPlayerScoredGoals(Integer playerScoredGoals) {
+        this.playerScoredGoals = playerScoredGoals;
+    }
+
+    public void setPlayerPlayer(PlayerInfoDTO playerPlayer) {
+        this.playerPlayer = playerPlayer;
+    }
+
+    public void setReferee(RefereeInfoDTO referee) {
+        this.referee = referee;
+    }
+
     public CardEnum getCardType() {
         return cardType;
     }

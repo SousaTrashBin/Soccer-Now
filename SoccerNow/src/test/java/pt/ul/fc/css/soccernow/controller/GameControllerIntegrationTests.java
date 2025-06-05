@@ -224,6 +224,13 @@ class GameControllerIntegrationTests {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/referees/" + certificatedReferees.get(0).getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(playerGameStatsDTOSet)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
     }
 
     @Test

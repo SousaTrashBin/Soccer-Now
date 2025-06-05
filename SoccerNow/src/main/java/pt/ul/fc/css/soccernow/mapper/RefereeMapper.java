@@ -17,7 +17,7 @@ public interface RefereeMapper {
 
     @AfterMapping
     default void linkIssuedCards(@MappingTarget Referee referee) {
-        referee.getIssuedCards().forEach(issuedCard -> issuedCard.setReferee(referee));
+        referee.getIssuedCards().forEach(card -> card.setReferee(referee));
     }
 
     RefereeDTO toDTO(Referee referee);
