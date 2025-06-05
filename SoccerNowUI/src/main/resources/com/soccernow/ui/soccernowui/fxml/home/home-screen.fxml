@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/17.0.12"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.soccernow.ui.soccernowui.controller.home.HomeScreenController"
+      style="-fx-font-family: 'JetBrains Mono'; -fx-font-size: 12;"
+      alignment="CENTER"
+      prefHeight="600.0"
+      prefWidth="400.0"
+      spacing="20.0"
+      styleClass="container">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <ToolBar prefHeight="40.0" prefWidth="400.0">
+         <items>
+                <Label text="SoccerNow" />
+         </items>
+    </ToolBar>
+
+                <Button text="Players"
+                        fx:id="viewPlayerButton"
+                        onAction="#onViewPlayerClick"
+                        prefWidth="150"/>
+
+                <Button text="Referees"
+                        fx:id="viewRefereeButton"
+                        onAction="#onViewRefereeClick"
+                        prefWidth="150"/>
+
+                <Button text="Teams"
+                        fx:id="viewTeamButton"
+                        onAction="#onViewTeamClick"
+                        prefWidth="150"/>
+
+                <Button text="Games"
+                        fx:id="viewGameButton"
+                        onAction="#onViewGameClick"
+                        prefWidth="150"/>
+
+                <Button text="Tournaments"
+                        fx:id="viewTournamentButton"
+                        onAction="#onViewTournamentClick"
+                        prefWidth="150"/>
+
+</VBox>

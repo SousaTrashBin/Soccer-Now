@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.soccernow.ui.soccernowui.controller.tournament.TournamentListController"
+            prefHeight="600.0" prefWidth="400.0">
+
+    <VBox alignment="TOP_CENTER" spacing="10.0" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.bottomAnchor="10"
+          style="-fx-font-family: 'JetBrains Mono'; -fx-font-size: 12;"
+          prefWidth="380">
+
+        <ToolBar prefHeight="40.0" prefWidth="400.0">
+            <Button fx:id="BackButton" onAction="#onBackClick" mnemonicParsing="false" text="&lt; Back"/>
+            <Label text="Tournament List"/>
+        </ToolBar>
+
+        <Label text="Tournaments" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+
+        <TableView fx:id="tournamentTableView" prefHeight="480" prefWidth="380">
+            <columns>
+                <TableColumn fx:id="idColumn" text="Tournament ID" prefWidth="100"/>
+                <TableColumn fx:id="nameColumn" text="Tournament Name" prefWidth="180"/>
+                <TableColumn fx:id="statusColumn" text="Status" prefWidth="100"/>
+            </columns>
+        </TableView>
+
+        <HBox spacing="8" alignment="CENTER" prefWidth="380" maxWidth="380">
+                    <Button text="Add" onAction="#onAddClick" prefWidth="80"/>
+                    <Button text="Edit" onAction="#onEditClick" prefWidth="80"/>
+                    <Button text="Refresh" onAction="#onRefreshClick" prefWidth="80"/>
+                    <Button text="Delete" onAction="#onDeleteClick" prefWidth="110"/>
+        </HBox>
+    </VBox>
+
+</AnchorPane>
