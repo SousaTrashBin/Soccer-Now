@@ -22,7 +22,7 @@ public class PlayerGameStats {
     @Column(name = "scored_goals", nullable = false)
     private Integer scoredGoals = 0;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false,cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "player_id")
     private Player player;
 
@@ -30,7 +30,7 @@ public class PlayerGameStats {
     @JoinColumn(name = "game_id", nullable = false)
     private Game game;
 
-    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "player", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, orphanRemoval = true)
     private Set<Card> receivedCards = new LinkedHashSet<>();
 
     public Set<Card> getReceivedCards() {
