@@ -5,8 +5,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox fx:id="editPlayerVBox"
-      alignment="CENTER"
+<VBox alignment="CENTER"
       prefHeight="600.0"
       prefWidth="400.0"
       spacing="20.0"
@@ -39,7 +38,23 @@
         <ComboBox fx:id="positionComboBox" promptText="Select position" prefWidth="250"/>
     </HBox>
 
-    <HBox spacing="20" alignment="CENTER">
+    <VBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Players's teams:"/>
+                    <ListView fx:id="playerTeamsListView" prefHeight="150" prefWidth="260"/>
+                    <HBox spacing="10" alignment="CENTER">
+                        <Button text="Remove Team" onAction="#onRemoveTeamClick" prefWidth="120"/>
+                    </HBox>
+    </VBox>
+
+    <VBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Other teams:"/>
+                        <ListView fx:id="otherTeamsListView" prefHeight="150" prefWidth="260"/>
+                        <HBox spacing="10" alignment="CENTER">
+                            <Button text="Add Team" onAction="#onAddTeamClick" prefWidth="90"/>
+                        </HBox>
+    </VBox>
+
+    <HBox spacing="20" alignment="CENTER_RIGHT">
         <Button text="Save Changes" onAction="#onSaveClick" styleClass="btn btn-primary"/>
     </HBox>
 </VBox>
