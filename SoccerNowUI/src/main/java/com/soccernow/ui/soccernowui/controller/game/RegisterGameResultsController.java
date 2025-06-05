@@ -61,8 +61,15 @@ public class RegisterGameResultsController {
         teamComboBox.valueProperty().addListener((obs, oldTeam, newTeam) -> {
             updatePlayers();
         });
+
         playerComboBox.valueProperty().addListener((obs, oldPlayer, newPlayer) -> {
             populatePlayerStats();
+        });
+
+        playerGoalsField.textProperty().addListener((obs, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                playerGoalsField.setText(newValue.replaceAll("\\D", ""));
+            }
         });
     }
 
