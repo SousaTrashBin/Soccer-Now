@@ -30,17 +30,17 @@
 
     <VBox spacing="10" alignment="CENTER_LEFT">
         <Label text="Teams participating:"/>
-        <ListView fx:id="gameListView" prefHeight="150" prefWidth="260"/>
+        <ListView fx:id="participatingTeamsListView" prefHeight="150" prefWidth="260"/>
         <HBox spacing="10" alignment="CENTER">
-            <Button text="Remove Team" onAction="#onRemoveClick" prefWidth="140"/>
+            <Button text="Remove Team" onAction="#onRemoveTeamClick" prefWidth="140"/>
         </HBox>
     </VBox>
 
     <VBox spacing="10" alignment="CENTER_LEFT">
-            <Label text="Other teams:"/>
-            <ListView fx:id="gameListView" prefHeight="150" prefWidth="260"/>
+            <Label text="Available teams:"/>
+            <ListView fx:id="availableTeamsListView" prefHeight="150" prefWidth="260"/>
             <HBox spacing="10" alignment="CENTER">
-                <Button text="Add Team" onAction="#onAddGameClick" prefWidth="140"/>
+                <Button text="Add Team" onAction="#onAddTeamClick" prefWidth="140"/>
             </HBox>
         </VBox>
 
