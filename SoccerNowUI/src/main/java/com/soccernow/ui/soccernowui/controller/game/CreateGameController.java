@@ -1,5 +1,6 @@
 package com.soccernow.ui.soccernowui.controller.game;
 
+import com.soccernow.ui.soccernowui.SoccerNowApp;
 import com.soccernow.ui.soccernowui.api.GameApiController;
 import com.soccernow.ui.soccernowui.api.PlayerApiController;
 import com.soccernow.ui.soccernowui.api.RefereeApiController;
@@ -15,6 +16,7 @@ import com.soccernow.ui.soccernowui.dto.user.RefereeDTO;
 import com.soccernow.ui.soccernowui.dto.user.RefereeInfoDTO;
 import com.soccernow.ui.soccernowui.util.FXMLUtils;
 import com.soccernow.ui.soccernowui.util.FutsalPositionEnum;
+import jakarta.validation.Validator;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -77,6 +79,7 @@ public class CreateGameController {
     @FXML private TextField timeField;
     private boolean updatingTeamTwoComboBox;
     private boolean updatingTeamOneComboBox;
+    private Validator validator;
 
     @FXML
     private void initialize() {
@@ -122,6 +125,8 @@ public class CreateGameController {
         teamTwoComboBox.valueProperty().addListener((obs, oldTeam, newTeam) -> {
             updateTeamTwoPlayers();
         });
+
+        this.validator = SoccerNowApp.getValidatorFactory().getValidator();
     }
 
     private void updateTeamOnePlayers() {
@@ -166,6 +171,11 @@ public class CreateGameController {
         gameDTO.setSecondaryReferees(secondaryReferees);
         gameDTO.setGameTeamOne(teamOne);
         gameDTO.setGameTeamTwo(teamTwo);
+
+        boolean isValid = FXMLUtils.validateAndShowAlert(gameDTO, validator);
+        if (!isValid) {
+            return;
+        }
 
         FXMLUtils.executeWithErrorHandling(() -> GameApiController.INSTANCE.registerGame(gameDTO))
                 .ifPresent(savedDTO -> {
