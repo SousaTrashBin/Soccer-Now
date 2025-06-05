@@ -1,5 +1,6 @@
 package com.soccernow.ui.soccernowui.controller.game;
 
+import com.soccernow.ui.soccernowui.api.GameApiController;
 import com.soccernow.ui.soccernowui.dto.TeamDTO;
 import com.soccernow.ui.soccernowui.dto.TeamInfoDTO;
 import com.soccernow.ui.soccernowui.dto.games.*;
@@ -14,9 +15,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class RegisterGameResultsController {
 
@@ -43,7 +42,7 @@ public class RegisterGameResultsController {
     @FXML
     public void initialize() {
         playerCardsTypeColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCardType().toString()));
-        playerCardsTypeColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getReferee().toString()));
+        playerCardsRefereeNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getReferee().toString()));
 
         cardTypeComboBox.setItems(FXCollections.observableArrayList(CardEnum.values()));
 
@@ -57,7 +56,7 @@ public class RegisterGameResultsController {
 
     private void populatePlayerStats() {
         PlayerInfoDTO selecterPlayer = playerComboBox.getSelectionModel().getSelectedItem();
-        if (selecterPlayer != null) {
+        if (selecterPlayer == null) {
             return;
         }
         savedPlayerGameStats.stream().filter(playerGameStatsDTO -> playerGameStatsDTO.getPlayer().getId().equals(selecterPlayer.getId()))
@@ -80,10 +79,40 @@ public class RegisterGameResultsController {
 
     @FXML
     private void onSavePlayerStatsClick() {
+        PlayerInfoDTO selectedPlayer = playerComboBox.getSelectionModel().getSelectedItem();
+        if (selectedPlayer == null) return;
+
+        Integer goals = safeParseInt(playerGoalsField.getText()); // falta validar
+        HashSet<CardInfoDTO> cardInfoDTOS = new HashSet<>(playerCardsTableView.getItems());
+        PlayerGameStatsDTO newStats = new PlayerGameStatsDTO(cardInfoDTOS, goals, selectedPlayer, null);
+
+        Optional<PlayerGameStatsDTO> existingStatsOpt = savedPlayerGameStats.stream()
+                .filter(p -> p.getPlayer().getId().equals(selectedPlayer.getId()))
+                .findFirst();
+
+        existingStatsOpt.ifPresent(playerGameStatsDTO -> savedPlayerGameStats.remove(playerGameStatsDTO));
+
+        savedPlayerGameStats.add(newStats);
+    }
+
+    private Integer safeParseInt(String text) {
+        try {
+            return Integer.parseInt(text);
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 
     @FXML
-    private void onSaveGameClick() {
+    private void onSaveGameClick(ActionEvent event) {
+        FXMLUtils.executeWithErrorHandling(() -> GameApiController.INSTANCE.closeGameById(gameDTO.getId(), new HashSet<>(savedPlayerGameStats)))
+                .ifPresent(savedDTO -> {
+                    System.out.printf(savedDTO.toString());
+                    FXMLUtils.showSuccess("Game Successfully Closed", "Game " + savedDTO.getId() + " successfully closed!");
+                });
+
+        FXMLUtils.switchScene("/com/soccernow/ui/soccernowui/fxml/game/game-list.fxml",
+                (Node) event.getSource());
     }
 
     public void onBackClick(ActionEvent actionEvent) {

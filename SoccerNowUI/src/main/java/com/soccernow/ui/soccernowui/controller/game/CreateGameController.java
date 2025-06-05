@@ -183,7 +183,7 @@ public class CreateGameController {
                     FXMLUtils.showSuccess("Game Successfully Created", "Game " + savedDTO.getId() + " successfully created!");
                 });
 
-        FXMLUtils.switchScene("/com/soccernow/ui/soccernowui/fxml/home/home-screen.fxml",
+        FXMLUtils.switchScene("/com/soccernow/ui/soccernowui/fxml/game/game-list.fxml",
                 (Node) event.getSource());
     }
 
