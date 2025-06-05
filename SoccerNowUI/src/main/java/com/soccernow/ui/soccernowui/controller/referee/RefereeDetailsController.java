@@ -65,7 +65,7 @@ public class RefereeDetailsController {
     }
 
     public void onBackClick(ActionEvent actionEvent) {
-        FXMLUtils.switchScene("/com/soccernow/ui/soccernowui/fxml/player/player-list.fxml",
+        FXMLUtils.switchScene("/com/soccernow/ui/soccernowui/fxml/referee/referee-list.fxml",
                 (Node) actionEvent.getSource());
     }
 }
