@@ -226,7 +226,7 @@
             result.push(stat);
         });
 
-        console.log(result);
+        console.log(JSON.stringify(result, null, 2));
 
         fetch(`/api/games/${gameId}/close`, {
             method: 'POST',

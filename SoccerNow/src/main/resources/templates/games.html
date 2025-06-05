@@ -15,7 +15,7 @@
         <div class="filter-container">
             <label for="status">Game status</label>
             <select name="statuses" id="status">
-                <option value=""></option>
+                <option value="">All</option>
                 <option value="OPENED">Opened</option>
                 <option value="CLOSED">Closed</option>
             </select>
@@ -61,7 +61,7 @@
       <tbody>
         <tr th:each="g : ${games}">
           <td th:text="${g.getIsClosed()}" />
-          <td th:text="${g.getGameStats().getNumberOfGoalsScored()}" />
+          <td th:text="${g.getGameStats() == null ? '--' : g.getGameStats().getNumberOfGoalsScored()}" />
           <td th:text="${g.getLocatedIn().getCity()}" />
           <td th:text="${g.getTimeOfDay().toString()}" />
         </tr>

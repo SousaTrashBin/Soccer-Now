@@ -50,7 +50,7 @@
         <tr th:each="r : ${referees}">
           <td th:text="${r.getName()}" />
           <td th:text="${r.getHasCertificate()}" />
-          <td th:text="${r.getNumberOfGames()}" />
+          <td th:text="${r.getNumberOfOfficiatedGames()}" />
           <td th:text="${r.getNumberOfIssuedCards()}" />
         </tr>
       </tbody>

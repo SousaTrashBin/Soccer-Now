@@ -69,7 +69,7 @@
   <tbody>
   <tr th:each="p : ${players}">
     <td th:text="${p.getName()}" />
-    <td th:text="${p.getName()}" />
+    <td th:text="${p.getPreferredPosition()}" />
     <td th:text="${p.getGoalsScored()}" />
     <td th:text="${p.getTotalNumberOfReceivedCards()}" />
     <td th:text="${p.getNumberOfPlayedGames()}" />
