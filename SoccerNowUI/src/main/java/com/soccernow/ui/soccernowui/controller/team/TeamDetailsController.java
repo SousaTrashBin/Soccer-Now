@@ -112,7 +112,7 @@ public class TeamDetailsController {
         try {
             List<PlayerDTO> allPlayers = PlayerApiController.INSTANCE.getAllPlayers();
             List<PlayerInfoDTO> otherTeams = allPlayers.stream()
-                    .map(playerDTO -> new PlayerInfoDTO(playerDTO.getId(), playerDTO.getName()))
+                    .map(playerDTO -> new PlayerInfoDTO(playerDTO.getId(), playerDTO.getName(),playerDTO.getPreferredPosition()))
                     .filter(playerInfoDTO -> !teamDTO.getPlayers().contains(playerInfoDTO))
                     .toList();
 
