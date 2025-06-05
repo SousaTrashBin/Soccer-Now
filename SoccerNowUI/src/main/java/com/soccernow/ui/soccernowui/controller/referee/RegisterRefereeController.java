@@ -28,7 +28,6 @@ public class RegisterRefereeController {
 
     @FXML
     public void initialize() {
-        hasCertificateComboBox.getItems().add(null);
         hasCertificateComboBox.getItems().addAll("Yes", "No");
         hasCertificateComboBox.setValue("No");
 
