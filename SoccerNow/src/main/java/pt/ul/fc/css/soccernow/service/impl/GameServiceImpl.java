@@ -229,15 +229,15 @@ public class GameServiceImpl implements GameService {
             playerGameStats.setScoredGoals(scoredGoals);
             playerGameStats.setPlayer(playerStat.getPlayer());
             Set<Card> cards = new LinkedHashSet<>();
-            for (Card card : playerGameStats.getReceivedCards()) {
+            for (Card card : playerStat.getReceivedCards()) {
                 Card newCard = new Card();
                 newCard.setCardType(card.getCardType());
                 newCard.setPlayer(playerGameStats);
 
                 Referee referee = refereeService.findNotDeletedById(card.getReferee().getId());
                 newCard.setReferee(referee);
-                referee.addIssuedCard(card);
-                cards.add(card);
+                referee.addIssuedCard(newCard);
+                cards.add(newCard);
             }
             playerGameStats.setReceivedCards(cards);
             playerGameStats.setGame(game);

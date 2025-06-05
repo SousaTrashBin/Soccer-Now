@@ -6,7 +6,7 @@ import pt.ul.fc.css.soccernow.domain.entities.Team;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,
         componentModel = MappingConstants.ComponentModel.SPRING,
-        uses = TournamentMapper.class)
+        uses = {TournamentMapper.class, CardMapper.class})
 public interface TeamMapper {
     Team toEntity(TeamDTO teamDTO);
 

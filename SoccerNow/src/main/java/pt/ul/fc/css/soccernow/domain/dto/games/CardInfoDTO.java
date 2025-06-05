@@ -1,30 +1,28 @@
 package pt.ul.fc.css.soccernow.domain.dto.games;
 
-import jakarta.validation.constraints.NotNull;
+import pt.ul.fc.css.soccernow.domain.dto.user.PlayerInfoDTO;
 import pt.ul.fc.css.soccernow.domain.dto.user.RefereeInfoDTO;
+import pt.ul.fc.css.soccernow.domain.entities.game.Card;
 import pt.ul.fc.css.soccernow.util.CardEnum;
 
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
- * DTO for {@link pt.ul.fc.css.soccernow.domain.entities.game.Card}
+ * DTO for {@link Card}
  */
 public class CardInfoDTO implements Serializable {
-    private UUID id;
-    private CardEnum cardType;
-    @NotNull
-    private PlayerGameStatsDTO player;
-    private RefereeInfoDTO referee;
+    private CardEnum cardType = null;
+    private Integer playerScoredGoals = 0;
+    private PlayerInfoDTO playerPlayer = null;
+    private RefereeInfoDTO referee = null;
 
-    public CardInfoDTO() {
-    }
+    public CardInfoDTO(){}
 
-    public CardInfoDTO(UUID id, CardEnum cardType, PlayerGameStatsDTO player, RefereeInfoDTO referee) {
-        this.id = id;
+    public CardInfoDTO(CardEnum cardType, Integer playerScoredGoals, PlayerInfoDTO playerPlayer, RefereeInfoDTO referee) {
         this.cardType = cardType;
-        this.player = player;
+        this.playerScoredGoals = playerScoredGoals;
+        this.playerPlayer = playerPlayer;
         this.referee = referee;
     }
 
@@ -33,40 +31,20 @@ public class CardInfoDTO implements Serializable {
         this.referee = refereeInfoDTO;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public CardInfoDTO setId(UUID id) {
-        this.id = id;
-        return this;
-    }
-
     public CardEnum getCardType() {
         return cardType;
     }
 
-    public CardInfoDTO setCardType(CardEnum cardType) {
-        this.cardType = cardType;
-        return this;
+    public Integer getPlayerScoredGoals() {
+        return playerScoredGoals;
     }
 
-    public PlayerGameStatsDTO getPlayer() {
-        return player;
-    }
-
-    public CardInfoDTO setPlayer(PlayerGameStatsDTO player) {
-        this.player = player;
-        return this;
+    public PlayerInfoDTO getPlayerPlayer() {
+        return playerPlayer;
     }
 
     public RefereeInfoDTO getReferee() {
         return referee;
-    }
-
-    public CardInfoDTO setReferee(RefereeInfoDTO referee) {
-        this.referee = referee;
-        return this;
     }
 
     @Override
@@ -74,23 +52,23 @@ public class CardInfoDTO implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CardInfoDTO entity = (CardInfoDTO) o;
-        return Objects.equals(this.id, entity.id) &&
-                Objects.equals(this.cardType, entity.cardType) &&
-                Objects.equals(this.player, entity.player) &&
+        return Objects.equals(this.cardType, entity.cardType) &&
+                Objects.equals(this.playerScoredGoals, entity.playerScoredGoals) &&
+                Objects.equals(this.playerPlayer, entity.playerPlayer) &&
                 Objects.equals(this.referee, entity.referee);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, cardType, player, referee);
+        return Objects.hash(cardType, playerScoredGoals, playerPlayer, referee);
     }
 
     @Override
     public String toString() {
         return getClass().getSimpleName() + "(" +
-                "id = " + id + ", " +
                 "cardType = " + cardType + ", " +
-                "player = " + player + ", " +
+                "playerScoredGoals = " + playerScoredGoals + ", " +
+                "playerPlayer = " + playerPlayer + ", " +
                 "referee = " + referee + ")";
     }
 }
