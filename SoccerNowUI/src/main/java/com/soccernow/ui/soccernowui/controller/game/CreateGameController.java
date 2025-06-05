@@ -17,6 +17,7 @@ public class CreateGameController {
 
     private List<TeamDTO> availableTeams = new ArrayList<>();
     private boolean updatingTeamSelections = false;
+    private boolean updatingPlayerSelections = false;
 
     @FXML
     private ComboBox<TeamDTO> teamOneComboBox;
@@ -84,7 +85,6 @@ public class CreateGameController {
         FXMLUtils.executeWithErrorHandling(TeamApiController.INSTANCE::getAllTeams)
                 .ifPresent(teams -> {
                     availableTeams = teams;
-                    // Populate team combo boxes after loading teams
                     teamOneComboBox.getItems().setAll(availableTeams);
                     teamTwoComboBox.getItems().setAll(availableTeams);
                 });
@@ -113,7 +113,6 @@ public class CreateGameController {
             }
         });
 
-        // Add player selection listeners
         addTeamOnePlayerSelectionListeners();
         addTeamTwoPlayerSelectionListeners();
 
@@ -133,11 +132,56 @@ public class CreateGameController {
     }
 
     private void addTeamOnePlayerSelectionListeners() {
-        teamOneGoalieComboBox.valueProperty().addListener((obs, oldVal, newVal) -> refreshTeamOnePlayerChoices());
-        teamOneSweeperComboBox.valueProperty().addListener((obs, oldVal, newVal) -> refreshTeamOnePlayerChoices());
-        teamOneLeftWingerComboBox.valueProperty().addListener((obs, oldVal, newVal) -> refreshTeamOnePlayerChoices());
-        teamOneRightWingerComboBox.valueProperty().addListener((obs, oldVal, newVal) -> refreshTeamOnePlayerChoices());
-        teamOneForwardComboBox.valueProperty().addListener((obs, oldVal, newVal) -> refreshTeamOnePlayerChoices());
+        teamOneGoalieComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (!updatingPlayerSelections) {
+                updatingPlayerSelections = true;
+                try {
+                    refreshTeamOnePlayerChoices();
+                } finally {
+                    updatingPlayerSelections = false;
+                }
+            }
+        });
+        teamOneSweeperComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (!updatingPlayerSelections) {
+                updatingPlayerSelections = true;
+                try {
+                    refreshTeamOnePlayerChoices();
+                } finally {
+                    updatingPlayerSelections = false;
+                }
+            }
+        });
+        teamOneLeftWingerComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (!updatingPlayerSelections) {
+                updatingPlayerSelections = true;
+                try {
+                    refreshTeamOnePlayerChoices();
+                } finally {
+                    updatingPlayerSelections = false;
+                }
+            }
+        });
+        teamOneRightWingerComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (!updatingPlayerSelections) {
+                updatingPlayerSelections = true;
+                try {
+                    refreshTeamOnePlayerChoices();
+                } finally {
+                    updatingPlayerSelections = false;
+                }
+            }
+        });
+        teamOneForwardComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (!updatingPlayerSelections) {
+                updatingPlayerSelections = true;
+                try {
+                    refreshTeamOnePlayerChoices();
+                } finally {
+                    updatingPlayerSelections = false;
+                }
+            }
+        });
     }
 
     private void refreshTeamOnePlayerChoices() {
@@ -199,11 +243,56 @@ public class CreateGameController {
     }
 
     private void addTeamTwoPlayerSelectionListeners() {
-        teamTwoGoalieComboBox.valueProperty().addListener((obs, oldVal, newVal) -> refreshTeamTwoPlayerChoices());
-        teamTwoSweeperComboBox.valueProperty().addListener((obs, oldVal, newVal) -> refreshTeamTwoPlayerChoices());
-        teamTwoLeftWingerComboBox.valueProperty().addListener((obs, oldVal, newVal) -> refreshTeamTwoPlayerChoices());
-        teamTwoRightWingerComboBox.valueProperty().addListener((obs, oldVal, newVal) -> refreshTeamTwoPlayerChoices());
-        teamTwoForwardComboBox.valueProperty().addListener((obs, oldVal, newVal) -> refreshTeamTwoPlayerChoices());
+        teamTwoGoalieComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (!updatingPlayerSelections) {
+                updatingPlayerSelections = true;
+                try {
+                    refreshTeamTwoPlayerChoices();
+                } finally {
+                    updatingPlayerSelections = false;
+                }
+            }
+        });
+        teamTwoSweeperComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (!updatingPlayerSelections) {
+                updatingPlayerSelections = true;
+                try {
+                    refreshTeamTwoPlayerChoices();
+                } finally {
+                    updatingPlayerSelections = false;
+                }
+            }
+        });
+        teamTwoLeftWingerComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (!updatingPlayerSelections) {
+                updatingPlayerSelections = true;
+                try {
+                    refreshTeamTwoPlayerChoices();
+                } finally {
+                    updatingPlayerSelections = false;
+                }
+            }
+        });
+        teamTwoRightWingerComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (!updatingPlayerSelections) {
+                updatingPlayerSelections = true;
+                try {
+                    refreshTeamTwoPlayerChoices();
+                } finally {
+                    updatingPlayerSelections = false;
+                }
+            }
+        });
+        teamTwoForwardComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (!updatingPlayerSelections) {
+                updatingPlayerSelections = true;
+                try {
+                    refreshTeamTwoPlayerChoices();
+                } finally {
+                    updatingPlayerSelections = false;
+                }
+            }
+        });
     }
 
     private void refreshTeamTwoPlayerChoices() {
@@ -265,12 +354,20 @@ public class CreateGameController {
     }
 
     private void updatePlayerComboBox(ComboBox<PlayerInfoDTO> comboBox, PlayerInfoDTO currentSelection, List<PlayerInfoDTO> others) {
+        if (updatingPlayerSelections) return;
+
         List<PlayerInfoDTO> allOptions = new ArrayList<>(others);
         if (currentSelection != null) {
             allOptions.add(currentSelection);
         }
-        comboBox.getItems().setAll(allOptions);
-        comboBox.setValue(currentSelection);
+
+        updatingPlayerSelections = true;
+        try {
+            comboBox.getItems().setAll(allOptions);
+            comboBox.setValue(currentSelection);
+        } finally {
+            updatingPlayerSelections = false;
+        }
     }
 
     private void updateTeamOneOptions(TeamDTO selectedTeamTwo) {
@@ -325,7 +422,6 @@ public class CreateGameController {
     }
 
     private boolean validateGameForm() {
-        // Add validation logic for all required fields
         if (teamOneComboBox.getValue() == null) {
             showAlert("Please select Team One");
             return false;
