@@ -29,21 +29,18 @@ public interface GameRepository extends SoftDeletedRepository<Game> {
             TimeOfDay.TimeSpan span = TimeOfDay.toTimeSpan(params.getTimeOfDay());
 
             int startHour = span.start().getHour();
-            int startMinute = span.start().getMinute();
-            int startSecond = span.start().getSecond();
-
             int endHour = span.end().getHour();
-            int endMinute = span.end().getMinute();
-            int endSecond = span.end().getSecond();
 
-            conditions.add(
-                    game.happensIn.hour().goe(startHour)
-                            .and(game.happensIn.hour().loe(endHour))
-                            .and(game.happensIn.minute().goe(startMinute))
-                            .and(game.happensIn.minute().loe(endMinute))
-                            .and(game.happensIn.second().goe(startSecond))
-                            .and(game.happensIn.second().loe(endSecond))
-            );
+            BooleanExpression timeCondition;
+
+            if (startHour <= endHour) {
+                timeCondition = game.happensIn.hour().between(startHour, endHour);
+            } else {
+                timeCondition = game.happensIn.hour().goe(startHour)
+                        .or(game.happensIn.hour().loe(endHour));
+            }
+
+            conditions.add(timeCondition);
         }
 
         if (!params.getStatuses().isEmpty()) {

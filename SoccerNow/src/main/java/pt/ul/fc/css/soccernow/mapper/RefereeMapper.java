@@ -6,7 +6,7 @@ import pt.ul.fc.css.soccernow.domain.entities.user.Referee;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,
         componentModel = MappingConstants.ComponentModel.SPRING,
-        uses = TournamentMapper.class)
+        uses = {TournamentMapper.class, CardMapper.class})
 public interface RefereeMapper {
     Referee toEntity(RefereeDTO refereeDTO);
 
