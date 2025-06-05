@@ -66,9 +66,6 @@ public class RefereeInfoDTO implements Serializable {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "id = " + id + ", " +
-                "name = " + name + ", " +
-                "hasCertificate = " + hasCertificate + ")";
+        return name + " : " + getId();
     }
 }

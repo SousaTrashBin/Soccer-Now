@@ -55,8 +55,6 @@ public class GameTeamDTO implements Serializable {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "gamePlayers = " + gamePlayers + ", " +
-                "team = " + team + ")";
+        return team.toString();
     }
 }
