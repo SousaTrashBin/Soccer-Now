@@ -24,7 +24,7 @@ public class SoccerNowApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         validatorFactory = Validation.buildDefaultValidatorFactory();
-        FXMLLoader fxmlLoader = new FXMLLoader(SoccerNowApp.class.getResource("fxml/home/home-screen.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(SoccerNowApp.class.getResource("fxml/home/login.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 300, 400);
 
         scene.getRoot().setStyle("-fx-background-color: white;");

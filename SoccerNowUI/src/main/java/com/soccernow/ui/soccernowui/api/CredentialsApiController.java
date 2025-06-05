@@ -13,7 +13,7 @@ public enum CredentialsApiController {
     INSTANCE;
     private final String credentialsURL = baseURL + "credentials/";
 
-    private void login(LoginRequest loginRequest) throws IOException, ErrorException {
+    public void login(LoginRequest loginRequest) throws IOException, ErrorException {
         try (Response response = ApiUtils.postJsonRequest(credentialsURL + "login", loginRequest)) {
             if (!response.isSuccessful()) {
                 ApiUtils.throwApiException(response, "Login failed");
