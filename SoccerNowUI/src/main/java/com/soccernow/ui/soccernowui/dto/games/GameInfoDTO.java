@@ -1,5 +1,6 @@
 package com.soccernow.ui.soccernowui.dto.games;
 
+import com.soccernow.ui.soccernowui.util.GameStatusEnum;
 import jakarta.validation.constraints.NotNull;
 import com.soccernow.ui.soccernowui.dto.tournament.TournamentInfoDTO;
 
@@ -13,17 +14,17 @@ public class GameInfoDTO implements Serializable {
     private AddressDTO locatedIn;
     private LocalDateTime happensIn;
     @NotNull
-    private Boolean isClosed = false;
+    private GameStatusEnum status = GameStatusEnum.OPENED;
     private TournamentInfoDTO tournament;
 
     public GameInfoDTO() {
     }
 
-    public GameInfoDTO(UUID id, AddressDTO locatedIn, LocalDateTime happensIn, Boolean isClosed, TournamentInfoDTO tournament) {
+    public GameInfoDTO(UUID id, AddressDTO locatedIn, LocalDateTime happensIn, GameStatusEnum status, TournamentInfoDTO tournament) {
         this.id = id;
         this.locatedIn = locatedIn;
         this.happensIn = happensIn;
-        this.isClosed = isClosed;
+        this.status = status;
         this.tournament = tournament;
     }
 
@@ -54,12 +55,12 @@ public class GameInfoDTO implements Serializable {
         return this;
     }
 
-    public Boolean getIsClosed() {
-        return isClosed;
+    public GameStatusEnum getStatus() {
+        return status;
     }
 
-    public GameInfoDTO setIsClosed(Boolean isClosed) {
-        this.isClosed = isClosed;
+    public GameInfoDTO setStatus(GameStatusEnum status) {
+        this.status = status;
         return this;
     }
 
@@ -80,13 +81,13 @@ public class GameInfoDTO implements Serializable {
         return Objects.equals(this.id, entity.id) &&
                 Objects.equals(this.locatedIn, entity.locatedIn) &&
                 Objects.equals(this.happensIn, entity.happensIn) &&
-                Objects.equals(this.isClosed, entity.isClosed) &&
+                Objects.equals(this.status, entity.status) &&
                 Objects.equals(this.tournament, entity.tournament);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, locatedIn, happensIn, isClosed, tournament);
+        return Objects.hash(id, locatedIn, happensIn, status, tournament);
     }
 
     @Override
@@ -95,7 +96,7 @@ public class GameInfoDTO implements Serializable {
                 "id = " + id + ", " +
                 "locatedIn = " + locatedIn + ", " +
                 "happensIn = " + happensIn + ", " +
-                "isClosed = " + isClosed + ", " +
+                "status = " + status + ", " +
                 "tournament = " + tournament + ")";
     }
 }

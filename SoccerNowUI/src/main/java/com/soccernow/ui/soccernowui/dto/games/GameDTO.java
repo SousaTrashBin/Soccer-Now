@@ -2,6 +2,7 @@ package com.soccernow.ui.soccernowui.dto.games;
 
 import com.soccernow.ui.soccernowui.dto.tournament.TournamentInfoDTO;
 import com.soccernow.ui.soccernowui.dto.user.RefereeInfoDTO;
+import com.soccernow.ui.soccernowui.util.GameStatusEnum;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -19,14 +20,14 @@ public class GameDTO implements Serializable {
     private Set<RefereeInfoDTO> secondaryReferees = new HashSet<>();
     private AddressDTO locatedIn;
     private LocalDateTime happensIn;
-    private Boolean isClosed = false;
     private TournamentInfoDTO tournament;
+    private GameStatusEnum status;
 
     public GameDTO() {
     }
 
     public GameDTO(
-            GameTeamDTO gameTeamTwo, UUID id, GameTeamDTO gameTeamOne, GameStatsDTO gameStats, RefereeInfoDTO primaryReferee, Set<RefereeInfoDTO> secondaryReferees, AddressDTO locatedIn, LocalDateTime happensIn, Boolean isClosed, TournamentInfoDTO tournament) {
+            GameTeamDTO gameTeamTwo, UUID id, GameTeamDTO gameTeamOne, GameStatsDTO gameStats, RefereeInfoDTO primaryReferee, Set<RefereeInfoDTO> secondaryReferees, AddressDTO locatedIn, LocalDateTime happensIn, TournamentInfoDTO tournament, GameStatusEnum status) {
         this.id = id;
         this.gameTeamOne = gameTeamOne;
         this.gameStats = gameStats;
@@ -34,9 +35,10 @@ public class GameDTO implements Serializable {
         this.secondaryReferees = secondaryReferees;
         this.locatedIn = locatedIn;
         this.happensIn = happensIn;
-        this.isClosed = isClosed;
+
         this.tournament = tournament;
         this.gameTeamTwo = gameTeamTwo;
+        this.status = status;
     }
 
     public UUID getId() {
@@ -102,15 +104,6 @@ public class GameDTO implements Serializable {
         return this;
     }
 
-    public Boolean getIsClosed() {
-        return isClosed;
-    }
-
-    public GameDTO setIsClosed(Boolean isClosed) {
-        this.isClosed = isClosed;
-        return this;
-    }
-
     public TournamentInfoDTO getTournament() {
         return tournament;
     }
@@ -132,13 +125,13 @@ public class GameDTO implements Serializable {
                 Objects.equals(this.secondaryReferees, entity.secondaryReferees) &&
                 Objects.equals(this.locatedIn, entity.locatedIn) &&
                 Objects.equals(this.happensIn, entity.happensIn) &&
-                Objects.equals(this.isClosed, entity.isClosed) &&
+                Objects.equals(this.status, entity.status) &&
                 Objects.equals(this.tournament, entity.tournament);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, gameTeamOne, gameStats, primaryReferee, secondaryReferees, locatedIn, happensIn, isClosed, tournament);
+        return Objects.hash(id, gameTeamOne, gameStats, primaryReferee, secondaryReferees, locatedIn, happensIn, status, tournament);
     }
 
     @Override
@@ -151,7 +144,7 @@ public class GameDTO implements Serializable {
                 "secondaryReferees = " + secondaryReferees + ", " +
                 "locatedIn = " + locatedIn + ", " +
                 "happensIn = " + happensIn + ", " +
-                "isClosed = " + isClosed + ", " +
+                "status = " + status + ", " +
                 "tournament = " + tournament + ")";
     }
 
@@ -162,5 +155,13 @@ public class GameDTO implements Serializable {
     public GameDTO setGameTeamTwo(GameTeamDTO gameTeamTwo) {
         this.gameTeamTwo = gameTeamTwo;
         return this;
+    }
+
+    public GameStatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(GameStatusEnum status) {
+        this.status = status;
     }
 }
