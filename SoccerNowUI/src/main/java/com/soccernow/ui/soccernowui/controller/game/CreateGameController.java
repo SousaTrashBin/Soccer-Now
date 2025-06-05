@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 public class CreateGameController {
 
     private List<TeamDTO> allTeams = new ArrayList<>();
-    private List<TeamDTO> availableTeams = new ArrayList<>();
 
     @FXML private ComboBox<TeamDTO> teamOneComboBox;
     @FXML private ComboBox<PlayerInfoDTO> teamOneGoalieComboBox;
@@ -28,7 +27,6 @@ public class CreateGameController {
     @FXML private ComboBox<PlayerInfoDTO> teamOneForwardComboBox;
     private List<ComboBox<PlayerInfoDTO>> teamOnePlayerComboBoxes;
     private List<PlayerInfoDTO> teamOnePlayers = new ArrayList<>();
-    private List<PlayerInfoDTO> availableTeamOnePlayers = new ArrayList<>();
 
     @FXML private ComboBox<TeamDTO> teamTwoComboBox;
     @FXML private ComboBox<PlayerInfoDTO> teamTwoGoalieComboBox;
@@ -38,7 +36,6 @@ public class CreateGameController {
     @FXML private ComboBox<PlayerInfoDTO> teamTwoForwardComboBox;
     private List<ComboBox<PlayerInfoDTO>> teamTwoPlayerComboBoxes;
     private List<PlayerInfoDTO> teamTwoPlayers = new ArrayList<>();
-    private List<PlayerInfoDTO> availableTeamTwoPlayers = new ArrayList<>();
 
     @FXML private ComboBox<RefereeInfoDTO> primaryRefereeComboBox;
     @FXML private TableView<RefereeInfoDTO> secondaryRefereesTableView;
@@ -62,153 +59,31 @@ public class CreateGameController {
 
         FXMLUtils.executeWithErrorHandling(TeamApiController.INSTANCE::getAllTeams)
                 .ifPresent(teams -> {
-                    this.allTeams = new ArrayList<>(teams);
-                    this.availableTeams = new ArrayList<>(teams);
-                    updateTeamComboBoxes();
+                    this.allTeams = teams;
+                    teamOneComboBox.getItems().setAll(allTeams);
+                    teamTwoComboBox.getItems().setAll(allTeams);
                 });
 
+
         teamOneComboBox.valueProperty().addListener((obs, oldTeam, newTeam) -> {
-            handleTeamOneSelection(oldTeam, newTeam);
+            if (oldTeam != null) allTeams.add(oldTeam);
+            allTeams.remove(newTeam);
+            teamOneComboBox.getItems().setAll(allTeams);
+            teamTwoComboBox.getItems().setAll(allTeams);
         });
 
         teamTwoComboBox.valueProperty().addListener((obs, oldTeam, newTeam) -> {
-            handleTeamTwoSelection(oldTeam, newTeam);
+            if (oldTeam != null) allTeams.add(oldTeam);
+            allTeams.remove(newTeam);
+            teamOneComboBox.getItems().setAll(allTeams);
+            teamTwoComboBox.getItems().setAll(allTeams);
         });
 
-        setupPlayerSelectionListeners(teamOnePlayerComboBoxes, availableTeamOnePlayers);
-
-        setupPlayerSelectionListeners(teamTwoPlayerComboBoxes, availableTeamTwoPlayers);
 
         initializeTableColumns();
     }
 
-    private void handleTeamOneSelection(TeamDTO oldTeam, TeamDTO newTeam) {
-        clearPlayerSelections(teamOnePlayerComboBoxes);
 
-        if (oldTeam != null) {
-            availableTeams.add(oldTeam);
-        }
-
-        if (newTeam != null) {
-            availableTeams.remove(newTeam);
-            updateTeamPlayers(newTeam, teamOnePlayers, availableTeamOnePlayers, teamOnePlayerComboBoxes);
-        } else {
-            teamOnePlayers.clear();
-            availableTeamOnePlayers.clear();
-            updatePlayerComboBoxes(teamOnePlayerComboBoxes, availableTeamOnePlayers);
-        }
-
-        updateTeamTwoComboBox();
-    }
-
-    private void handleTeamTwoSelection(TeamDTO oldTeam, TeamDTO newTeam) {
-        clearPlayerSelections(teamTwoPlayerComboBoxes);
-
-        if (oldTeam != null) {
-            availableTeams.add(oldTeam);
-        }
-
-        if (newTeam != null) {
-            availableTeams.remove(newTeam);
-            updateTeamPlayers(newTeam, teamTwoPlayers, availableTeamTwoPlayers, teamTwoPlayerComboBoxes);
-        } else {
-            teamTwoPlayers.clear();
-            availableTeamTwoPlayers.clear();
-            updatePlayerComboBoxes(teamTwoPlayerComboBoxes, availableTeamTwoPlayers);
-        }
-
-        updateTeamOneComboBox();
-    }
-
-    private void updateTeamPlayers(TeamDTO selectedTeam, List<PlayerInfoDTO> teamPlayers,
-                                   List<PlayerInfoDTO> availableTeamPlayers,
-                                   List<ComboBox<PlayerInfoDTO>> playerComboBoxes) {
-        teamPlayers.clear();
-        availableTeamPlayers.clear();
-
-        List<PlayerInfoDTO> playersFromTeam = getPlayersForTeam(selectedTeam);
-        teamPlayers.addAll(playersFromTeam);
-        availableTeamPlayers.addAll(playersFromTeam);
-
-        updatePlayerComboBoxes(playerComboBoxes, availableTeamPlayers);
-    }
-
-    private void setupPlayerSelectionListeners(List<ComboBox<PlayerInfoDTO>> playerComboBoxes,
-                                               List<PlayerInfoDTO> availablePlayers) {
-        for (ComboBox<PlayerInfoDTO> comboBox : playerComboBoxes) {
-            comboBox.valueProperty().addListener((obs, oldPlayer, newPlayer) -> {
-                handlePlayerSelection(oldPlayer, newPlayer, playerComboBoxes, availablePlayers);
-            });
-        }
-    }
-
-    private void handlePlayerSelection(PlayerInfoDTO oldPlayer, PlayerInfoDTO newPlayer,
-                                       List<ComboBox<PlayerInfoDTO>> playerComboBoxes,
-                                       List<PlayerInfoDTO> availablePlayers) {
-        if (oldPlayer != null) {
-            availablePlayers.add(oldPlayer);
-        }
-
-        if (newPlayer != null) {
-            availablePlayers.remove(newPlayer);
-        }
-
-        updatePlayerComboBoxes(playerComboBoxes, availablePlayers);
-    }
-
-    private void updateTeamComboBoxes() {
-        updateTeamOneComboBox();
-        updateTeamTwoComboBox();
-    }
-
-    private void updateTeamOneComboBox() {
-        TeamDTO currentSelection = teamOneComboBox.getValue();
-        List<TeamDTO> teamsForComboBox = new ArrayList<>(availableTeams);
-
-        if (currentSelection != null) {
-            teamsForComboBox.add(currentSelection);
-        }
-
-        teamOneComboBox.getItems().setAll(teamsForComboBox);
-        teamOneComboBox.setValue(currentSelection);
-    }
-
-    private void updateTeamTwoComboBox() {
-        TeamDTO currentSelection = teamTwoComboBox.getValue();
-        List<TeamDTO> teamsForComboBox = new ArrayList<>(availableTeams);
-
-        if (currentSelection != null) {
-            teamsForComboBox.add(currentSelection);
-        }
-
-        teamTwoComboBox.getItems().setAll(teamsForComboBox);
-        teamTwoComboBox.setValue(currentSelection);
-    }
-
-    private void updatePlayerComboBoxes(List<ComboBox<PlayerInfoDTO>> playerComboBoxes,
-                                        List<PlayerInfoDTO> availablePlayers) {
-        for (ComboBox<PlayerInfoDTO> comboBox : playerComboBoxes) {
-            PlayerInfoDTO currentSelection = comboBox.getValue();
-            List<PlayerInfoDTO> playersForComboBox = new ArrayList<>(availablePlayers);
-
-            if (currentSelection != null) {
-                playersForComboBox.add(currentSelection);
-            }
-
-            comboBox.getItems().setAll(playersForComboBox);
-            comboBox.setValue(currentSelection);
-        }
-    }
-
-    private void clearPlayerSelections(List<ComboBox<PlayerInfoDTO>> playerComboBoxes) {
-        for (ComboBox<PlayerInfoDTO> comboBox : playerComboBoxes) {
-            comboBox.setValue(null);
-        }
-    }
-
-    private List<PlayerInfoDTO> getPlayersForTeam(TeamDTO team) {
-        return team.getPlayers().stream().toList();
-    }
     @FXML
     public void onCreateGameClick(ActionEvent event) {
 
