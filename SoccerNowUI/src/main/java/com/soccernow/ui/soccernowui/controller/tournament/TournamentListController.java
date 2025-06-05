@@ -2,6 +2,7 @@ package com.soccernow.ui.soccernowui.controller.tournament;
 
 import com.soccernow.ui.soccernowui.api.PointTournamentApiController;
 import com.soccernow.ui.soccernowui.api.TeamApiController;
+import com.soccernow.ui.soccernowui.controller.team.TeamDetailsController;
 import com.soccernow.ui.soccernowui.dto.TeamDTO;
 import com.soccernow.ui.soccernowui.dto.tournament.PointTournamentDTO;
 import com.soccernow.ui.soccernowui.dto.tournament.TournamentDTO;
@@ -60,7 +61,30 @@ public class TournamentListController {
     }
 
     @FXML
-    private void onEditClick(ActionEvent event) {}
+    private void onEditClick(ActionEvent event) {
+        PointTournamentDTO selectedTournament = tournamentTableView.getSelectionModel().getSelectedItem();
+        if (selectedTournament == null) {
+            return;
+        }
+        switch (selectedTournament.getStatus()) {
+            case OPEN -> FXMLUtils.switchScene(
+                    "/com/soccernow/ui/soccernowui/fxml/tournament/open-tournament-details.fxml",
+                    (Node) event.getSource(),
+                    controller -> {
+                        if (controller instanceof OpenTournamentDetailsController openTournamentDetailsController) {
+                            openTournamentDetailsController.setTournamentDTO(selectedTournament);
+                        }
+                    });
+            case IN_PROGRESS -> FXMLUtils.switchScene(
+                    "/com/soccernow/ui/soccernowui/fxml/tournament/tournament-in-progress-details.fxml",
+                    (Node) event.getSource(),
+                    controller -> {
+                        if (controller instanceof TournamentInProgressDetailsController tournamentInProgressDetailsController) {
+                            tournamentInProgressDetailsController.setTournamentDTO(selectedTournament);
+                        }
+                    });
+        }
+    }
 
     @FXML
     private void onRefreshClick(ActionEvent event) {loadTournaments();}
