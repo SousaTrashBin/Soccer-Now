@@ -81,15 +81,10 @@ public class CreateGameController {
     }
 
     private void updateOpponentTeamOptions(TeamDTO selectedTeam, ComboBox<TeamDTO> opponentComboBox) {
-        TeamDTO opponentCurrentSelection = opponentComboBox.getValue();
         List<TeamDTO> opponentOptions = new ArrayList<>(allTeams);
         opponentOptions.remove(selectedTeam);
 
         opponentComboBox.getItems().setAll(opponentOptions);
-
-        if (!opponentOptions.contains(opponentCurrentSelection)) {
-            opponentComboBox.setValue(null);
-        }
     }
 
     private void loadPlayersForTeamOne(TeamDTO selectedTeam) {
