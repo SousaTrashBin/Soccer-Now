@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER"
+      prefHeight="600.0"
+      prefWidth="400.0"
+      spacing="20.0"
+      styleClass="container"
+      xmlns="http://javafx.com/javafx/17.0.12"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.soccernow.ui.soccernowui.controller.tournament.OpenTournamentDetailsController"
+      style="-fx-font-family: 'JetBrains Mono'; -fx-font-size: 12;">
+
+    <padding>
+        <Insets top="20" bottom="20" left="10" right="10"/>
+    </padding>
+
+    <ToolBar prefHeight="40.0" prefWidth="360.0">
+        <items>
+            <Button fx:id="BackButton" onAction="#onBackClick" mnemonicParsing="false" text="&lt; Back"/>
+            <Label text="Edit &gt; Open Tournament"/>
+        </items>
+    </ToolBar>
+
+    <Label text="Open Tournament Details" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+
+    <VBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Teams participating:"/>
+        <ListView fx:id="gameListView" prefHeight="150" prefWidth="260"/>
+        <HBox spacing="10" alignment="CENTER">
+            <Button text="Remove Team" onAction="#onRemoveClick" prefWidth="140"/>
+        </HBox>
+    </VBox>
+
+    <VBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Other teams:"/>
+            <ListView fx:id="gameListView" prefHeight="150" prefWidth="260"/>
+            <HBox spacing="10" alignment="CENTER">
+                <Button text="Add Team" onAction="#onAddGameClick" prefWidth="140"/>
+            </HBox>
+        </VBox>
+
+    <HBox spacing="20" alignment="CENTER_RIGHT">
+        <Button text="Start Tournament" onAction="#onStartTournamentClick" styleClass="btn btn-primary"/>
+    </HBox>
+</VBox>
