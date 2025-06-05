@@ -42,10 +42,10 @@
          <Label text="Players's teams:"/>
     </VBox>
 
-    <TableView fx:id="playerTableListView" prefHeight="180" prefWidth="380">
+    <TableView fx:id="playerTeamsTableView" prefHeight="180" prefWidth="380">
          <columns>
               <TableColumn fx:id="playerTeamsIdColumn" text="ID" prefWidth="190"/>
-              <TableColumn fx:id="playerTeamsStatusColumn" text="Status" prefWidth="190"/>
+              <TableColumn fx:id="playerTeamsNameColumn" text="Name" prefWidth="190"/>
          </columns>
     </TableView>
 
@@ -60,7 +60,7 @@
     <TableView fx:id="otherTeamsTableView" prefHeight="180" prefWidth="380">
          <columns>
              <TableColumn fx:id="otherTeamsIdColumn" text="ID" prefWidth="190"/>
-             <TableColumn fx:id="otherTeamsStatusColumn" text="Status" prefWidth="190"/>
+             <TableColumn fx:id="otherTeamsNameColumn" text="Name" prefWidth="190"/>
          </columns>
     </TableView>
 
