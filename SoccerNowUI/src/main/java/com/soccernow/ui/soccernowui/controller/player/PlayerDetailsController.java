@@ -1,5 +1,6 @@
 package com.soccernow.ui.soccernowui.controller.player;
 
+import com.soccernow.ui.soccernowui.dto.TeamDTO;
 import com.soccernow.ui.soccernowui.util.FXMLUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,6 +14,12 @@ public class PlayerDetailsController {
 
     @FXML
     private ComboBox<String> positionComboBox;
+
+    @FXML
+    private ListView<TeamDTO> playerTeamsListView;
+
+    @FXML
+    private ListView<TeamDTO> otherTeamsListView;
 
     @FXML
     public void initialize() {
