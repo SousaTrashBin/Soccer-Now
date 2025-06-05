@@ -47,7 +47,6 @@ public class PlayerDetailsController {
 
     public List<FXMLUtils.ConsumerWithExceptions> pendingOperations = new ArrayList<>();
 
-    @FXML
     public void initialize() {
         positionComboBox.getItems().add(null);
         positionComboBox.getItems().addAll(FutsalPositionEnum.values());
@@ -56,6 +55,9 @@ public class PlayerDetailsController {
         playerTeamsNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
         ObservableList<TeamInfoDTO> playerTeamsObservable = FXCollections.observableArrayList(playerDTO.getTeams());
         playerTeamsTableView.setItems(playerTeamsObservable);
+
+        otherTeamsIdColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getId().toString()));
+        otherTeamsNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
 
         try {
             List<TeamDTO> allTeams = TeamApiController.INSTANCE.getAllTeams();
@@ -99,9 +101,9 @@ public class PlayerDetailsController {
     }
 
     public void setPlayerDTO(PlayerDTO selectedPlayer) {
-        this.playerDTO = selectedPlayer;
-        this.playerNameField.setText(selectedPlayer.getName());
-        positionComboBox.setValue(this.playerDTO.getPreferredPosition());
+        playerDTO = selectedPlayer;
+        playerNameField.setText(playerDTO.getName());
+        positionComboBox.setValue(playerDTO.getPreferredPosition());
     }
 
     public void onRemoveTeamClick(ActionEvent actionEvent) {
