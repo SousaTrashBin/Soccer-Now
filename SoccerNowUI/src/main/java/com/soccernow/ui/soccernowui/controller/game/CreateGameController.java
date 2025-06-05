@@ -16,6 +16,7 @@ import java.util.List;
 public class CreateGameController {
 
     private List<TeamDTO> availableTeams = new ArrayList<>();
+    private boolean updatingTeamSelections = false;
 
     @FXML
     private ComboBox<TeamDTO> teamOneComboBox;
@@ -83,20 +84,36 @@ public class CreateGameController {
         FXMLUtils.executeWithErrorHandling(TeamApiController.INSTANCE::getAllTeams)
                 .ifPresent(teams -> {
                     availableTeams = teams;
+                    // Populate team combo boxes after loading teams
                     teamOneComboBox.getItems().setAll(availableTeams);
                     teamTwoComboBox.getItems().setAll(availableTeams);
                 });
 
         teamOneComboBox.valueProperty().addListener((obs, oldTeam, newTeam) -> {
-            updateTeamTwoOptions(newTeam);
-            loadTeamOnePlayers(newTeam);
+            if (!updatingTeamSelections) {
+                updatingTeamSelections = true;
+                try {
+                    updateTeamTwoOptions(newTeam);
+                    loadTeamOnePlayers(newTeam);
+                } finally {
+                    updatingTeamSelections = false;
+                }
+            }
         });
 
         teamTwoComboBox.valueProperty().addListener((obs, oldTeam, newTeam) -> {
-            updateTeamOneOptions(newTeam);
-            loadTeamTwoPlayers(newTeam);
+            if (!updatingTeamSelections) {
+                updatingTeamSelections = true;
+                try {
+                    updateTeamOneOptions(newTeam);
+                    loadTeamTwoPlayers(newTeam);
+                } finally {
+                    updatingTeamSelections = false;
+                }
+            }
         });
 
+        // Add player selection listeners
         addTeamOnePlayerSelectionListeners();
         addTeamTwoPlayerSelectionListeners();
 
@@ -257,28 +274,44 @@ public class CreateGameController {
     }
 
     private void updateTeamOneOptions(TeamDTO selectedTeamTwo) {
+        if (updatingTeamSelections) return;
+
         List<TeamDTO> filtered = new ArrayList<>(availableTeams);
         filtered.remove(selectedTeamTwo);
 
         TeamDTO currentSelection = teamOneComboBox.getValue();
-        teamOneComboBox.getItems().setAll(filtered);
-        if (filtered.contains(currentSelection)) {
-            teamOneComboBox.setValue(currentSelection);
-        } else {
-            teamOneComboBox.setValue(null);
+
+        updatingTeamSelections = true;
+        try {
+            teamOneComboBox.getItems().setAll(filtered);
+            if (filtered.contains(currentSelection) && currentSelection != selectedTeamTwo) {
+                teamOneComboBox.setValue(currentSelection);
+            } else if (currentSelection == selectedTeamTwo) {
+                teamOneComboBox.setValue(null);
+            }
+        } finally {
+            updatingTeamSelections = false;
         }
     }
 
     private void updateTeamTwoOptions(TeamDTO selectedTeamOne) {
+        if (updatingTeamSelections) return;
+
         List<TeamDTO> filtered = new ArrayList<>(availableTeams);
         filtered.remove(selectedTeamOne);
 
         TeamDTO currentSelection = teamTwoComboBox.getValue();
-        teamTwoComboBox.getItems().setAll(filtered);
-        if (filtered.contains(currentSelection) && currentSelection != selectedTeamOne) {
-            teamTwoComboBox.setValue(currentSelection);
-        } else {
-            teamTwoComboBox.setValue(null);
+
+        updatingTeamSelections = true;
+        try {
+            teamTwoComboBox.getItems().setAll(filtered);
+            if (filtered.contains(currentSelection) && currentSelection != selectedTeamOne) {
+                teamTwoComboBox.setValue(currentSelection);
+            } else if (currentSelection == selectedTeamOne) {
+                teamTwoComboBox.setValue(null);
+            }
+        } finally {
+            updatingTeamSelections = false;
         }
     }
 
@@ -292,6 +325,7 @@ public class CreateGameController {
     }
 
     private boolean validateGameForm() {
+        // Add validation logic for all required fields
         if (teamOneComboBox.getValue() == null) {
             showAlert("Please select Team One");
             return false;
