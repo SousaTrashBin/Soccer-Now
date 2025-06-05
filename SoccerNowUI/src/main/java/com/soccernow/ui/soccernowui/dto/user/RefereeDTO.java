@@ -97,12 +97,7 @@ public class RefereeDTO implements Serializable {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "id = " + id + ", " +
-                "name = " + name + ", " +
-                "hasCertificate = " + hasCertificate + ", " +
-                "primaryRefereeGames = " + primaryRefereeGames + ", " +
-                "issuedCards = " + issuedCards + ")";
+        return name + " : " + getId();
     }
 
     public Set<GameInfoDTO> getSecondaryRefereeGames() {

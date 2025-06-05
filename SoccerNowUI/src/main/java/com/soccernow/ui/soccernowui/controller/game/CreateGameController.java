@@ -68,15 +68,11 @@ public class CreateGameController {
 
     @FXML
     private void initialize() {
-        secondaryRefereesIdColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getId().toString()));
-        secondaryRefereesNameColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getName()));
+        secondaryRefereesIdColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getId().toString()));
+        secondaryRefereesNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
 
-        otherRefereesIdColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getId().toString()));
-        otherRefereesNameColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getName()));
+        otherRefereesIdColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getId().toString()));
+        otherRefereesNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
 
         teamOnePlayerComboBoxes = List.of(teamOneGoalieComboBox, teamOneSweeperComboBox, teamOneLeftWingerComboBox, teamOneRightWingerComboBox, teamOneForwardComboBox);
         teamTwoPlayerComboBoxes = List.of(teamTwoGoalieComboBox, teamTwoSweeperComboBox, teamTwoLeftWingerComboBox, teamTwoRightWingerComboBox, teamTwoForwardComboBox);
