@@ -121,8 +121,16 @@ public class RefereeDTO implements Serializable {
     }
 
     @JsonIgnore
-    public Integer getNumberOfGames() {
-        return primaryRefereeGames.size() + secondaryRefereeGames.size();
+    public Integer getNumberOfOfficiatedGames() {
+        int numGamesAsPrimary = (int) primaryRefereeGames.stream()
+                                                       .filter(game -> game.getIsClosed())
+                                                       .count();
+
+        int numGamesAsSecondary = (int) secondaryRefereeGames.stream()
+                                                       .filter(game -> game.getIsClosed())
+                                                       .count();
+
+        return numGamesAsPrimary + numGamesAsSecondary;
     }
 
     @JsonIgnore
