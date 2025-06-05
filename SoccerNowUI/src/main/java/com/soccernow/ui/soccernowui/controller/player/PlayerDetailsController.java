@@ -81,10 +81,9 @@ public class PlayerDetailsController {
                 .ifPresent(savedDTO -> {
                     System.out.printf(savedDTO.toString());
                     FXMLUtils.showSuccess("Player Details Successfully Updated", "Player " + savedDTO.getName() + " successfully updated!");
+                    FXMLUtils.switchScene("/com/soccernow/ui/soccernowui/fxml/player/player-list.fxml",
+                            (Node) actionEvent.getSource());
                 });
-
-        FXMLUtils.switchScene("/com/soccernow/ui/soccernowui/fxml/player/player-list.fxml",
-                (Node) actionEvent.getSource());
     }
 
     public void onBackClick(ActionEvent actionEvent) {

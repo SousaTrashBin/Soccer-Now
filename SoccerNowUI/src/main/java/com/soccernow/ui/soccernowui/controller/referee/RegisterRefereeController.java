@@ -54,6 +54,8 @@ public class RegisterRefereeController {
                 .ifPresent(savedDTO -> {
                     System.out.printf(savedDTO.toString());
                     FXMLUtils.showSuccess("Referee Successfully Registered", "Referee " + savedDTO.getName() + " registered successfully!");
+                    FXMLUtils.switchScene("/com/soccernow/ui/soccernowui/fxml/referee/referee-list.fxml",
+                            (Node) actionEvent.getSource());
                 });
     }
 

@@ -44,6 +44,8 @@ public class CreateTournamentController {
                 .ifPresent(savedDTO -> {
                     System.out.printf(savedDTO.toString());
                     FXMLUtils.showSuccess("Point Tournament Successfully Created", "Point Tournament " + savedDTO.getName() + " created successfully!");
+                    FXMLUtils.switchScene("/com/soccernow/ui/soccernowui/fxml/tournament/tournament-list.fxml",
+                            (Node) event.getSource());
                 });
     }
 

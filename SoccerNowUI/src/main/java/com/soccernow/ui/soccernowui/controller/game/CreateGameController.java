@@ -181,10 +181,9 @@ public class CreateGameController {
                 .ifPresent(savedDTO -> {
                     System.out.printf(savedDTO.toString());
                     FXMLUtils.showSuccess("Game Successfully Created", "Game " + savedDTO.getId() + " successfully created!");
+                    FXMLUtils.switchScene("/com/soccernow/ui/soccernowui/fxml/game/game-list.fxml",
+                            (Node) event.getSource());
                 });
-
-        FXMLUtils.switchScene("/com/soccernow/ui/soccernowui/fxml/game/game-list.fxml",
-                (Node) event.getSource());
     }
 
     private RefereeInfoDTO mapPrimaryReferee() {

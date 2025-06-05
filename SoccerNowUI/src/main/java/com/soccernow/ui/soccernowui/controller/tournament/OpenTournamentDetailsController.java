@@ -82,9 +82,9 @@ public class OpenTournamentDetailsController {
                 .ifPresent(savedDTO -> {
                     System.out.printf(savedDTO.toString());
                     FXMLUtils.showSuccess("Tournament Successfully Started", "Tournament " + savedDTO.getName() + " started successfully!");
+                    FXMLUtils.switchScene("/com/soccernow/ui/soccernowui/fxml/tournament/tournament-list.fxml",
+                            (Node) actionEvent.getSource());
                 });
-        FXMLUtils.switchScene("/com/soccernow/ui/soccernowui/fxml/tournament/tournament-list.fxml",
-                (Node) actionEvent.getSource());
     }
 
     @FXML

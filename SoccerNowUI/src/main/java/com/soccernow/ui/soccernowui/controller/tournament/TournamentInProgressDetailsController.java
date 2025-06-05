@@ -98,10 +98,9 @@ public class TournamentInProgressDetailsController {
                 .ifPresent(savedDTO -> {
                     System.out.printf(savedDTO.toString());
                     FXMLUtils.showSuccess("Tournament Successfully Ended", "Tournament " + savedDTO.getName() + " ended successfully!");
+                    FXMLUtils.switchScene("/com/soccernow/ui/soccernowui/fxml/tournament/tournament-list.fxml",
+                            (Node) actionEvent.getSource());
                 });
-
-        FXMLUtils.switchScene("/com/soccernow/ui/soccernowui/fxml/team/team-list.fxml",
-                (Node) actionEvent.getSource());
     }
 
     @FXML

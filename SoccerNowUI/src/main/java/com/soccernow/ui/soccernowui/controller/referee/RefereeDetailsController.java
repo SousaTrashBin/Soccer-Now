@@ -48,7 +48,7 @@ public class RefereeDetailsController {
     }
 
     @FXML
-    private void onSaveClick() {
+    private void onSaveClick(ActionEvent actionEvent) {
         RefereeDTO updatedDTO = new RefereeDTO();
         updatedDTO.setName(refereeNameField.getText());
         updatedDTO.setHasCertificate(getCertificateBoolean());
@@ -62,6 +62,8 @@ public class RefereeDetailsController {
                 .ifPresent(savedDTO -> {
                     System.out.printf(savedDTO.toString());
                     FXMLUtils.showSuccess("Referee Successfully Updated", "Referee " + savedDTO.getName() + " successfully updated!");
+                    FXMLUtils.switchScene("/com/soccernow/ui/soccernowui/fxml/referee/referee-list.fxml",
+                            (Node) actionEvent.getSource());
                 });
     }
 

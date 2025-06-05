@@ -97,6 +97,8 @@ public class TeamDetailsController {
                 .ifPresent(savedDTO -> {
                     System.out.printf(savedDTO.toString());
                     FXMLUtils.showSuccess("Team Details Successfully Updated", "Team " + savedDTO.getName() + " successfully updated!");
+                    FXMLUtils.switchScene("/com/soccernow/ui/soccernowui/fxml/team/team-list.fxml",
+                            (Node) actionEvent.getSource());
                 });
 
         FXMLUtils.switchScene("/com/soccernow/ui/soccernowui/fxml/team/team-list.fxml",

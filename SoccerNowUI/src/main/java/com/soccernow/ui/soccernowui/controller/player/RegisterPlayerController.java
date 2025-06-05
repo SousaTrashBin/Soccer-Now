@@ -43,6 +43,8 @@ public class RegisterPlayerController {
                 .ifPresent(savedDTO -> {
                     System.out.printf(savedDTO.toString());
                     FXMLUtils.showSuccess("Player Successfully Registered", "Player " + savedDTO.getName() + " registered successfully!");
+                    FXMLUtils.switchScene("/com/soccernow/ui/soccernowui/fxml/player/player-list.fxml",
+                            (Node) actionEvent.getSource());
                 });
     }
 

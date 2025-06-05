@@ -35,6 +35,8 @@ public class RegisterTeamController {
                 .ifPresent(savedDTO -> {
                     System.out.printf(savedDTO.toString());
                     FXMLUtils.showSuccess("Team Successfully Registered", "Team " + savedDTO.getName() + " registered successfully!");
+                    FXMLUtils.switchScene("/com/soccernow/ui/soccernowui/fxml/team/team-list.fxml",
+                            (Node) actionEvent.getSource());
                 });
     }
 

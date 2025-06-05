@@ -131,10 +131,9 @@ public class RegisterGameResultsController {
                 .ifPresent(savedDTO -> {
                     System.out.printf(savedDTO.toString());
                     FXMLUtils.showSuccess("Game Successfully Closed", "Game " + savedDTO.getId() + " successfully closed!");
+                    FXMLUtils.switchScene("/com/soccernow/ui/soccernowui/fxml/game/game-list.fxml",
+                            (Node) event.getSource());
                 });
-
-        FXMLUtils.switchScene("/com/soccernow/ui/soccernowui/fxml/game/game-list.fxml",
-                (Node) event.getSource());
     }
 
     public void onBackClick(ActionEvent actionEvent) {
