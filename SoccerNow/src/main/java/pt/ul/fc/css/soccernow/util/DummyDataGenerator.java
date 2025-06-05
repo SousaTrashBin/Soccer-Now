@@ -17,10 +17,7 @@ import pt.ul.fc.css.soccernow.service.RefereeService;
 import pt.ul.fc.css.soccernow.service.TeamService;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Component
@@ -31,6 +28,25 @@ public class DummyDataGenerator {
     private final RefereeService refereeService;
     private final TeamService teamService;
     private final CredentialsRepository credentialsRepository;
+
+    private static final String[] PLAYERS_NAMES = {
+        "Lucas",
+        "Gabriel",
+        "Miguel",
+        "João",
+        "Pedro",
+        "Mateus",
+        "Henrique",
+        "Gustavo",
+        "Caio",
+        "Felipe"
+    };
+
+    private static final String[] REF_NAMES = {
+        "Rafael",
+        "Bruno",
+        "Tiago"
+    };
 
     public DummyDataGenerator(GameService gameService, PlayerService playerService, RefereeService refereeService, TeamService teamService,
                               CredentialsRepository credentialsRepository) {
@@ -45,20 +61,20 @@ public class DummyDataGenerator {
         Team firstTeam = createTeamWithName("A");
         Team secondTeam = createTeamWithName("B");
         List<Player> firstTeamPlayers = new ArrayList<>();
-        for (char c = 'A'; c <= 'F'; c++) {
-            firstTeamPlayers.add(createPlayerWithName(String.valueOf(c), firstTeam));
+        for (int i = 0; i < 5; i++) {
+            firstTeamPlayers.add(createPlayerWithName(PLAYERS_NAMES[i], firstTeam));
         }
         List<Player> secondTeamPlayers = new ArrayList<>();
-        for (char c = 'F'; c <= 'J'; c++) {
-            secondTeamPlayers.add(createPlayerWithName(String.valueOf(c), secondTeam));
+        for (int i = 5; i < 10; i++) {
+            secondTeamPlayers.add(createPlayerWithName(PLAYERS_NAMES[i], secondTeam));
         }
         List<Referee> referees = new ArrayList<>();
-        for (char c = 'A'; c <= 'C'; c++) {
-            referees.add(createRefereeWithName(String.valueOf(c)));
+        for (int i = 0; i < 3; i++) {
+            referees.add(createRefereeWithName(REF_NAMES[i]));
         }
-        createNewGameWith(firstTeamPlayers, secondTeamPlayers, firstTeam, secondTeam, referees);
-        Game closedGame = createNewGameWith(firstTeamPlayers, secondTeamPlayers, firstTeam, secondTeam, referees);
-        gameService.closeGame(closedGame.getId(), getPlayerStats(firstTeamPlayers, secondTeamPlayers, closedGame));
+//        createNewGameWith(firstTeamPlayers, secondTeamPlayers, firstTeam, secondTeam, referees);
+//        Game closedGame = createNewGameWith(firstTeamPlayers, secondTeamPlayers, firstTeam, secondTeam, referees);
+//        gameService.closeGame(closedGame.getId(), getPlayerStats(firstTeamPlayers, secondTeamPlayers, closedGame));
 
         Credentials adminCredentials = new Credentials();
         adminCredentials.setUsername("admin");
@@ -93,7 +109,7 @@ public class DummyDataGenerator {
         address.setPostalCode("2612-234");
         game.setLocatedIn(address);
 
-        game.setPrimaryReferee(referees.get(0));
+        game.setPrimaryReferee(referees.get(new Random().nextInt(referees.size())));
 
         GameTeam gameTeamOne = getGameTeam(aPlayers, firstTeam);
         game.setGameTeamOne(gameTeamOne);
@@ -104,17 +120,17 @@ public class DummyDataGenerator {
         return gameService.add(game);
     }
 
-    private GameTeam getGameTeam(List<Player> aPlayers, Team firstTeam) {
+    private GameTeam getGameTeam(List<Player> players, Team team) {
         HashSet<GamePlayer> gamePlayers = new HashSet<>();
         for (int i = 0; i < 5; i++) {
             FutsalPositionEnum futsalPosition = FutsalPositionEnum.values()[i];
             GamePlayer gamePlayer = new GamePlayer();
             gamePlayer.setPlayedInPosition(futsalPosition);
-            gamePlayer.setPlayer(aPlayers.get(i));
+            gamePlayer.setPlayer(players.get(i));
             gamePlayers.add(gamePlayer);
         }
         GameTeam gameTeamOne = new GameTeam();
-        gameTeamOne.setTeam(firstTeam);
+        gameTeamOne.setTeam(team);
         gameTeamOne.setGamePlayers(gamePlayers);
         return gameTeamOne;
     }
@@ -122,6 +138,7 @@ public class DummyDataGenerator {
     private Referee createRefereeWithName(String name) {
         Referee referee = new Referee();
         referee.setName(name);
+        referee.setHasCertificate(new Random().nextBoolean());
         return refereeService.add(referee);
     }
 
