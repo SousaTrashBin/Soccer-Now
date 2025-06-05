@@ -67,18 +67,14 @@ public class RefereeListController {
         if (selectedReferee == null) {
             return;
         }
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/soccernow/ui/soccernowui/fxml/referee/edit-referee.fxml"));
-            VBox editRefereeRoot = loader.load();
-
-            RefereeDetailsController controller = loader.getController();
-            controller.setRefereeDTO(selectedReferee);
-
-            Node source = (Node) event.getSource();
-            source.getScene().setRoot(editRefereeRoot);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FXMLUtils.switchScene(
+                "/com/soccernow/ui/soccernowui/fxml/referee/referee-details.fxml",
+                (Node) event.getSource(),
+                controller -> {
+                    if (controller instanceof RefereeDetailsController refereeDetailsController) {
+                        refereeDetailsController.setRefereeDTO(selectedReferee);
+                    }
+                });
     }
 
     @FXML
