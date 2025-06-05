@@ -84,7 +84,7 @@ public class TournamentInProgressDetailsController {
             FXMLUtils.executeWithErrorHandling(pendingOperation);
         }
 
-        FXMLUtils.switchScene("/com/soccernow/ui/soccernowui/fxml/team/team-list.fxml",
+        FXMLUtils.switchScene("/com/soccernow/ui/soccernowui/fxml/tournament/tournament-list.fxml",
                 (Node) actionEvent.getSource());
     }
 
