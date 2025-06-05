@@ -1,12 +1,20 @@
 package com.soccernow.ui.soccernowui.controller.game;
 
+import com.soccernow.ui.soccernowui.api.GameApiController;
+import com.soccernow.ui.soccernowui.api.PlayerApiController;
 import com.soccernow.ui.soccernowui.api.RefereeApiController;
 import com.soccernow.ui.soccernowui.api.TeamApiController;
 import com.soccernow.ui.soccernowui.dto.TeamDTO;
+import com.soccernow.ui.soccernowui.dto.TeamInfoDTO;
+import com.soccernow.ui.soccernowui.dto.games.AddressDTO;
+import com.soccernow.ui.soccernowui.dto.games.GameDTO;
+import com.soccernow.ui.soccernowui.dto.games.GamePlayerDTO;
+import com.soccernow.ui.soccernowui.dto.games.GameTeamDTO;
 import com.soccernow.ui.soccernowui.dto.user.PlayerInfoDTO;
 import com.soccernow.ui.soccernowui.dto.user.RefereeDTO;
 import com.soccernow.ui.soccernowui.dto.user.RefereeInfoDTO;
 import com.soccernow.ui.soccernowui.util.FXMLUtils;
+import com.soccernow.ui.soccernowui.util.FutsalPositionEnum;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,13 +23,17 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class CreateGameController {
-
     private List<TeamDTO> allTeams;
     private ObservableList<TeamDTO> availableTeamsForTeamOne;
     private ObservableList<TeamDTO> availableTeamsForTeamTwo;
@@ -101,26 +113,7 @@ public class CreateGameController {
                     this.allReferees = referees;
                     primaryRefereeComboBox.setItems(FXCollections.observableArrayList(allReferees));
                     otherRefereesTableView.setItems(FXCollections.observableArrayList(allReferees));
-                    secondaryRefereesTableView.setItems(FXCollections.observableArrayList(allReferees));
                 });
-
-        primaryRefereeComboBox.valueProperty().addListener((observable, oldReferee, newReferee) -> {
-            List<RefereeDTO> filteredReferees = new ArrayList<>(allReferees);
-
-            RefereeDTO selectedPrimaryReferee = primaryRefereeComboBox.getSelectionModel().getSelectedItem();
-            if (selectedPrimaryReferee != null) {
-                filteredReferees.remove(selectedPrimaryReferee);
-
-                secondaryRefereesTableView.getSelectionModel().clearSelection(
-                        secondaryRefereesObservableList.indexOf(selectedPrimaryReferee)
-                );
-            }
-
-            List<RefereeDTO> selectedSecondaryReferees = secondaryRefereesTableView.getSelectionModel().getSelectedItems();
-            filteredReferees.removeAll(selectedSecondaryReferees);
-
-            otherRefereesObservableList.setAll(filteredReferees);
-        });
 
         teamOneComboBox.valueProperty().addListener((obs, oldTeam, newTeam) -> {
             updateTeamOnePlayers();
@@ -154,7 +147,115 @@ public class CreateGameController {
 
     @FXML
     public void onCreateGameClick(ActionEvent event) {
+        LocalDateTime gameDateTime = getGameDateTime();
+        AddressDTO addressDTO = getAddressFromFields();
 
+        if (!validateInputs(gameDateTime, addressDTO)) return;
+
+        RefereeInfoDTO primaryReferee = mapPrimaryReferee();
+        Set<RefereeInfoDTO> secondaryReferees = mapSecondaryReferees();
+
+        GameTeamDTO teamOne = buildGameTeam(teamOneComboBox, teamOneGoalieComboBox, teamOneSweeperComboBox,
+                teamOneLeftWingerComboBox, teamOneRightWingerComboBox, teamOneForwardComboBox, "Team One");
+
+        if (teamOne == null) return;
+
+        GameTeamDTO teamTwo = buildGameTeam(teamTwoComboBox, teamTwoGoalieComboBox, teamTwoSweeperComboBox,
+                teamTwoLeftWingerComboBox, teamTwoRightWingerComboBox, teamTwoForwardComboBox, "Team Two");
+
+        if (teamTwo == null) return;
+
+        GameDTO gameDTO = new GameDTO();
+        gameDTO.setHappensIn(gameDateTime);
+        gameDTO.setLocatedIn(addressDTO);
+        gameDTO.setPrimaryReferee(primaryReferee);
+        gameDTO.setSecondaryReferees(secondaryReferees);
+        gameDTO.setGameTeamOne(teamOne);
+        gameDTO.setGameTeamTwo(teamTwo);
+
+        FXMLUtils.executeWithErrorHandling(() -> GameApiController.INSTANCE.registerGame(gameDTO))
+                .ifPresent(savedDTO -> {
+                    System.out.printf(savedDTO.toString());
+                    FXMLUtils.showSuccess("Game Successfully Created", "Game " + savedDTO.getId() + " successfully created!");
+                });
+
+        FXMLUtils.switchScene("/com/soccernow/ui/soccernowui/fxml/home/home-screen.fxml",
+                (Node) event.getSource());
+    }
+
+    private boolean validateInputs(LocalDateTime dateTime, AddressDTO address) {
+        if (dateTime == null) {
+            System.out.println("Invalid gameDateTime");
+            return false;
+        }
+        if (address == null) {
+            System.out.println("Invalid addressDTO");
+            return false;
+        }
+        if (primaryRefereeComboBox.getSelectionModel().getSelectedItem() == null) {
+            System.out.println("Invalid primaryReferee");
+            return false;
+        }
+        if (teamOneComboBox.getSelectionModel().getSelectedItem() == null) {
+            System.out.println("Invalid team one");
+            return false;
+        }
+        if (teamTwoComboBox.getSelectionModel().getSelectedItem() == null) {
+            System.out.println("Invalid team two");
+            return false;
+        }
+        return true;
+    }
+
+    private RefereeInfoDTO mapPrimaryReferee() {
+        RefereeDTO selected = primaryRefereeComboBox.getSelectionModel().getSelectedItem();
+        RefereeInfoDTO info = new RefereeInfoDTO();
+        info.setId(selected.getId());
+        return info;
+    }
+
+    private Set<RefereeInfoDTO> mapSecondaryReferees() {
+        return secondaryRefereesTableView.getItems().stream()
+                .map(ref -> {
+                    RefereeInfoDTO info = new RefereeInfoDTO();
+                    info.setId(ref.getId());
+                    return info;
+                })
+                .collect(Collectors.toSet());
+    }
+
+    private GameTeamDTO buildGameTeam(
+            ComboBox<TeamDTO> teamComboBox,
+            ComboBox<PlayerInfoDTO> goalie,
+            ComboBox<PlayerInfoDTO> sweeper,
+            ComboBox<PlayerInfoDTO> leftWinger,
+            ComboBox<PlayerInfoDTO> rightWinger,
+            ComboBox<PlayerInfoDTO> forward,
+            String teamLabel
+    ) {
+        List<GamePlayerDTO> gamePlayers = List.of(
+                new GamePlayerDTO(FutsalPositionEnum.GOALIE, goalie.getValue()),
+                new GamePlayerDTO(FutsalPositionEnum.SWEEPER, sweeper.getValue()),
+                new GamePlayerDTO(FutsalPositionEnum.LEFT_WINGER, leftWinger.getValue()),
+                new GamePlayerDTO(FutsalPositionEnum.RIGHT_WINGER, rightWinger.getValue()),
+                new GamePlayerDTO(FutsalPositionEnum.FORWARD, forward.getValue())
+        );
+
+        if (gamePlayers.stream().anyMatch(dto -> dto.getPlayer() == null)) {
+            System.out.println(teamLabel + " must have 5 players selected.");
+            return null;
+        }
+
+        Set<GamePlayerDTO> gamePlayerSet = gamePlayers.stream()
+                .map(dto -> dto.setPlayer(new PlayerInfoDTO(dto.getPlayer().getId())))
+                .collect(Collectors.toSet());
+
+        GameTeamDTO team = new GameTeamDTO();
+        TeamInfoDTO teamInfo = new TeamInfoDTO();
+        teamInfo.setId(teamComboBox.getSelectionModel().getSelectedItem().getId());
+        team.setTeam(teamInfo);
+        team.setGamePlayers(gamePlayerSet);
+        return team;
     }
 
     @FXML
@@ -165,12 +266,53 @@ public class CreateGameController {
 
     @FXML
     public void onRemoveRefereeClick(ActionEvent actionEvent) {
-
+        RefereeDTO selectedReferee = secondaryRefereesTableView.getSelectionModel().getSelectedItem();
+        if (selectedReferee == null) {
+            return;
+        }
+        this.otherRefereesTableView.getItems().add(selectedReferee);
+        this.secondaryRefereesTableView.getItems().remove(selectedReferee);
     }
 
     @FXML
     public void onAddRefereeClick(ActionEvent actionEvent) {
-
+        RefereeDTO selectedReferee = otherRefereesTableView.getSelectionModel().getSelectedItem();
+        if (selectedReferee == null) {
+            return;
+        }
+        this.secondaryRefereesTableView.getItems().add(selectedReferee);
+        this.otherRefereesTableView.getItems().remove(selectedReferee);
     }
 
+    private LocalDateTime getGameDateTime() {
+        LocalDate date = datePicker.getValue();
+        String timeText = timeField.getText();
+
+        if (date == null || timeText == null || timeText.isBlank()) {
+            return null;
+        }
+
+        try {
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+            LocalTime time = LocalTime.parse(timeText, timeFormatter);
+
+            return LocalDateTime.of(date, time);
+        } catch (DateTimeParseException e) {
+            System.err.println("Invalid time format. Expected HH:mm.");
+            return null;
+        }
+    }
+
+    private AddressDTO getAddressFromFields() {
+        String country = countryField.getText();
+        String city = cityField.getText();
+        String street = streetField.getText();
+        String postalCode = postalCodeField.getText();
+
+        if (street == null || street.isBlank()) {
+            return null;
+        }
+
+        return new AddressDTO(country, city, street, postalCode);
+    }
 }
