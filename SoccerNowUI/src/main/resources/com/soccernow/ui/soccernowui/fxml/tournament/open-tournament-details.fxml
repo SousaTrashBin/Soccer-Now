@@ -29,20 +29,34 @@
     <Label text="Open Tournament Details" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
 
     <VBox spacing="10" alignment="CENTER_LEFT">
-        <Label text="Teams participating:"/>
-        <ListView fx:id="participatingTeamsListView" prefHeight="150" prefWidth="260"/>
-        <HBox spacing="10" alignment="CENTER">
-            <Button text="Remove Team" onAction="#onRemoveTeamClick" prefWidth="140"/>
-        </HBox>
-    </VBox>
+            <Label text="Teams participating:"/>
+        </VBox>
+
+    <TableView fx:id="participatingTeamsListView" prefHeight="180" prefWidth="380">
+        <columns>
+              <TableColumn fx:id="participatingTeamsIdColumn" text="ID" prefWidth="190"/>
+              <TableColumn fx:id="participatingTeamsNameColumn" text="Name" prefWidth="190"/>
+        </columns>
+    </TableView>
+
+    <HBox spacing="10" alignment="CENTER">
+         <Button text="Remove Team" onAction="#onRemoveTeamClick" prefWidth="140"/>
+    </HBox>
 
     <VBox spacing="10" alignment="CENTER_LEFT">
             <Label text="Available teams:"/>
-            <ListView fx:id="availableTeamsListView" prefHeight="150" prefWidth="260"/>
-            <HBox spacing="10" alignment="CENTER">
-                <Button text="Add Team" onAction="#onAddTeamClick" prefWidth="140"/>
-            </HBox>
-        </VBox>
+    </VBox>
+
+    <TableView fx:id="availableTeamsListView" prefHeight="180" prefWidth="380">
+            <columns>
+                  <TableColumn fx:id="availableTeamsIdColumn" text="ID" prefWidth="190"/>
+                  <TableColumn fx:id="availableTeamsNameColumn" text="Name" prefWidth="190"/>
+            </columns>
+        </TableView>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Add Team" onAction="#onAddTeamClick" prefWidth="140"/>
+    </HBox>
 
     <HBox spacing="20" alignment="CENTER_RIGHT">
         <Button text="Start Tournament" onAction="#onStartTournamentClick" styleClass="btn btn-primary"/>
