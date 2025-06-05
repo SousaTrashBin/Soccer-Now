@@ -43,6 +43,10 @@
                 <Button text="Remove Game" onAction="#onRemoveGameClick" prefWidth="140"/>
             </HBox>
 
+    <VBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Other Games:"/>
+        </VBox>
+
     <TableView fx:id="otherGamesTableView" prefHeight="180" prefWidth="380">
                     <columns>
                         <TableColumn fx:id="otherGamesIdColumn" text="ID" prefWidth="190"/>
