@@ -26,7 +26,7 @@ public class CredentialsController {
         this.credentialsRepository = credentialsRepository;
     }
 
-    @PostMapping("login/")
+    @PostMapping("login")
     @Operation(
             summary = "Mock logs in an app user",
             description = "Mock logs a person into the app and returns 200 if the given password and username are valid."
