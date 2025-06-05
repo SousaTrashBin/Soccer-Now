@@ -11,13 +11,14 @@
 
     <h2 class="filters-title">Filters:</h2>
 
-    <form method="get" th:action="@{/games}" class="filter-form">
+    <form method="get" th:action="@{/games}" class="filter-form" id="filter-form">
         <div class="filter-container">
             <label for="status">Game status</label>
             <select name="statuses" id="status">
-                <option value="">All</option>
+                <option value=""></option>
                 <option value="OPENED">Opened</option>
                 <option value="CLOSED">Closed</option>
+                <option value="CANCELLED">Cancelled</option>
             </select>
         </div>
 
@@ -28,12 +29,23 @@
                    id="goals">
         </div>
 
-<!--        <div class="filter-container">-->
-<!--            <label for="location">Location</label>-->
-<!--            <input type="text"-->
-<!--                   name="???"-->
-<!--                   id="location">-->
-<!--        </div>-->
+        <div class="filter-container">
+            <label for="addressSelect">Address</label>
+            <select id="addressSelect">
+                <option value=""></option>
+                <option th:each="address : ${locations}"
+                        th:text="${address.getStreet() + ', ' + address.getCity() + ' (' + address.getPostalCode() + ') - ' + address.getCountry()}"
+                        th:attr="data-country=${address.getCountry()},
+                                 data-city=${address.getCity()},
+                                 data-street=${address.getStreet()},
+                                 data-postalCode=${address.getPostalCode()}" />
+            </select>
+        </div>
+
+        <input type="hidden" name="country" id="country">
+        <input type="hidden" name="city" id="city">
+        <input type="hidden" name="street" id="street">
+        <input type="hidden" name="postalCode" id="postalCode">
 
         <div class="filter-container">
             <label for="time">Time of day</label>
@@ -51,21 +63,41 @@
     <table>
       <thead>
         <tr>
-          <th>Closed game</th>
+          <th>Game status</th>
           <th>Goals Scored</th>
-          <th>Location (city)</th>
+          <th>Address</th>
           <th>Time of day</th>
         </tr>
       </thead>
 
       <tbody>
         <tr th:each="g : ${games}">
-          <td th:text="${g.getIsClosed()}" />
+          <td th:text="${g.getStatus()}" />
           <td th:text="${g.getGameStats() == null ? '--' : g.getGameStats().getNumberOfGoalsScored()}" />
-          <td th:text="${g.getLocatedIn().getCity()}" />
+          <td th:text="${g.getLocatedIn().getStreet() + ', ' + g.getLocatedIn().getCity() + ' (' + g.getLocatedIn().getPostalCode() + ') - ' + g.getLocatedIn().getCountry()}" />
           <td th:text="${g.getTimeOfDay().toString()}" />
         </tr>
       </tbody>
     </table>
+
+    <script>
+        document.getElementById("addressSelect").addEventListener("change", function () {
+            const selected = this.options[this.selectedIndex];
+            document.getElementById("country").value = selected.getAttribute("data-country") || "";
+            document.getElementById("city").value = selected.getAttribute("data-city") || "";
+            document.getElementById("street").value = selected.getAttribute("data-street") || "";
+            document.getElementById("postalCode").value = selected.getAttribute("data-postalCode") || "";
+        });
+
+        document.getElementById("filter-form").addEventListener("submit", function () {
+            const fields = ["country", "city", "street", "postalCode"];
+            fields.forEach(id => {
+                const input = document.getElementById(id);
+                if (input && input.value.trim() === "") {
+                    input.remove();
+                }
+            });
+        });
+    </script>
 </body>
 </html>
