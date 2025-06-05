@@ -53,22 +53,9 @@ public class PlayerDetailsController {
 
         playerTeamsIdColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getId().toString()));
         playerTeamsNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
-        ObservableList<TeamInfoDTO> playerTeamsObservable = FXCollections.observableArrayList(playerDTO.getTeams());
-        playerTeamsTableView.setItems(playerTeamsObservable);
 
         otherTeamsIdColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getId().toString()));
         otherTeamsNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
-
-        try {
-            List<TeamDTO> allTeams = TeamApiController.INSTANCE.getAllTeams();
-            List<TeamInfoDTO> otherTeams = allTeams.stream().map(team -> new TeamInfoDTO(team.getId(), team.getName()))
-                    .filter(teamInfoDTO -> !playerDTO.getTeams().contains(teamInfoDTO)).toList();
-            ObservableList<TeamInfoDTO> otherTeamsObservable = FXCollections.observableArrayList(otherTeams);
-            otherTeamsTableView.setItems(otherTeamsObservable);
-        } catch (IOException | ErrorException e) {
-            System.err.println("Failed to load players: " + e.getMessage());
-            otherTeamsTableView.setItems(FXCollections.observableArrayList());
-        }
 
         this.validator = SoccerNowApp.getValidatorFactory().getValidator();
     }
@@ -100,10 +87,28 @@ public class PlayerDetailsController {
                 (Node) actionEvent.getSource());
     }
 
-    public void setPlayerDTO(PlayerDTO selectedPlayer) {
-        playerDTO = selectedPlayer;
-        playerNameField.setText(playerDTO.getName());
-        positionComboBox.setValue(playerDTO.getPreferredPosition());
+    public void setPlayerDTO(PlayerDTO playerDTO) {
+        this.playerDTO = playerDTO;
+
+        this.playerNameField.setText(playerDTO.getName());
+        this.positionComboBox.setValue(playerDTO.getPreferredPosition());
+
+        ObservableList<TeamInfoDTO> playerTeamsObservable = FXCollections.observableArrayList(playerDTO.getTeams());
+        playerTeamsTableView.setItems(playerTeamsObservable);
+
+        try {
+            List<TeamDTO> allTeams = TeamApiController.INSTANCE.getAllTeams();
+            List<TeamInfoDTO> otherTeams = allTeams.stream()
+                    .map(team -> new TeamInfoDTO(team.getId(), team.getName()))
+                    .filter(teamInfoDTO -> !playerDTO.getTeams().contains(teamInfoDTO))
+                    .toList();
+
+            ObservableList<TeamInfoDTO> otherTeamsObservable = FXCollections.observableArrayList(otherTeams);
+            otherTeamsTableView.setItems(otherTeamsObservable);
+        } catch (IOException | ErrorException e) {
+            System.err.println("Failed to load teams: " + e.getMessage());
+            otherTeamsTableView.setItems(FXCollections.observableArrayList());
+        }
     }
 
     public void onRemoveTeamClick(ActionEvent actionEvent) {
