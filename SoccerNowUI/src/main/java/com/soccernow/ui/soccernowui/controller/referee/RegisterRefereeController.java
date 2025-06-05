@@ -28,7 +28,7 @@ public class RegisterRefereeController {
 
     @FXML
     public void initialize() {
-        hasCertificateComboBox.getItems().addAll("Yes", "No");
+        hasCertificateComboBox.getItems().addAll("No","Yes");
         hasCertificateComboBox.setValue("No");
 
         this.validator = SoccerNowApp.getValidatorFactory().getValidator();

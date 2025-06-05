@@ -26,7 +26,7 @@ public class RefereeDetailsController {
 
     @FXML
     public void initialize() {
-        certificateComboBox.getItems().addAll("Yes", "No");
+        certificateComboBox.getItems().addAll("No","Yes");
         certificateComboBox.setValue("No");
 
         this.validator = SoccerNowApp.getValidatorFactory().getValidator();
@@ -55,7 +55,7 @@ public class RefereeDetailsController {
         updatedDTO.setName(refereeNameField.getText());
         updatedDTO.setHasCertificate(getCertificateBoolean());
 
-        boolean isValid = FXMLUtils.validateAndShowAlert(refereeDTO, validator);
+        boolean isValid = FXMLUtils.validateAndShowAlert(updatedDTO, validator);
         if (!isValid) {
             return;
         }
@@ -63,7 +63,7 @@ public class RefereeDetailsController {
         FXMLUtils.executeWithErrorHandling(() -> RefereeApiController.INSTANCE.updateRefereeById(refereeDTO.getId(),updatedDTO))
                 .ifPresent(savedDTO -> {
                     System.out.printf(savedDTO.toString());
-                    FXMLUtils.showSuccess("Referee Successfully Updated", "Referee " + savedDTO.getName() + " registered updated!");
+                    FXMLUtils.showSuccess("Referee Successfully Updated", "Referee " + savedDTO.getName() + " successfully updated!");
                 });
     }
 
