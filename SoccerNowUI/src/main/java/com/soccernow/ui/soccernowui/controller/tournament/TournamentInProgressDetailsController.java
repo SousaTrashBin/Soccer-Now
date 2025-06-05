@@ -28,14 +28,14 @@ public class TournamentInProgressDetailsController {
     @FXML
     public TableColumn<GameInfoDTO,String> tournamentGamesIdColumn;
     @FXML
-    public TableColumn<GameInfoDTO,String> tournamentGamesNameColumn;
+    public TableColumn<GameInfoDTO,String> tournamentGamesStatusColumn;
 
     @FXML
     public TableView<GameInfoDTO> otherGamesTableView;
     @FXML
-    public TableColumn<GameInfoDTO,String> availableTeamsIdColumn;
+    public TableColumn<GameInfoDTO,String> otherGamesIdColumn;
     @FXML
-    public TableColumn<GameInfoDTO,String> availableTeamsNameColumn;
+    public TableColumn<GameInfoDTO,String> otherGamesStatusColumn;
 
     private PointTournamentDTO tournamentDTO;
 
