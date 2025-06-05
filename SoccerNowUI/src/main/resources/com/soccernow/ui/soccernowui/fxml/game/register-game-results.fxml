@@ -77,14 +77,13 @@
     <Separator/>
 
     <VBox spacing="10" alignment="CENTER_LEFT">
-                <Label text="Saved Game Stats:"/>
+                <Label text="Saved Player Stats:" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
     </VBox>
-
-                    <TableView fx:id="gameStatsTableView" prefHeight="180" prefWidth="380">
+                    <TableView fx:id="playerStatsTableView" prefHeight="180" prefWidth="380">
                         <columns>
-                            <TableColumn fx:id="playerIdColumn" text="Player Id" prefWidth="140"/>
-                            <TableColumn fx:id="playerNameColumn" text="Player Name" prefWidth="200"/>
-                            <TableColumn fx:id="playerGoalsColumn" text="Player Goals" prefWidth="100"/>
+                            <TableColumn fx:id="playerStatsIdColumn" text="Player Id" prefWidth="140"/>
+                            <TableColumn fx:id="playerStatsNameColumn" text="Player Name" prefWidth="200"/>
+                            <TableColumn fx:id="playerStatsGoalsColumn" text="Player Goals" prefWidth="100"/>
                         </columns>
                     </TableView>
 
