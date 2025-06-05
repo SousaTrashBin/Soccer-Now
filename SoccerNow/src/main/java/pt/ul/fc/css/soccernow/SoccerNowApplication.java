@@ -25,7 +25,7 @@ public class SoccerNowApplication {
     @Profile("!test")
     @Transactional
     public CommandLineRunner demo() {
-        dummyDataGenerator.generateDummyData();
+        //dummyDataGenerator.generateDummyData();
         return (args) -> {
         };
     }
