@@ -74,6 +74,17 @@
 
     <Separator/>
 
+    <VBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Saved Player Stats:" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+    </VBox>
+                    <TableView fx:id="playerStatsTableView" prefHeight="180" prefWidth="380">
+                        <columns>
+                            <TableColumn fx:id="playerStatsIdColumn" text="Player Id" prefWidth="140"/>
+                            <TableColumn fx:id="playerStatsNameColumn" text="Player Name" prefWidth="200"/>
+                            <TableColumn fx:id="playerStatsGoalsColumn" text="Player Goals" prefWidth="100"/>
+                        </columns>
+                    </TableView>
+
     <HBox spacing="20" alignment="CENTER_RIGHT">
         <Button text="Register Game Result" onAction="#onSaveGameClick" prefWidth="200"/>
     </HBox>
