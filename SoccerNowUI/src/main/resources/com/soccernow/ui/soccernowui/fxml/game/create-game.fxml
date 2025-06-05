@@ -23,6 +23,9 @@
     </ToolBar>
 
     <Label text="Create Game" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Set Teams and their Players:" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+    </HBox>
 
     <HBox spacing="10" alignment="CENTER">
         <Label text="Team One:"/>
@@ -69,6 +72,10 @@
     <Separator/>
 
     <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Set Referees:" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+    </HBox>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
         <Label text="Primary Referee:"/>
         <ComboBox fx:id="primaryRefereeComboBox" promptText="Select Referee" prefWidth="200"/>
     </HBox>
@@ -106,7 +113,7 @@
     <Separator/>
 
     <HBox spacing="10" alignment="CENTER_LEFT">
-            <Label text="Game Address:"/>
+        <Label text="Set Game Address and Date:" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
     </HBox>
 
     <HBox spacing="10" alignment="CENTER">
@@ -124,7 +131,7 @@
          <TextField fx:id="postalCodeField" promptText="Enter postal code" prefWidth="200"/>
     </HBox>
 
-    <HBox spacing="10" alignment="CENTER_LEFT">
+    <HBox spacing="10" alignment="CENTER">
         <Label text="Date and Time:"/>
         <DatePicker fx:id="datePicker"/>
         <TextField fx:id="timeField" promptText="HH:MM" prefWidth="80"/>

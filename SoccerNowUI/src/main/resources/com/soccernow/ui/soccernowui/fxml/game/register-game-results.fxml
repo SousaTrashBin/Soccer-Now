@@ -27,8 +27,8 @@
     <Label text="Register Game Results" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
 
     <VBox spacing="10" alignment="TOP_LEFT">
-    <Separator/>
-    <Label text="Player's Stats:" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+
+    <Label text="Player's Stats:" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
 
         <HBox spacing="10" alignment="CENTER">
             <Label text="Select Team:"/>
