@@ -68,15 +68,15 @@ public class CreateGameController {
         teamOneComboBox.valueProperty().addListener((obs, oldTeam, newTeam) -> {
             if (oldTeam != null) allTeams.add(oldTeam);
             allTeams.remove(newTeam);
-            teamOneComboBox.getItems().setAll(allTeams);
-            teamTwoComboBox.getItems().setAll(allTeams);
+            teamOneComboBox.getItems().setAll(new ArrayList<>(allTeams));
+            teamTwoComboBox.getItems().setAll(new ArrayList<>(allTeams));
         });
 
         teamTwoComboBox.valueProperty().addListener((obs, oldTeam, newTeam) -> {
             if (oldTeam != null) allTeams.add(oldTeam);
             allTeams.remove(newTeam);
-            teamOneComboBox.getItems().setAll(allTeams);
-            teamTwoComboBox.getItems().setAll(allTeams);
+            teamOneComboBox.getItems().setAll(new ArrayList<>(allTeams));
+            teamTwoComboBox.getItems().setAll(new ArrayList<>(allTeams));
         });
 
 
