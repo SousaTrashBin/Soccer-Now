@@ -34,6 +34,10 @@ body {
     flex-direction: column;
 }
 
+input[type="number"] {
+    width: 150px;
+}
+
 .filter-container label {
     margin-bottom: 3px;
 }
@@ -66,4 +70,32 @@ th, td {
 
 tr {
     border: 1px solid #ccc;
+}
+
+.register-game-btn {
+    background-color: #d6ff9a;
+    padding: 5px;
+    border: 1px solid black;
+    border-radius: 5px;
+    color: black;
+    font-style: normal;
+    text-decoration: none;
+}
+
+.register-game-btn:hover {
+    background-color: #bbff54;
+}
+
+.home-btn {
+    background-color: #ffc2c2;
+    padding: 5px;
+    border: 1px solid black;
+    border-radius: 5px;
+    color: black;
+    font-style: normal;
+    text-decoration: none;
+}
+
+.home-btn:hover {
+    background-color: #ff7b7b;
 }
