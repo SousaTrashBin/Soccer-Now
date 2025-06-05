@@ -6,8 +6,8 @@
 <?import javafx.geometry.Pos?>
 
 <VBox alignment="TOP_CENTER"
-      prefHeight="600.0"
-      prefWidth="400.0"
+      prefHeight="800.0"
+      prefWidth="500.0"
       spacing="20.0"
       xmlns="http://javafx.com/javafx/17.0.12"
       xmlns:fx="http://javafx.com/fxml/1"
@@ -26,34 +26,27 @@
 
     <Label text="Register Game Results" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
 
-    <HBox spacing="15" alignment="CENTER_LEFT">
-        <Label text="Team One Goals:"/>
-        <TextField fx:id="teamOneGoalsField" prefWidth="60" promptText="0"/>
-        <Label text="Team Two Goals:"/>
-        <TextField fx:id="teamTwoGoalsField" prefWidth="60" promptText="0"/>
-    </HBox>
-
     <VBox spacing="10" alignment="TOP_LEFT">
     <Separator/>
-        <HBox spacing="10" alignment="CENTER_LEFT">
+    <Label text="Player's Stats:" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+
+        <HBox spacing="10" alignment="CENTER">
             <Label text="Select Team:"/>
             <ComboBox fx:id="teamComboBox" prefWidth="200" promptText="Choose a team"/>
-        </HBox>
 
-        <HBox spacing="10" alignment="CENTER_LEFT">
-            <Label text="Select Player:"/>
-            <ComboBox fx:id="playerComboBox" prefWidth="200" promptText="Choose a player"/>
         </HBox>
+        <HBox spacing="10" alignment="CENTER">
+                    <Label text="Select Player:"/>
+                    <ComboBox fx:id="playerComboBox" prefWidth="200" promptText="Choose a player"/>
+                </HBox>
 
-        <HBox spacing="10" alignment="CENTER_LEFT">
+        <HBox spacing="10" alignment="CENTER">
             <Label text="Goals:"/>
             <TextField fx:id="playerGoalsField" prefWidth="60" promptText="0"/>
         </HBox>
 
-        <Separator/>
-
         <Label text="Add Card:"/>
-        <HBox spacing="10" alignment="CENTER_LEFT">
+        <HBox spacing="10" alignment="CENTER">
             <Label text="Card Type:"/>
             <ComboBox fx:id="cardTypeComboBox" prefWidth="80" promptText="Type"/>
 
@@ -61,21 +54,30 @@
             <ComboBox fx:id="refereeComboBox" prefWidth="150" promptText="Select Referee"/>
         </HBox>
 
-
-        <HBox spacing="10" alignment="CENTER_RIGHT">
-              <Button text="Add Card" onAction="#onAddCardClick"/>
+        <HBox spacing="20" alignment="CENTER">
+              <Button text="Add Card" onAction="#onAddCardClick" prefWidth="120"/>
         </HBox>
 
-        <Label text="Player's Cards:"/>
-        <ListView fx:id="playerCardsListView" prefHeight="100" prefWidth="300"/>
+        <VBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Player's Cards:"/>
+                </VBox>
 
-        <HBox spacing="20" alignment="CENTER_RIGHT">
-            <Button text="Save Player Stats" onAction="#onSavePlayerStatsClick"/>
+                <TableView fx:id="playerCardsTableView" prefHeight="180" prefWidth="380">
+                    <columns>
+                        <TableColumn fx:id="playerCardsTypeColumn" text="Card Type" prefWidth="200"/>
+                        <TableColumn fx:id="playerCardsRefereeNameColumn" text="Referee Name" prefWidth="300"/>
+                    </columns>
+                </TableView>
+
+        <HBox spacing="20" alignment="CENTER">
+            <Button text="Save Player Stats" onAction="#onSavePlayerStatsClick" prefWidth="180"/>
         </HBox>
     </VBox>
 
-    <HBox spacing="20" alignment="CENTER">
-        <Button text="Register Game Result" onAction="#onSaveGameClick"/>
+    <Separator/>
+
+    <HBox spacing="20" alignment="CENTER_RIGHT">
+        <Button text="Register Game Result" onAction="#onSaveGameClick" prefWidth="200"/>
     </HBox>
 
 </VBox>
