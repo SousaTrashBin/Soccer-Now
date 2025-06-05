@@ -30,20 +30,34 @@
     </HBox>
 
     <VBox spacing="10" alignment="CENTER_LEFT">
-            <Label text="Players on team:"/>
-            <ListView fx:id="playersOnTeamListView" prefHeight="150" prefWidth="260"/>
-            <HBox spacing="10" alignment="CENTER">
-                <Button text="Remove Player" onAction="#onRemovePlayerClick" prefWidth="120"/>
-            </HBox>
+         <Label text="Players on team:"/>
     </VBox>
 
+    <TableView fx:id="teamPlayersTableView" prefHeight="180" prefWidth="380">
+         <columns>
+              <TableColumn fx:id="teamPlayersIdColumn" text="ID" prefWidth="190"/>
+              <TableColumn fx:id="teamPlayersNameColumn" text="Name" prefWidth="190"/>
+         </columns>
+    </TableView>
+
+    <HBox spacing="10" alignment="CENTER">
+         <Button text="Remove Player" onAction="#onRemovePlayerOnTeamClick" prefWidth="120"/>
+    </HBox>
+
     <VBox spacing="10" alignment="CENTER_LEFT">
-                <Label text="Players not on team:"/>
-                <ListView fx:id="playersNotOnTeamListView" prefHeight="150" prefWidth="260"/>
-                <HBox spacing="10" alignment="CENTER">
-                    <Button text="Add Player" onAction="#onAddPlayerClick" prefWidth="90"/>
-                </HBox>
+             <Label text="Other players:"/>
         </VBox>
+
+        <TableView fx:id="otherPlayersTableView" prefHeight="180" prefWidth="380">
+             <columns>
+                  <TableColumn fx:id="otherPlayersIdColumn" text="ID" prefWidth="190"/>
+                  <TableColumn fx:id="otherPlayersNameColumn" text="Name" prefWidth="190"/>
+             </columns>
+        </TableView>
+
+        <HBox spacing="10" alignment="CENTER">
+             <Button text="Add Player" onAction="#onAddPlayerClick" prefWidth="90"/>
+        </HBox>
 
     <HBox spacing="20" alignment="CENTER_RIGHT">
         <Button text="Save Changes" onAction="#onSaveClick" styleClass="btn btn-primary"/>
