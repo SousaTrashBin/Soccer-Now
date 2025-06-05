@@ -104,8 +104,8 @@ public class CreateGameController {
                 .ifPresent(referees -> {
                     this.allReferees = referees;
                     primaryRefereeComboBox.setItems(FXCollections.observableArrayList(allReferees));
-                    otherRefereesObservableList.setAll(new ArrayList<>(allReferees));
-                    secondaryRefereesObservableList.setAll(new ArrayList<>(allReferees));
+                    otherRefereesTableView.setItems(FXCollections.observableArrayList(allReferees));
+                    secondaryRefereesTableView.setItems(FXCollections.observableArrayList(allReferees));
                 });
 
         primaryRefereeComboBox.valueProperty().addListener((observable, oldReferee, newReferee) -> {
