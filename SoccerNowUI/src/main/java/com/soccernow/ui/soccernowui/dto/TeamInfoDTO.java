@@ -50,8 +50,6 @@ public class TeamInfoDTO implements Serializable {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "id = " + id + ", " +
-                "name = " + name + ")";
+        return name + " : " + id;
     }
 }
