@@ -1,5 +1,6 @@
 package pt.ul.fc.css.soccernow.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
@@ -7,6 +8,7 @@ import pt.ul.fc.css.soccernow.domain.dto.games.GameInfoDTO;
 import pt.ul.fc.css.soccernow.domain.dto.tournament.PlacementInfoDTO;
 import pt.ul.fc.css.soccernow.domain.dto.user.PlayerInfoDTO;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
+import pt.ul.fc.css.soccernow.util.PlacementEnum;
 
 import java.io.Serializable;
 import java.util.LinkedHashSet;
@@ -108,5 +110,23 @@ public class TeamDTO implements Serializable {
                 "placements = " + placements + ", " +
                 "name = " + name + ", " +
                 "games = " + games + ")";
+    }
+
+    @JsonIgnore
+    public Integer getNumberOfPlayers() {
+        return players.size();
+    }
+
+    @JsonIgnore
+    public Integer getNumberOfAchievements() {
+        Set<PlacementEnum> validAchievements = Set.of(
+            PlacementEnum.FIRST,
+            PlacementEnum.SECOND,
+            PlacementEnum.THIRD
+        );
+
+        return (int)placements.stream()
+                              .filter(p -> validAchievements.contains(p.getValue()))
+                              .count();
     }
 }

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <title>SoccerNow - Home</title>
+</head>
+<body class="flex flex-col gap-2 h-screen pt-20 items-center text-2xl">
+  <h1 class="font-bold text-3xl mb-4">SoccerNow</h1>
+
+  <p>Actions</p>
+  <a th:href="@{/register-game-result}" class="max-w-[400px] w-[100%] mb-6 text-center border-2 border-gray-400 hover:bg-amber-200 cursor-pointer p-2 rounded-xl">Register Game result</a>
+
+  <p>Search</p>
+  <a th:href="@{/teams}" class="max-w-[400px] w-[100%] text-center border-2 border-gray-400 hover:bg-amber-200 cursor-pointer p-2 rounded-xl">Teams</a>
+  <a th:href="@{/tournaments}" class="max-w-[400px] w-[100%] text-center border-2 border-gray-400 hover:bg-amber-200 cursor-pointer p-2 rounded-xl">Tournaments</a>
+  <a th:href="@{/games}" class="max-w-[400px] w-[100%] text-center border-2 border-gray-400 hover:bg-amber-200 cursor-pointer p-2 rounded-xl">Games</a>
+  <a th:href="@{/players}" class="max-w-[400px] w-[100%] text-center border-2 border-gray-400 hover:bg-amber-200 cursor-pointer p-2 rounded-xl">Players</a>
+  <a th:href="@{/referees}" class="max-w-[400px] w-[100%] text-center border-2 border-gray-400 hover:bg-amber-200 cursor-pointer p-2 rounded-xl">Referees</a>
+</body>
+</html>

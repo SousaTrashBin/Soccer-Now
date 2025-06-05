@@ -1,10 +1,12 @@
 package pt.ul.fc.css.soccernow.domain.dto.tournament;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 import pt.ul.fc.css.soccernow.domain.dto.games.GameInfoDTO;
 import pt.ul.fc.css.soccernow.domain.entities.tournament.Tournament;
+import pt.ul.fc.css.soccernow.util.GameStatusEnum;
 import pt.ul.fc.css.soccernow.util.TournamentStatusEnum;
 
 import java.io.Serializable;
@@ -93,5 +95,19 @@ public class TournamentDTO implements Serializable {
     public TournamentDTO setStatus(TournamentStatusEnum status) {
         this.status = status;
         return this;
+    }
+
+    @JsonIgnore
+    public Integer getNumberOfClosedGames() {
+        return (int)games.stream()
+                         .filter(g -> g.getStatus() == GameStatusEnum.CLOSED)
+                         .count();
+    }
+
+    @JsonIgnore
+    public Integer getNumberOfOpenedGames() {
+        return (int)games.stream()
+                         .filter(g -> g.getStatus() == GameStatusEnum.OPENED)
+                         .count();
     }
 }

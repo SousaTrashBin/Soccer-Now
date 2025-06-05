@@ -1,11 +1,13 @@
 package pt.ul.fc.css.soccernow.domain.dto.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 import pt.ul.fc.css.soccernow.domain.dto.games.CardInfoDTO;
 import pt.ul.fc.css.soccernow.domain.dto.games.GameInfoDTO;
+import pt.ul.fc.css.soccernow.util.GameStatusEnum;
 
 import java.io.Serializable;
 import java.util.*;
@@ -117,5 +119,23 @@ public class RefereeDTO implements Serializable {
     public RefereeDTO setSecondaryRefereeGames(Set<GameInfoDTO> secondaryRefereeGames) {
         this.secondaryRefereeGames = secondaryRefereeGames;
         return this;
+    }
+
+    @JsonIgnore
+    public Integer getNumberOfOfficiatedGames() {
+        int numGamesAsPrimary = (int) primaryRefereeGames.stream()
+                                                       .filter(game -> game.getStatus() == GameStatusEnum.CLOSED)
+                                                       .count();
+
+        int numGamesAsSecondary = (int) secondaryRefereeGames.stream()
+                                                       .filter(game -> game.getStatus() == GameStatusEnum.CLOSED)
+                                                       .count();
+
+        return numGamesAsPrimary + numGamesAsSecondary;
+    }
+
+    @JsonIgnore
+    public Integer getNumberOfIssuedCards() {
+        return issuedCards.size();
     }
 }

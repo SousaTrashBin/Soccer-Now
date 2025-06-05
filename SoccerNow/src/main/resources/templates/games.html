@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{styles.css}">
+    <title>SoccerNow - Games</title>
+</head>
+<body>
+    <a href="/home" class="home-btn">Home</a>
+    <h1>SoccerNow: Games</h1>
+
+    <h2 class="filters-title">Filters:</h2>
+
+    <form method="get" th:action="@{/games}" class="filter-form" id="filter-form">
+        <div class="filter-container">
+            <label for="status">Game status</label>
+            <select name="statuses" id="status">
+                <option value=""></option>
+                <option value="OPENED">Opened</option>
+                <option value="CLOSED">Closed</option>
+                <option value="CANCELLED">Cancelled</option>
+            </select>
+        </div>
+
+        <div class="filter-container">
+            <label for="goals">Goals scored</label>
+            <input type="number"
+                   name="numGoals"
+                   id="goals">
+        </div>
+
+        <div class="filter-container">
+            <label for="addressSelect">Address</label>
+            <select id="addressSelect">
+                <option value=""></option>
+                <option th:each="address : ${locations}"
+                        th:text="${address.getStreet() + ', ' + address.getCity() + ' (' + address.getPostalCode() + ') - ' + address.getCountry()}"
+                        th:attr="data-country=${address.getCountry()},
+                                 data-city=${address.getCity()},
+                                 data-street=${address.getStreet()},
+                                 data-postalCode=${address.getPostalCode()}" />
+            </select>
+        </div>
+
+        <input type="hidden" name="country" id="country">
+        <input type="hidden" name="city" id="city">
+        <input type="hidden" name="street" id="street">
+        <input type="hidden" name="postalCode" id="postalCode">
+
+        <div class="filter-container">
+            <label for="time">Time of day</label>
+            <select name="timeOfDay" id="time">
+                <option value=""></option>
+                <option value="MORNING">Morning</option>
+                <option value="AFTERNOON">Afternoon</option>
+                <option value="EVENING">Evening</option>
+            </select>
+        </div>
+
+      <button type="submit" class="submit-filter-btn">Filter</button>
+    </form>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Game status</th>
+          <th>Goals Scored</th>
+          <th>Address</th>
+          <th>Time of day</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr th:each="g : ${games}">
+          <td th:text="${g.getStatus()}" />
+          <td th:text="${g.getGameStats() == null ? '--' : g.getGameStats().getNumberOfGoalsScored()}" />
+          <td th:text="${g.getLocatedIn().getStreet() + ', ' + g.getLocatedIn().getCity() + ' (' + g.getLocatedIn().getPostalCode() + ') - ' + g.getLocatedIn().getCountry()}" />
+          <td th:text="${g.getTimeOfDay().toString()}" />
+        </tr>
+      </tbody>
+    </table>
+
+    <script>
+        document.getElementById("addressSelect").addEventListener("change", function () {
+            const selected = this.options[this.selectedIndex];
+            document.getElementById("country").value = selected.getAttribute("data-country") || "";
+            document.getElementById("city").value = selected.getAttribute("data-city") || "";
+            document.getElementById("street").value = selected.getAttribute("data-street") || "";
+            document.getElementById("postalCode").value = selected.getAttribute("data-postalCode") || "";
+        });
+
+        document.getElementById("filter-form").addEventListener("submit", function () {
+            const fields = ["country", "city", "street", "postalCode"];
+            fields.forEach(id => {
+                const input = document.getElementById(id);
+                if (input && input.value.trim() === "") {
+                    input.remove();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

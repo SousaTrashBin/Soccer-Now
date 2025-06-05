@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{styles.css}">
+    <title>SoccerNow - Teams</title>
+</head>
+<body>
+    <a href="/home" class="home-btn">Home</a>
+    <h1>SoccerNow: Teams</h1>
+
+    <h2 class="filters-title">Filters:</h2>
+
+    <form method="get" th:action="@{/teams}" class="filter-form">
+        <div class="filter-container">
+            <label for="name">Name</label>
+            <input type="text"
+                   name="name"
+                   id="name">
+        </div>
+
+        <div class="filter-container">
+            <label for="players">Number of players</label>
+            <input type="number"
+                   name="numPlayers"
+                   id="players">
+        </div>
+
+        <div class="filter-container">
+            <label for="wins">Wins</label>
+            <input type="number"
+                   name="numVictories"
+                   id="wins">
+        </div>
+
+        <div class="filter-container">
+            <label for="draws">Draws</label>
+            <input type="number"
+                   name="numDraws"
+                   id="draws">
+        </div>
+
+        <div class="filter-container">
+            <label for="losses">Losses</label>
+            <input type="number"
+                   name="numLosses"
+                   id="losses">
+        </div>
+
+        <div class="filter-container">
+            <label for="achievements">Achievements</label>
+            <input type="number"
+                   name="numAchievements"
+                   id="achievements">
+        </div>
+
+        <div class="filter-container">
+            <label for="missing">Missing position</label>
+            <select name="missingPositions" id="missing">
+                <option value=""></option>
+                <option value="GOALIE">Goalie</option>
+                <option value="LEFT_WINGER">Left Winger</option>
+                <option value="RIGHT_WINGER">Right Winger</option>
+                <option value="SWEEPER">Sweeper</option>
+                <option value="FORWARD">Forward</option>
+            </select>
+        </div>
+
+      <button type="submit" class="submit-filter-btn">Filter</button>
+    </form>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Number of Players</th>
+          <th>Wins</th>
+          <th>Draws</th>
+          <th>Losses</th>
+          <th>Achievements</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr th:each="t : ${teams}">
+          <td th:text="${t.getName()}" />
+          <td th:text="${t.getNumberOfPlayers()}" />
+          <td th:text="${gameResultsByTeam.get(t.getId())[0]}" />
+          <td th:text="${gameResultsByTeam.get(t.getId())[1]}" />
+          <td th:text="${gameResultsByTeam.get(t.getId())[2]}" />
+          <td th:text="${t.getNumberOfAchievements()}" />
+        </tr>
+      </tbody>
+    </table>
+</body>
+</html>

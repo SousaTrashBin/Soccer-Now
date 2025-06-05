@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" th:href="@{styles.css}">
+  <title>SoccerNow - Players</title>
+</head>
+<body>
+<a href="/home" class="home-btn">Home</a>
+<h1 id="title">SoccerNow: Players</h1>
+
+<h2 class="filters-title">Filters:</h2>
+
+<form method="get" th:action="@{/players}" class="filter-form">
+  <div class="filter-container">
+    <label for="name">Name</label>
+    <input type="text"
+           name="name"
+           id="name">
+  </div>
+
+  <div class="filter-container">
+    <label for="position">Position</label>
+    <select name="preferredPositions" id="position">
+      <option value=""></option>
+      <option value="GOALIE">Goalie</option>
+      <option value="LEFT_WINGER">Left Winger</option>
+      <option value="RIGHT_WINGER">Right Winger</option>
+      <option value="SWEEPER">Sweeper</option>
+      <option value="FORWARD">Forward</option>
+    </select>
+  </div>
+
+  <div class="filter-container">
+    <label for="goals">Goals scored</label>
+    <input type="number"
+           name="numScoredGoals"
+           id="goals">
+  </div>
+
+  <div class="filter-container">
+    <label for="cards">Cards received</label>
+    <input type="number"
+           name="numReceivedCards"
+           id="cards">
+  </div>
+
+  <div class="filter-container">
+    <label for="games">Games played</label>
+    <input type="number"
+           name="numGames"
+           id="games">
+  </div>
+
+  <button type="submit" class="submit-filter-btn">Filter</button>
+</form>
+
+<table>
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>Position</th>
+    <th>Goals scored</th>
+    <th>Cards received</th>
+    <th>Games played</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <tr th:each="p : ${players}">
+    <td th:text="${p.getName()}" />
+    <td th:text="${p.getPreferredPosition()}" />
+    <td th:text="${p.getGoalsScored()}" />
+    <td th:text="${p.getTotalNumberOfReceivedCards()}" />
+    <td th:text="${p.getNumberOfPlayedGames()}" />
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>
