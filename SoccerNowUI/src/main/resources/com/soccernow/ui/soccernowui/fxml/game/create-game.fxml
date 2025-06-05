@@ -5,7 +5,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Pos?>
 
-<VBox alignment="CENTER" prefHeight="900.0" prefWidth="700.0" spacing="20.0" styleClass="container"
+<VBox alignment="CENTER" prefHeight="1200.0" prefWidth="800.0" spacing="20.0" styleClass="container"
       xmlns="http://javafx.com/javafx/17.0.12"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.soccernow.ui.soccernowui.controller.game.CreateGameController"
@@ -78,35 +78,36 @@
         <ComboBox fx:id="primaryRefereeComboBox" promptText="Select Referee" prefWidth="200"/>
     </HBox>
 
-    <VBox spacing="10" alignment="CENTER_LEFT">
-             <Label text="Secondary Referees:"/>
-    </VBox>
+    <HBox spacing="20" alignment="TOP_CENTER">
 
-        <TableView fx:id="secondaryRefereesTableView" prefHeight="180" prefWidth="380">
-             <columns>
-                  <TableColumn fx:id="secondaryRefereesIdColumn" text="ID" prefWidth="300"/>
-                  <TableColumn fx:id="secondaryRefereesNameColumn" text="Name" prefWidth="300"/>
-             </columns>
-        </TableView>
-
-    <HBox spacing="10" alignment="CENTER">
-             <Button text="Remove Referee" onAction="#onRemoveRefereeClick" prefWidth="120"/>
-    </HBox>
-
-    <VBox spacing="10" alignment="CENTER_LEFT">
-                 <Label text="Other Referees:"/>
-            </VBox>
-
-            <TableView fx:id="otherRefereesTableView" prefHeight="180" prefWidth="380">
-                 <columns>
-                      <TableColumn fx:id="otherRefereesIdColumn" text="ID" prefWidth="300"/>
-                      <TableColumn fx:id="otherRefereesNameColumn" text="Name" prefWidth="300"/>
-                 </columns>
+        <VBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Secondary Referees:"/>
+            <TableView fx:id="secondaryRefereesTableView" prefHeight="180" prefWidth="400">
+                <columns>
+                    <TableColumn fx:id="secondaryRefereesIdColumn" text="ID" prefWidth="200"/>
+                    <TableColumn fx:id="secondaryRefereesNameColumn" text="Name" prefWidth="180"/>
+                </columns>
             </TableView>
+            <HBox spacing="10" alignment="CENTER">
+                <Button text="Remove Referee" onAction="#onRemoveRefereeClick" prefWidth="120"/>
+            </HBox>
+        </VBox>
 
-    <HBox spacing="10" alignment="CENTER">
-                 <Button text="Add Referee" onAction="#onAddRefereeClick" prefWidth="120"/>
+        <VBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Other Referees:"/>
+            <TableView fx:id="otherRefereesTableView" prefHeight="180" prefWidth="400">
+                <columns>
+                    <TableColumn fx:id="otherRefereesIdColumn" text="ID" prefWidth="200"/>
+                    <TableColumn fx:id="otherRefereesNameColumn" text="Name" prefWidth="180"/>
+                </columns>
+            </TableView>
+            <HBox spacing="10" alignment="CENTER">
+                <Button text="Add Referee" onAction="#onAddRefereeClick" prefWidth="120"/>
+            </HBox>
+        </VBox>
+
     </HBox>
+
 
     <Separator/>
 
