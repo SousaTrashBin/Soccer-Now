@@ -25,6 +25,11 @@ public class PlayerInfoDTO implements Serializable {
         this.id = uuid;
     }
 
+    public PlayerInfoDTO(UUID id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public UUID getId() {
         return id;
     }
