@@ -30,12 +30,12 @@
 
         <HBox spacing="10" alignment="CENTER">
             <Label text="Select Team:"/>
-            <ComboBox fx:id="teamComboBox" prefWidth="200" promptText="Choose a team"/>
+            <ComboBox fx:id="teamComboBox" prefWidth="250" promptText="Choose a team"/>
 
         </HBox>
         <HBox spacing="10" alignment="CENTER">
                     <Label text="Select Player:"/>
-                    <ComboBox fx:id="playerComboBox" prefWidth="200" promptText="Choose a player"/>
+                    <ComboBox fx:id="playerComboBox" prefWidth="250" promptText="Choose a player"/>
                 </HBox>
 
         <HBox spacing="10" alignment="CENTER">
@@ -46,7 +46,7 @@
         <Label text="Add Card:"/>
         <HBox spacing="10" alignment="CENTER">
             <Label text="Card Type:"/>
-            <ComboBox fx:id="cardTypeComboBox" prefWidth="80" promptText="Type"/>
+            <ComboBox fx:id="cardTypeComboBox" prefWidth="100" promptText="Type"/>
 
             <Label text="Referee:"/>
             <ComboBox fx:id="refereeComboBox" prefWidth="150" promptText="Select Referee"/>
