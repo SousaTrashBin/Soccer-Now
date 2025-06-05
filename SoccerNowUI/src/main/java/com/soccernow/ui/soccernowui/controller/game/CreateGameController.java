@@ -87,9 +87,7 @@ public class CreateGameController {
 
         opponentComboBox.getItems().setAll(opponentOptions);
 
-        if (opponentOptions.contains(opponentCurrentSelection)) {
-            opponentComboBox.setValue(opponentCurrentSelection);
-        } else {
+        if (!opponentOptions.contains(opponentCurrentSelection)) {
             opponentComboBox.setValue(null);
         }
     }
