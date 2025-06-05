@@ -13,31 +13,6 @@ import java.io.IOException;
 
 public class HomeScreenController {
 
-    @FXML
-    private VBox createOptions;
-    @FXML
-    private VBox viewOptions;
-
-    @FXML
-    private void onCreateClick() {
-        boolean isVisible = createOptions.isVisible();
-        createOptions.setVisible(!isVisible);
-        createOptions.setManaged(!isVisible);
-
-        viewOptions.setVisible(false);
-        viewOptions.setManaged(false);
-    }
-
-    @FXML
-    private void onViewClick() {
-        boolean isVisible = viewOptions.isVisible();
-        viewOptions.setVisible(!isVisible);
-        viewOptions.setManaged(!isVisible);
-
-        createOptions.setVisible(false);
-        createOptions.setManaged(false);
-    }
-
     private void navigate(ActionEvent event, String fxmlPath) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
@@ -48,31 +23,6 @@ public class HomeScreenController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @FXML
-    private void onRegisterPlayerClick(ActionEvent event) {
-        navigate(event, "/com/soccernow/ui/soccernowui/fxml/player/register-player.fxml");
-    }
-
-    @FXML
-    private void onRegisterRefereeClick(ActionEvent event) {
-        navigate(event, "/com/soccernow/ui/soccernowui/fxml/referee/register-referee.fxml");
-    }
-
-    @FXML
-    private void onRegisterTeamClick(ActionEvent event) {
-        navigate(event, "/com/soccernow/ui/soccernowui/fxml/team/register-team.fxml");
-    }
-
-    @FXML
-    private void onCreateGameClick(ActionEvent event) {
-        navigate(event, "/com/soccernow/ui/soccernowui/fxml/game/create-game.fxml");
-    }
-
-    @FXML
-    private void onCreateTournamentClick(ActionEvent event) {
-        navigate(event, "/com/soccernow/ui/soccernowui/fxml/tournament/create-tournament.fxml");
     }
 
     @FXML

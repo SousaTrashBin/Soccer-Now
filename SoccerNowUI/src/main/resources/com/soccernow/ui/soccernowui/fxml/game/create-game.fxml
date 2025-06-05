@@ -135,7 +135,7 @@
         <TextField fx:id="timeField" promptText="HH:MM" prefWidth="80"/>
     </HBox>
 
-    <HBox spacing="15" alignment="CENTER_RIGHT">
+    <HBox spacing="10" alignment="CENTER_RIGHT">
         <Button text="Create Game" onAction="#onCreateGameClick" prefWidth="200"/>
     </HBox>
 
