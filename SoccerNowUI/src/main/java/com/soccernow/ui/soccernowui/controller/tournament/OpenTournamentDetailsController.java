@@ -10,10 +10,10 @@ import javafx.scene.control.*;
 public class OpenTournamentDetailsController {
 
     @FXML
-    private ListView<TeamDTO> participatingTeamsListView;
+    private TableView<TeamDTO> participatingTeamsListView;
 
     @FXML
-    private ListView<TeamDTO> availableTeamsListView;
+    private TableView<TeamDTO> availableTeamsListView;
 
     @FXML
     public void initialize() {
