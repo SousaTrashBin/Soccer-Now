@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Component
 public class DummyDataGenerator {
@@ -127,6 +128,11 @@ public class DummyDataGenerator {
     public Player createPlayerWithName(String name, Team team) {
         Player player = new Player();
         player.setName(name);
+
+        FutsalPositionEnum[] vals = FutsalPositionEnum.values();
+        int index = ThreadLocalRandom.current().nextInt(vals.length);
+        player.setPreferredPosition(vals[index]);
+
         Player saved = playerService.add(player);
         teamService.addPlayerToTeam(saved, team);
         return saved;
