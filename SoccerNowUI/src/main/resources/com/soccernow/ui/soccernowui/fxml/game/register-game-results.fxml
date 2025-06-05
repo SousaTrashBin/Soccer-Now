@@ -5,8 +5,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Pos?>
 
-<VBox fx:id="editGameVBox"
-      alignment="TOP_CENTER"
+<VBox alignment="TOP_CENTER"
       prefHeight="600.0"
       prefWidth="400.0"
       spacing="20.0"
@@ -59,12 +58,12 @@
             <ComboBox fx:id="cardTypeComboBox" prefWidth="80" promptText="Type"/>
 
             <Label text="Referee:"/>
-            <ComboBox fx:id="refereeComboBox" prefWidth="140" promptText="Select Referee"/>
+            <ComboBox fx:id="refereeComboBox" prefWidth="150" promptText="Select Referee"/>
         </HBox>
 
 
         <HBox spacing="10" alignment="CENTER_RIGHT">
-              <Button text="Add" onAction="#onAddCardClick"/>
+              <Button text="Add Card" onAction="#onAddCardClick"/>
         </HBox>
 
         <Label text="Player's Cards:"/>

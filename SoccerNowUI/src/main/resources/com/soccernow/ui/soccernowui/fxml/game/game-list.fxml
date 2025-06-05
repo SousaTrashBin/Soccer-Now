@@ -35,7 +35,6 @@
             <Button text="Add" onAction="#onAddClick" prefWidth="80"/>
             <Button text="Edit" onAction="#onEditClick" prefWidth="80"/>
             <Button text="Refresh" onAction="#onRefreshClick" prefWidth="80"/>
-            <Button text="Delete" onAction="#onDeleteClick" prefWidth="110"/>
         </HBox>
     </VBox>
 

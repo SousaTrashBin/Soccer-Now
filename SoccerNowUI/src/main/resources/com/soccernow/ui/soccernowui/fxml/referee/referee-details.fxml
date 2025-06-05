@@ -5,8 +5,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox fx:id="editRefereeVBox"
-      alignment="CENTER"
+<VBox alignment="CENTER"
       prefHeight="600.0"
       prefWidth="400.0"
       spacing="20.0"

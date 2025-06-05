@@ -5,7 +5,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox fx:id="editTeamVBox" alignment="CENTER" prefHeight="600.0" prefWidth="400.0" spacing="20.0" styleClass="container"
+<VBox alignment="CENTER" prefHeight="600.0" prefWidth="400.0" spacing="20.0" styleClass="container"
       xmlns="http://javafx.com/javafx/17.0.12"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.soccernow.ui.soccernowui.controller.team.EditTeamController"
@@ -33,7 +33,7 @@
             <Label text="Players on team:"/>
             <ListView fx:id="playersOnTeamListView" prefHeight="150" prefWidth="260"/>
             <HBox spacing="10" alignment="CENTER">
-                <Button text="Remove" onAction="#onRemovePlayerClick" prefWidth="120"/>
+                <Button text="Remove Player" onAction="#onRemovePlayerClick" prefWidth="120"/>
             </HBox>
     </VBox>
 
@@ -41,11 +41,11 @@
                 <Label text="Players not on team:"/>
                 <ListView fx:id="playersNotOnTeamListView" prefHeight="150" prefWidth="260"/>
                 <HBox spacing="10" alignment="CENTER">
-                    <Button text="Add" onAction="#onAddPlayerClick" prefWidth="90"/>
+                    <Button text="Add Player" onAction="#onAddPlayerClick" prefWidth="90"/>
                 </HBox>
         </VBox>
 
-    <HBox spacing="20" alignment="CENTER">
+    <HBox spacing="20" alignment="CENTER_RIGHT">
         <Button text="Save Changes" onAction="#onSaveClick" styleClass="btn btn-primary"/>
     </HBox>
 </VBox>
