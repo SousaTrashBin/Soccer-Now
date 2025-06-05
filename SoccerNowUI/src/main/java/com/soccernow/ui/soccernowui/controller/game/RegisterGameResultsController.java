@@ -50,6 +50,24 @@ public class RegisterGameResultsController {
         teamComboBox.valueProperty().addListener((obs, oldTeam, newTeam) -> {
             updatePlayers();
         });
+        playerComboBox.valueProperty().addListener((obs, oldPlayer, newPlayer) -> {
+            populatePlayerStats();
+        });
+    }
+
+    private void populatePlayerStats() {
+        PlayerInfoDTO selecterPlayer = playerComboBox.getSelectionModel().getSelectedItem();
+        if (selecterPlayer != null) {
+            return;
+        }
+        savedPlayerGameStats.stream().filter(playerGameStatsDTO -> playerGameStatsDTO.getPlayer().getId().equals(selecterPlayer.getId()))
+                        .findFirst().ifPresentOrElse(playerGameStatsDTO -> {
+                    playerGoalsField.setText(playerGameStatsDTO.getScoredGoals().toString());
+                    playerCardsTableView.setItems(FXCollections.observableArrayList(playerGameStatsDTO.getReceivedCards()));
+                },() -> {
+                    playerGoalsField.setText("0");
+                    playerCardsTableView.setItems(FXCollections.observableArrayList());
+                });
     }
 
     private void updatePlayers() {
@@ -92,5 +110,19 @@ public class RegisterGameResultsController {
     }
 
     public void onAddCardClick(ActionEvent actionEvent) {
+        if (cardTypeComboBox.getSelectionModel().getSelectedItem() == null
+        || refereeComboBox.getSelectionModel().getSelectedItem() == null
+        || playerComboBox.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
+        CardEnum cardType = cardTypeComboBox.getSelectionModel().getSelectedItem();
+        RefereeInfoDTO referee = refereeComboBox.getSelectionModel().getSelectedItem();
+        PlayerInfoDTO
+                player = playerComboBox.getSelectionModel().getSelectedItem();
+        CardInfoDTO newCardDTO = new CardInfoDTO();
+        newCardDTO.setCardType(cardType);
+        newCardDTO.setReferee(referee);
+        newCardDTO.setPlayerPlayer(player);
+        playerCardsTableView.getItems().add(newCardDTO);
     }
 }
