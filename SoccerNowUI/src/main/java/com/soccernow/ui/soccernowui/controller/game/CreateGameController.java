@@ -1,8 +1,10 @@
 package com.soccernow.ui.soccernowui.controller.game;
 
+import com.soccernow.ui.soccernowui.api.RefereeApiController;
 import com.soccernow.ui.soccernowui.api.TeamApiController;
 import com.soccernow.ui.soccernowui.dto.TeamDTO;
 import com.soccernow.ui.soccernowui.dto.user.PlayerInfoDTO;
+import com.soccernow.ui.soccernowui.dto.user.RefereeDTO;
 import com.soccernow.ui.soccernowui.dto.user.RefereeInfoDTO;
 import com.soccernow.ui.soccernowui.util.FXMLUtils;
 import javafx.collections.FXCollections;
@@ -41,13 +43,18 @@ public class CreateGameController {
     private List<ComboBox<PlayerInfoDTO>> teamTwoPlayerComboBoxes;
     private List<PlayerInfoDTO> teamTwoPlayers = new ArrayList<>();
 
-    @FXML private ComboBox<RefereeInfoDTO> primaryRefereeComboBox;
-    @FXML private TableView<RefereeInfoDTO> secondaryRefereesTableView;
-    @FXML private TableColumn<RefereeInfoDTO, String> secondaryRefereesIdColumn;
-    @FXML private TableColumn<RefereeInfoDTO, String> secondaryRefereesNameColumn;
-    @FXML private TableView<RefereeInfoDTO> otherRefereesTableView;
-    @FXML private TableColumn<RefereeInfoDTO, String> otherRefereesIdColumn;
-    @FXML private TableColumn<RefereeInfoDTO, String> otherRefereesNameColumn;
+    private List<RefereeDTO> allReferees = new ArrayList<>();
+    private ObservableList<RefereeDTO> otherRefereesObservableList;
+    private ObservableList<RefereeDTO> secondaryRefereesObservableList;
+
+    @FXML private ComboBox<RefereeDTO> primaryRefereeComboBox;
+    @FXML private TableView<RefereeDTO> secondaryRefereesTableView;
+    @FXML private TableColumn<RefereeDTO, String> secondaryRefereesIdColumn;
+    @FXML private TableColumn<RefereeDTO, String> secondaryRefereesNameColumn;
+
+    @FXML private TableView<RefereeDTO> otherRefereesTableView;
+    @FXML private TableColumn<RefereeDTO, String> otherRefereesIdColumn;
+    @FXML private TableColumn<RefereeDTO, String> otherRefereesNameColumn;
 
     @FXML private TextField countryField;
     @FXML private TextField cityField;
@@ -75,6 +82,37 @@ public class CreateGameController {
                     availableTeamsForTeamOne.setAll(new ArrayList<>(allTeams));
                     availableTeamsForTeamTwo.setAll(new ArrayList<>(allTeams));
                 });
+
+        otherRefereesObservableList = FXCollections.observableArrayList();
+        otherRefereesTableView.setItems(otherRefereesObservableList);
+
+        secondaryRefereesObservableList = FXCollections.observableArrayList();
+        secondaryRefereesTableView.setItems(secondaryRefereesObservableList);
+
+        FXMLUtils.executeWithErrorHandling(RefereeApiController.INSTANCE::getAllReferees)
+                .ifPresent(referees -> {
+                    this.allReferees = referees;
+                    otherRefereesObservableList.setAll(new ArrayList<>(allReferees));
+                    secondaryRefereesObservableList.setAll(new ArrayList<>(allReferees));
+                });
+
+        primaryRefereeComboBox.valueProperty().addListener((observable, oldReferee, newReferee) -> {
+            List<RefereeDTO> filteredReferees = new ArrayList<>(allReferees);
+
+            RefereeDTO selectedPrimaryReferee = primaryRefereeComboBox.getSelectionModel().getSelectedItem();
+            if (selectedPrimaryReferee != null) {
+                filteredReferees.remove(selectedPrimaryReferee);
+
+                secondaryRefereesTableView.getSelectionModel().clearSelection(
+                        secondaryRefereesObservableList.indexOf(selectedPrimaryReferee)
+                );
+            }
+
+            List<RefereeDTO> selectedSecondaryReferees = secondaryRefereesTableView.getSelectionModel().getSelectedItems();
+            filteredReferees.removeAll(selectedSecondaryReferees);
+
+            otherRefereesObservableList.setAll(filteredReferees);
+        });
 
         teamOneComboBox.valueProperty().addListener((obs, oldTeam, newTeam) -> {
             updateTeamOnePlayers();
