@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 import pt.ul.fc.css.soccernow.domain.dto.games.GameInfoDTO;
 import pt.ul.fc.css.soccernow.domain.entities.tournament.Tournament;
+import pt.ul.fc.css.soccernow.util.GameStatusEnum;
 import pt.ul.fc.css.soccernow.util.TournamentStatusEnum;
 
 import java.io.Serializable;
@@ -99,14 +100,14 @@ public class TournamentDTO implements Serializable {
     @JsonIgnore
     public Integer getNumberOfClosedGames() {
         return (int)games.stream()
-                         .filter(GameInfoDTO::getIsClosed)
+                         .filter(g -> g.getStatus() == GameStatusEnum.CLOSED)
                          .count();
     }
 
     @JsonIgnore
     public Integer getNumberOfOpenedGames() {
         return (int)games.stream()
-                         .filter(g -> !g.getIsClosed())
+                         .filter(g -> g.getStatus() == GameStatusEnum.OPENED)
                          .count();
     }
 }

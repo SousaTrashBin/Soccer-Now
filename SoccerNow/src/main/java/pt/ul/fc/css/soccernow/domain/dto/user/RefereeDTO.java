@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 import pt.ul.fc.css.soccernow.domain.dto.games.CardInfoDTO;
 import pt.ul.fc.css.soccernow.domain.dto.games.GameInfoDTO;
+import pt.ul.fc.css.soccernow.util.GameStatusEnum;
 
 import java.io.Serializable;
 import java.util.*;
@@ -123,11 +124,11 @@ public class RefereeDTO implements Serializable {
     @JsonIgnore
     public Integer getNumberOfOfficiatedGames() {
         int numGamesAsPrimary = (int) primaryRefereeGames.stream()
-                                                       .filter(game -> game.getIsClosed())
+                                                       .filter(game -> game.getStatus() == GameStatusEnum.CLOSED)
                                                        .count();
 
         int numGamesAsSecondary = (int) secondaryRefereeGames.stream()
-                                                       .filter(game -> game.getIsClosed())
+                                                       .filter(game -> game.getStatus() == GameStatusEnum.CLOSED)
                                                        .count();
 
         return numGamesAsPrimary + numGamesAsSecondary;
