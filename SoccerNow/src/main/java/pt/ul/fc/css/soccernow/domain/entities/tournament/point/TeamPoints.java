@@ -19,7 +19,7 @@ public class TeamPoints {
     @Column(name = "current_points", nullable = false)
     private Integer currentPoints = 0;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "team_id")
     private Team team;
 

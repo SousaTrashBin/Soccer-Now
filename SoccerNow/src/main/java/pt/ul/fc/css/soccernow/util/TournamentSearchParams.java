@@ -1,10 +1,11 @@
 package pt.ul.fc.css.soccernow.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TournamentSearchParams {
     private String name;
-    private List<String> teams;
+    private List<String> teams = new ArrayList<>();
 
     private Integer numGamesClosed;
     private Integer minGamesClosed;

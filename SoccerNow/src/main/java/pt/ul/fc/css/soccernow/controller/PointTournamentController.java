@@ -103,6 +103,13 @@ public class PointTournamentController {
         return ResponseEntity.ok(tournamentMapper.toDTO(updatedPointTournament));
     }
 
+    @DeleteMapping("{tournamentId}")
+    @Operation(summary = "Delete a tournament", description = "Marks the tournament as deleted by the given UUID.")
+    public ResponseEntity<String> deleteTournament(@PathVariable @NotNull UUID tournamentId) {
+        pointTournamentService.deleteTournament(tournamentId);
+        return ResponseEntity.ok("Tournament deleted successfully");
+    }
+
     public record CreatePointTournamentDTO(@NotNull String name) {
         PointTournament toEntity() {
             PointTournament pointTournament = new PointTournament();

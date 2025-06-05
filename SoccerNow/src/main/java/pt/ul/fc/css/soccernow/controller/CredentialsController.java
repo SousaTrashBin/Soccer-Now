@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pt.ul.fc.css.soccernow.domain.entities.Credentials;
 import pt.ul.fc.css.soccernow.domain.entities.CredentialsRepository;
+import pt.ul.fc.css.soccernow.exception.UnauthorizedException;
 
 import java.util.List;
 
@@ -33,15 +34,14 @@ public class CredentialsController {
     public ResponseEntity<Void> login(@RequestBody @NotNull LoginRequest request) {
         List<Credentials> credentialsForUsername = credentialsRepository.findByUsername(request.username);
         if (credentialsForUsername.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            throw new UnauthorizedException("Invalid username or password");
         }
         Credentials usernameCredentials = credentialsForUsername.get(0); // username should be unique
         if (!usernameCredentials.getPassword().equals(request.password)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            throw new UnauthorizedException("Invalid username or password");
         }
         return ResponseEntity.ok().build();
     }
 
-    public record LoginRequest(@NotNull String username, @NotNull String password) {
-    }
+    public record LoginRequest(@NotNull String username, @NotNull String password) {}
 }

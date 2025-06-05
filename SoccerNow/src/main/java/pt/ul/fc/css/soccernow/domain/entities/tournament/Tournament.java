@@ -21,7 +21,7 @@ public abstract class Tournament extends SoftDeleteEntity {
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @OneToMany(mappedBy = "tournament", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "tournament", orphanRemoval = true, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @OrderBy("happensIn")
     private List<Game> games = new ArrayList<>();
 

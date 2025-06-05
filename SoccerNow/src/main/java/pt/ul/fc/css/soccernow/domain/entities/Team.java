@@ -173,7 +173,7 @@ public class Team extends SoftDeleteEntity {
     }
 
     public void removeTournament(Tournament tournament) {
-        placements.removeIf(p -> tournament.equals(p.getTournament()));
+        placements.removeIf(p -> tournament.getId().equals(p.getTournament().getId()));
     }
 
     public Placement getPlacementForTournament(Tournament tournament) {

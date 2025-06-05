@@ -33,7 +33,7 @@ public class PointTournament extends Tournament {
     }
 
     public void removeTeam(Team savedTeam) {
-        teamPoints.removeIf(teamPoints -> teamPoints.getTeam().equals(savedTeam));
+        teamPoints.removeIf(teamPoints -> teamPoints.getTeam().getId().equals(savedTeam.getId()));
         savedTeam.removeTournament(this);
     }
 
