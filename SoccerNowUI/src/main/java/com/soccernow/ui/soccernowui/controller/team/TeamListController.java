@@ -67,7 +67,7 @@ public class TeamListController {
             return;
         }
         FXMLUtils.switchScene(
-                "/com/soccernow/ui/soccernowui/fxml/referee/referee-details.fxml",
+                "/com/soccernow/ui/soccernowui/fxml/team/team-details.fxml",
                 (Node) event.getSource(),
                 controller -> {
                     if (controller instanceof TeamDetailsController teamDetailsController) {
