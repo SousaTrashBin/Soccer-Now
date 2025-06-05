@@ -55,6 +55,8 @@ public class CreateGameController {
     @FXML private TextField postalCodeField;
     @FXML private DatePicker datePicker;
     @FXML private TextField timeField;
+    private boolean updatingTeamTwoComboBox;
+    private boolean updatingTeamOneComboBox;
 
     @FXML
     private void initialize() {
@@ -75,36 +77,47 @@ public class CreateGameController {
                 });
 
         teamOneComboBox.valueProperty().addListener((obs, oldTeam, newTeam) -> {
-            updateAvailableTeams();
+            if (!updatingTeamOneComboBox) {
+                updateAvailableTeamsForTeamTwo();
+            }
         });
 
         teamTwoComboBox.valueProperty().addListener((obs, oldTeam, newTeam) -> {
-            updateAvailableTeams();
+            if (!updatingTeamTwoComboBox) {
+                updateAvailableTeamsForTeamOne();
+            }
         });
 
         initializeTableColumns();
     }
 
-    private void updateAvailableTeams() {
-        List<TeamDTO> currentAllTeams = new ArrayList<>(allTeams);
+    private void updateAvailableTeamsForTeamOne() {
+        updatingTeamOneComboBox = true;
 
-        TeamDTO selectedTeamOne = teamOneComboBox.getSelectionModel().getSelectedItem();
+        List<TeamDTO> tempAvailableTeams = new ArrayList<>(allTeams);
         TeamDTO selectedTeamTwo = teamTwoComboBox.getSelectionModel().getSelectedItem();
 
-        if (selectedTeamOne != null) {
-            currentAllTeams.remove(selectedTeamOne);
-        }
-
-        availableTeamsForTeamTwo.setAll(currentAllTeams);
-
-        currentAllTeams = new ArrayList<>(allTeams);
-
         if (selectedTeamTwo != null) {
-            currentAllTeams.remove(selectedTeamTwo);
+            tempAvailableTeams.remove(selectedTeamTwo);
         }
+        availableTeamsForTeamOne.setAll(tempAvailableTeams);
 
-        availableTeamsForTeamOne.setAll(currentAllTeams);
+        updatingTeamOneComboBox = false;
     }
+
+    private void updateAvailableTeamsForTeamTwo() {
+        updatingTeamTwoComboBox = true;
+        List<TeamDTO> tempAvailableTeams = new ArrayList<>(allTeams);
+        TeamDTO selectedTeamOne = teamOneComboBox.getSelectionModel().getSelectedItem();
+
+        if (selectedTeamOne != null) {
+            tempAvailableTeams.remove(selectedTeamOne);
+        }
+        availableTeamsForTeamTwo.setAll(tempAvailableTeams);
+
+        updatingTeamTwoComboBox = false;
+    }
+
 
 
     @FXML
