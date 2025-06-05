@@ -107,4 +107,7 @@ public class GameTeam {
         this.team = team;
     }
 
+    public boolean hasNoDuplicates() {
+        return getPlayers().stream().distinct().count() == FUTSAL_TEAM_SIZE;
+    }
 }
