@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -65,91 +66,74 @@ public class CreateGameController {
                 });
 
         teamOneComboBox.valueProperty().addListener((obs, oldTeam, newTeam) -> {
-            updateOpponentTeamOptions(newTeam, teamTwoComboBox);
-            loadPlayersForTeamOne(newTeam);
+            if (newTeam != null) {
+                teamTwoComboBox.getItems().setAll(filterOutTeam(newTeam));
+                teamOnePlayers = new ArrayList<>(newTeam.getPlayers());
+                updatePlayerComboBoxes(teamOnePlayerComboBoxes, teamOnePlayers);
+                resetComboBoxes(teamOnePlayerComboBoxes);
+            } else {
+                teamTwoComboBox.getItems().setAll(allTeams);
+            }
         });
 
         teamTwoComboBox.valueProperty().addListener((obs, oldTeam, newTeam) -> {
-            updateOpponentTeamOptions(newTeam, teamOneComboBox);
-            loadPlayersForTeamTwo(newTeam);
+            if (newTeam != null) {
+                teamOneComboBox.getItems().setAll(filterOutTeam(newTeam));
+                teamTwoPlayers = new ArrayList<>(newTeam.getPlayers());
+                updatePlayerComboBoxes(teamTwoPlayerComboBoxes, teamTwoPlayers);
+                resetComboBoxes(teamTwoPlayerComboBoxes);
+            } else {
+                teamOneComboBox.getItems().setAll(allTeams);
+            }
         });
-
-        addPlayerSelectionListeners(teamOnePlayerComboBoxes, this::updatePlayerOptionsForTeamOne);
-        addPlayerSelectionListeners(teamTwoPlayerComboBoxes, this::updatePlayerOptionsForTeamTwo);
 
         initializeTableColumns();
     }
 
-    private void updateOpponentTeamOptions(TeamDTO selectedTeam, ComboBox<TeamDTO> opponentComboBox) {
-        List<TeamDTO> opponentOptions = new ArrayList<>(allTeams);
-        opponentOptions.remove(selectedTeam);
-
-        opponentComboBox.getItems().setAll(opponentOptions);
+    private List<TeamDTO> filterOutTeam(TeamDTO excluded) {
+        return allTeams.stream()
+                .filter(team -> !team.equals(excluded))
+                .collect(Collectors.toList());
     }
 
-    private void loadPlayersForTeamOne(TeamDTO selectedTeam) {
-        clearAndResetPlayerUI(teamOnePlayerComboBoxes, teamOnePlayers);
-        if (selectedTeam != null) {
-            this.teamOnePlayers.addAll(selectedTeam.getPlayers());
-            updatePlayerOptionsForTeamOne();
+    private void updatePlayerComboBoxes(List<ComboBox<PlayerInfoDTO>> comboBoxes, List<PlayerInfoDTO> players) {
+        for (ComboBox<PlayerInfoDTO> cb : comboBoxes) {
+            cb.getItems().setAll(players);
+            setupPlayerSelectionListener(cb, comboBoxes);
         }
     }
 
-    private void updatePlayerOptionsForTeamOne() {
-        updatePlayerOptionsForTeam(teamOnePlayers, teamOnePlayerComboBoxes);
-    }
-
-    private void loadPlayersForTeamTwo(TeamDTO selectedTeam) {
-        clearAndResetPlayerUI(teamTwoPlayerComboBoxes, teamTwoPlayers);
-        if (selectedTeam != null) {
-            this.teamTwoPlayers.addAll(selectedTeam.getPlayers());
-            updatePlayerOptionsForTeamTwo();
+    private void resetComboBoxes(List<ComboBox<PlayerInfoDTO>> comboBoxes) {
+        for (ComboBox<PlayerInfoDTO> cb : comboBoxes) {
+            cb.getSelectionModel().clearSelection();
         }
     }
 
-    private void updatePlayerOptionsForTeamTwo() {
-        updatePlayerOptionsForTeam(teamTwoPlayers, teamTwoPlayerComboBoxes);
-    }
+    private void setupPlayerSelectionListener(ComboBox<PlayerInfoDTO> currentComboBox, List<ComboBox<PlayerInfoDTO>> allBoxes) {
+        currentComboBox.valueProperty().addListener((obs, oldPlayer, newPlayer) -> {
+            Set<PlayerInfoDTO> selected = allBoxes.stream()
+                    .map(ComboBox::getValue)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toSet());
 
-    private void updatePlayerOptionsForTeam(List<PlayerInfoDTO> allPlayersForTeam, List<ComboBox<PlayerInfoDTO>> playerComboBoxes) {
-        Set<PlayerInfoDTO> selectedPlayers = playerComboBoxes.stream()
-                .map(ComboBox::getValue)
-                .filter(java.util.Objects::nonNull)
-                .collect(Collectors.toSet());
+            List<PlayerInfoDTO> fullList = new ArrayList<>(currentComboBox.getItems());
+            for (ComboBox<PlayerInfoDTO> cb : allBoxes) {
+                PlayerInfoDTO previouslySelected = cb.getValue();
+                List<PlayerInfoDTO> available = fullList.stream()
+                        .filter(p -> !selected.contains(p) || p.equals(previouslySelected))
+                        .collect(Collectors.toList());
 
-        for (ComboBox<PlayerInfoDTO> comboBox : playerComboBoxes) {
-            PlayerInfoDTO currentSelection = comboBox.getValue();
-            List<PlayerInfoDTO> availableOptions = new ArrayList<>(allPlayersForTeam);
-
-            availableOptions.removeAll(selectedPlayers);
-
-            if (currentSelection != null && !availableOptions.contains(currentSelection)) {
-                availableOptions.add(currentSelection);
+                cb.getItems().setAll(available);
+                if (previouslySelected != null && !available.contains(previouslySelected)) {
+                    cb.setValue(null);
+                }
             }
-
-            comboBox.getItems().setAll(availableOptions);
-            comboBox.setValue(currentSelection);
-        }
-    }
-
-    private void addPlayerSelectionListeners(List<ComboBox<PlayerInfoDTO>> comboBoxes, Runnable updateAction) {
-        comboBoxes.forEach(cb -> cb.valueProperty().addListener((obs, oldVal, newVal) -> updateAction.run()));
-    }
-
-    private void clearAndResetPlayerUI(List<ComboBox<PlayerInfoDTO>> playerComboBoxes, List<PlayerInfoDTO> playerList) {
-        playerList.clear();
-        playerComboBoxes.forEach(cb -> {
-            cb.getItems().clear();
-            cb.setValue(null);
         });
     }
 
     @FXML
     public void onCreateGameClick(ActionEvent event) {
-        if (!validateGameForm()) {
-            return;
-        }
-        System.out.println("Create game functionality not yet implemented");
+
     }
 
     @FXML
@@ -160,24 +144,12 @@ public class CreateGameController {
 
     @FXML
     public void onRemoveRefereeClick(ActionEvent actionEvent) {
-        RefereeInfoDTO selectedReferee = secondaryRefereesTableView.getSelectionModel().getSelectedItem();
-        if (selectedReferee != null) {
-            secondaryRefereesTableView.getItems().remove(selectedReferee);
-            otherRefereesTableView.getItems().add(selectedReferee);
-        } else {
-            showAlert("Please select a referee to remove.");
-        }
+
     }
 
     @FXML
     public void onAddRefereeClick(ActionEvent actionEvent) {
-        RefereeInfoDTO selectedReferee = otherRefereesTableView.getSelectionModel().getSelectedItem();
-        if (selectedReferee != null) {
-            otherRefereesTableView.getItems().remove(selectedReferee);
-            secondaryRefereesTableView.getItems().add(selectedReferee);
-        } else {
-            showAlert("Please select a referee to add.");
-        }
+
     }
 
     private void initializeTableColumns() {
@@ -192,31 +164,4 @@ public class CreateGameController {
                 new javafx.beans.property.SimpleStringProperty(cellData.getValue().getName()));
     }
 
-    private boolean validateGameForm() {
-        if (teamOneComboBox.getValue() == null) {
-            showAlert("Please select Team One.");
-            return false;
-        }
-        if (teamTwoComboBox.getValue() == null) {
-            showAlert("Please select Team Two.");
-            return false;
-        }
-        if (datePicker.getValue() == null) {
-            showAlert("Please select a date.");
-            return false;
-        }
-        if (timeField.getText() == null || timeField.getText().trim().isEmpty()) {
-            showAlert("Please enter a time.");
-            return false;
-        }
-        return true;
-    }
-
-    private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Validation Error");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 }
