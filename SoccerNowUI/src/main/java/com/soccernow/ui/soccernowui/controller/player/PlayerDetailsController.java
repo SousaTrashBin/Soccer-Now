@@ -60,8 +60,7 @@ public class PlayerDetailsController {
         this.validator = SoccerNowApp.getValidatorFactory().getValidator();
     }
 
-    @FXML
-    private void onSaveClick() {
+    public void onSaveClick(ActionEvent actionEvent) {
         PlayerDTO updatedDTO = new PlayerDTO();
         updatedDTO.setName(playerNameField.getText());
         updatedDTO.setPreferredPosition(positionComboBox.getValue());
@@ -74,12 +73,15 @@ public class PlayerDetailsController {
         FXMLUtils.executeWithErrorHandling(() -> PlayerApiController.INSTANCE.updatePlayerById(playerDTO.getId(),updatedDTO))
                 .ifPresent(savedDTO -> {
                     System.out.printf(savedDTO.toString());
-                    FXMLUtils.showSuccess("Player Successfully Updated", "Player " + savedDTO.getName() + " successfully updated!");
+                    FXMLUtils.showSuccess("Player Details Successfully Updated", "Player " + savedDTO.getName() + " successfully updated!");
                 });
 
         for (FXMLUtils.ConsumerWithExceptions pendingOperation : pendingOperations) {
             FXMLUtils.executeWithErrorHandling(pendingOperation);
         }
+
+        FXMLUtils.switchScene("/com/soccernow/ui/soccernowui/fxml/player/player-list.fxml",
+                (Node) actionEvent.getSource());
     }
 
     public void onBackClick(ActionEvent actionEvent) {
