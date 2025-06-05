@@ -16,10 +16,10 @@ public class PlayerDetailsController {
     private ComboBox<String> positionComboBox;
 
     @FXML
-    private ListView<TeamDTO> playerTeamsListView;
+    private TableView<TeamDTO> playerTeamsTableView;
 
     @FXML
-    private ListView<TeamDTO> otherTeamsListView;
+    private TableView<TeamDTO> otherTeamsTableView;
 
     @FXML
     public void initialize() {
