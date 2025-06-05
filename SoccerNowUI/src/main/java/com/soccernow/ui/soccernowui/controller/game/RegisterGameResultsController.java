@@ -35,6 +35,14 @@ public class RegisterGameResultsController {
     public TextField playerGoalsField;
     @FXML
     public ComboBox<GameTeamDTO> teamComboBox;
+    @FXML
+    public TableView<PlayerGameStatsDTO> playerStatsTableView;
+    @FXML
+    public TableColumn<PlayerGameStatsDTO,String> playerStatsIdColumn;
+    @FXML
+    public TableColumn<PlayerGameStatsDTO,String> playerStatsNameColumn;
+    @FXML
+    public TableColumn<PlayerGameStatsDTO,String> playerStatsGoalsColumn;
 
     private GameDTO gameDTO;
     List<PlayerGameStatsDTO> savedPlayerGameStats = new ArrayList<>();
@@ -43,6 +51,10 @@ public class RegisterGameResultsController {
     public void initialize() {
         playerCardsTypeColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCardType().toString()));
         playerCardsRefereeNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getReferee().toString()));
+
+        playerStatsIdColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPlayer().getId().toString()));
+        playerStatsNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPlayer().getName()));
+        playerStatsGoalsColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getScoredGoals().toString()));
 
         cardTypeComboBox.setItems(FXCollections.observableArrayList(CardEnum.values()));
 
@@ -67,6 +79,8 @@ public class RegisterGameResultsController {
                     playerGoalsField.setText("0");
                     playerCardsTableView.setItems(FXCollections.observableArrayList());
                 });
+
+        playerStatsTableView.setItems(FXCollections.observableArrayList(savedPlayerGameStats));
     }
 
     private void updatePlayers() {
@@ -93,6 +107,7 @@ public class RegisterGameResultsController {
         existingStatsOpt.ifPresent(playerGameStatsDTO -> savedPlayerGameStats.remove(playerGameStatsDTO));
 
         savedPlayerGameStats.add(newStats);
+        playerStatsTableView.setItems(FXCollections.observableArrayList(savedPlayerGameStats));
     }
 
     private Integer safeParseInt(String text) {
