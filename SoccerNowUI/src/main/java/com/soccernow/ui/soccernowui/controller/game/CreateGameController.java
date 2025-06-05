@@ -92,6 +92,7 @@ public class CreateGameController {
         FXMLUtils.executeWithErrorHandling(RefereeApiController.INSTANCE::getAllReferees)
                 .ifPresent(referees -> {
                     this.allReferees = referees;
+                    primaryRefereeComboBox.setItems(FXCollections.observableArrayList(allReferees));
                     otherRefereesObservableList.setAll(new ArrayList<>(allReferees));
                     secondaryRefereesObservableList.setAll(new ArrayList<>(allReferees));
                 });
