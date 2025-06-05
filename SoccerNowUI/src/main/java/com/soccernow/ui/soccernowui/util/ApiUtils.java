@@ -16,7 +16,7 @@ public class ApiUtils {
     public record ApiError(int status, String message, Map<String, String> validationErrors) {}
 
     public static Response postJsonRequest(String url, Object bodyObject) throws IOException {
-        String json = objectMapper.writeValueAsString(bodyObject);
+        String json = getObjectMapper().writeValueAsString(bodyObject);
 
         RequestBody body = RequestBody.create(
                 json,
@@ -32,7 +32,7 @@ public class ApiUtils {
     }
 
     public static Response putJsonRequest(String url, Object bodyObject) throws IOException {
-        String json = objectMapper.writeValueAsString(bodyObject);
+        String json = getObjectMapper().writeValueAsString(bodyObject);
 
         RequestBody body = RequestBody.create(
                 json,

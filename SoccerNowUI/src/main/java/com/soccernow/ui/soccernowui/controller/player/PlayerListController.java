@@ -1,7 +1,9 @@
 package com.soccernow.ui.soccernowui.controller.player;
 
 import com.soccernow.ui.soccernowui.api.PlayerApiController;
+import com.soccernow.ui.soccernowui.controller.referee.RefereeDetailsController;
 import com.soccernow.ui.soccernowui.dto.user.PlayerDTO;
+import com.soccernow.ui.soccernowui.dto.user.RefereeDTO;
 import com.soccernow.ui.soccernowui.util.ErrorException;
 import com.soccernow.ui.soccernowui.util.FXMLUtils;
 import com.soccernow.ui.soccernowui.util.FutsalPositionEnum;
@@ -68,7 +70,20 @@ public class PlayerListController {
     }
 
     @FXML
-    private void onEditClick(ActionEvent event) {}
+    private void onEditClick(ActionEvent event) {
+        PlayerDTO selectedPlayer = playerTableView.getSelectionModel().getSelectedItem();
+        if (selectedPlayer == null) {
+            return;
+        }
+        FXMLUtils.switchScene(
+                "/com/soccernow/ui/soccernowui/fxml/player/player-details.fxml",
+                (Node) event.getSource(),
+                controller -> {
+                    if (controller instanceof PlayerDetailsController playerDetailsController) {
+                        playerDetailsController.setPlayerDTO(selectedPlayer);
+                    }
+                });
+    }
 
     @FXML
     private void onRefreshClick(ActionEvent event) {

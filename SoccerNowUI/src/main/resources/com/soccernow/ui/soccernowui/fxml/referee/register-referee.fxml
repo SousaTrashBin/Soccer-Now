@@ -17,10 +17,8 @@
     </padding>
 
     <ToolBar prefHeight="40.0" prefWidth="400.0">
-        <items>
-            <Button fx:id="BackButton" mnemonicParsing="false" onAction="#onBackClick" text="&lt; Back" />
-            <Label text="Register &gt; Referee " />
-        </items>
+        <Button fx:id="BackButton" mnemonicParsing="false" onAction="#onBackClick" text="&lt; Back"/>
+        <Label text="Register &gt; Referee "/>
     </ToolBar>
 
     <VBox prefWidth="360.0" spacing="15.0">
