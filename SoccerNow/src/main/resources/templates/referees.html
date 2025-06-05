@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{styles.css}">
+    <title>SoccerNow - Referees</title>
+</head>
+<body>
+    <a href="/home" class="home-btn">Home</a>
+    <h1>SoccerNow: Referees</h1>
+
+    <h2 class="filters-title">Filters:</h2>
+
+    <form method="get" th:action="@{/referees}" class="filter-form">
+      <div class="filter-container">
+        <label for="name">Name</label>
+        <input type="text"
+               name="name"
+               id="name">
+      </div>
+
+      <div class="filter-container">
+        <label for="games">Officiated games</label>
+        <input type="number"
+               name="numGames"
+               id="games">
+      </div>
+
+      <div class="filter-container">
+        <label for="cards">Cards given</label>
+        <input type="number"
+               name="numCardsGiven"
+               id="cards">
+      </div>
+
+      <button type="submit" class="submit-filter-btn">Filter</button>
+    </form>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Certified</th>
+          <th>Games</th>
+          <th>Cards given</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr th:each="r : ${referees}">
+          <td th:text="${r.getName()}" />
+          <td th:text="${r.getHasCertificate() ? 'YES' : 'NO'}" />
+          <td th:text="${r.getNumberOfOfficiatedGames()}" />
+          <td th:text="${r.getNumberOfIssuedCards()}" />
+        </tr>
+      </tbody>
+    </table>
+</body>
+</html>

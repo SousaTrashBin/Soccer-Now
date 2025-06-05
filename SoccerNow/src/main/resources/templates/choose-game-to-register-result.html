@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{styles.css}">
+    <title>SoccerNow - Register game result</title>
+</head>
+<body>
+<a href="/home" class="home-btn">Home</a>
+<h1>Choose a game to register its result:</h1>
+
+<h2 class="filters-title">Games:</h2>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Team One</th>
+        <th>Team Two</th>
+        <th>Date/Time</th>
+        <th>Tournament</th>
+        <th></th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="g : ${games}">
+        <td th:text="${g.getId()}" />
+        <td th:text="${g.getGameTeamOne().getTeam().getName()}" />
+        <td th:text="${g.getGameTeamTwo().getTeam().getName()}" />
+        <td th:text="${g.getHappensIn().toString()}" />
+        <td th:text="${g.getTournament() != null} ? ${g.getTournament().getName()} : '--'"></td>
+        <td><a class="register-game-btn" th:href="@{'/register-game-result/' + ${g.getId}}">Register</a></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

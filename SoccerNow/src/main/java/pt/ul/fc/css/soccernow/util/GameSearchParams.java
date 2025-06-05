@@ -16,6 +16,7 @@ public class GameSearchParams {
     private String city;
     private String street;
     private String postalCode;
+    
     @NotNull
     private TimeOfDay timeOfDay = null;
 

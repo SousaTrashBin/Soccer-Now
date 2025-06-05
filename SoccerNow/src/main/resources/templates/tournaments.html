@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{styles.css}">
+    <title>SoccerNow - Tournaments</title>
+</head>
+<body>
+    <a href="/home" class="home-btn">Home</a>
+    <h1>SoccerNow: Tournaments</h1>
+
+    <h2 class="filters-title">Filters:</h2>
+
+    <form method="get" th:action="@{/tournaments}" class="filter-form">
+        <div class="filter-container">
+            <label for="name">Name</label>
+            <input type="text"
+                   name="name"
+                   id="name">
+        </div>
+
+        <div class="filter-container">
+            <label for="team">Participating team</label>
+            <select name="teams" id="team">
+                <option value=""></option>
+                <option th:each="team : ${teams}"
+                        th:value="${team.getName()}"
+                        th:text="${team.getName()}"/>
+            </select>
+        </div>
+
+        <div class="filter-container">
+            <label for="nGamesClosed">Number of closed games</label>
+            <input type="number"
+                   name="numGamesClosed"
+                   id="nGamesClosed">
+        </div>
+
+        <div class="filter-container">
+            <label for="nGamesOpened">Number of opened games</label>
+            <input type="number"
+                   name="numGamesOpened"
+                   id="nGamesOpened">
+        </div>
+
+      <button type="submit" class="submit-filter-btn">Filter</button>
+    </form>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Number of closed games</th>
+          <th>Number of opened games</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr th:each="t : ${tournaments}">
+          <td th:text="${t.getName()}" />
+          <td th:text="${t.getNumberOfClosedGames()}" />
+          <td th:text="${t.getNumberOfOpenedGames()}" />
+        </tr>
+      </tbody>
+    </table>
+</body>
+</html>

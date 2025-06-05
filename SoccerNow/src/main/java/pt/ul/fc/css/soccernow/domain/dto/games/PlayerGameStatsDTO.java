@@ -1,5 +1,6 @@
 package pt.ul.fc.css.soccernow.domain.dto.games;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import pt.ul.fc.css.soccernow.domain.dto.user.PlayerInfoDTO;
 
 import java.io.Serializable;
@@ -90,5 +91,10 @@ public class PlayerGameStatsDTO implements Serializable {
     public PlayerGameStatsDTO setReceivedCards(Set<CardInfoDTO> receivedCards) {
         this.receivedCards = receivedCards;
         return this;
+    }
+
+    @JsonIgnore
+    public Integer getNumberOfReceivedCards() {
+        return receivedCards.size();
     }
 }

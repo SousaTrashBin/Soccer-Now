@@ -1,7 +1,9 @@
 package pt.ul.fc.css.soccernow.domain.dto.games;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import pt.ul.fc.css.soccernow.domain.dto.tournament.TournamentInfoDTO;
 import pt.ul.fc.css.soccernow.domain.dto.user.RefereeInfoDTO;
+import pt.ul.fc.css.soccernow.util.TimeOfDay;
 import pt.ul.fc.css.soccernow.util.GameStatusEnum;
 
 import java.io.Serializable;
@@ -166,5 +168,10 @@ public class GameDTO implements Serializable {
 
     public void setStatus(GameStatusEnum status) {
         this.status = status;
+    }
+
+    @JsonIgnore
+    public TimeOfDay getTimeOfDay() {
+        return TimeOfDay.fromDateTime(happensIn);
     }
 }
