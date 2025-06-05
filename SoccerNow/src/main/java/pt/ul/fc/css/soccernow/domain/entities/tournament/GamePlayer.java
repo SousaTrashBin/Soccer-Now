@@ -21,7 +21,7 @@ public class GamePlayer {
     @Column(name = "played_in_position", nullable = false)
     private FutsalPositionEnum playedInPosition;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "player_id", nullable = false)
     private Player player;
 
