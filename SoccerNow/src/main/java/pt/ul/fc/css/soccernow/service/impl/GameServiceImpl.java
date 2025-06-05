@@ -106,6 +106,10 @@ public class GameServiceImpl implements GameService {
             throw new BadRequestException("Game teams must have %d elements".formatted(FUTSAL_TEAM_SIZE));
         }
 
+        if (!gameTeam.hasNoDuplicates()) {
+            throw new BadRequestException("There can't be a player playing on 2 or more different positions at the same time.");
+        }
+
         if (!gameTeam.hasExactlyOneGoalKeeper()) {
             throw new BadRequestException("Game teams must contain exactly one goal keeper");
         }
