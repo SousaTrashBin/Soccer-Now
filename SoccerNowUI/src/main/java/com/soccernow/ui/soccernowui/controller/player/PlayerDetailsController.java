@@ -1,17 +1,24 @@
 package com.soccernow.ui.soccernowui.controller.player;
 
+import com.soccernow.ui.soccernowui.SoccerNowApp;
 import com.soccernow.ui.soccernowui.api.TeamApiController;
 import com.soccernow.ui.soccernowui.api.PlayerApiController;
+import com.soccernow.ui.soccernowui.dto.TeamDTO;
 import com.soccernow.ui.soccernowui.dto.TeamInfoDTO;
 import com.soccernow.ui.soccernowui.dto.user.PlayerDTO;
+import com.soccernow.ui.soccernowui.util.ErrorException;
 import com.soccernow.ui.soccernowui.util.FXMLUtils;
 import com.soccernow.ui.soccernowui.util.FutsalPositionEnum;
 import jakarta.validation.Validator;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +46,30 @@ public class PlayerDetailsController {
     public TableColumn<TeamInfoDTO,String> otherTeamsNameColumn;
 
     public List<FXMLUtils.ConsumerWithExceptions> pendingOperations = new ArrayList<>();
+
+    @FXML
+    public void initialize() {
+        positionComboBox.getItems().add(null);
+        positionComboBox.getItems().addAll(FutsalPositionEnum.values());
+
+        playerTeamsIdColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getId().toString()));
+        playerTeamsNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
+        ObservableList<TeamInfoDTO> playerTeamsObservable = FXCollections.observableArrayList(playerDTO.getTeams());
+        playerTeamsTableView.setItems(playerTeamsObservable);
+
+        try {
+            List<TeamDTO> allTeams = TeamApiController.INSTANCE.getAllTeams();
+            List<TeamInfoDTO> otherTeams = allTeams.stream().map(team -> new TeamInfoDTO(team.getId(), team.getName()))
+                    .filter(teamInfoDTO -> !playerDTO.getTeams().contains(teamInfoDTO)).toList();
+            ObservableList<TeamInfoDTO> otherTeamsObservable = FXCollections.observableArrayList(otherTeams);
+            otherTeamsTableView.setItems(otherTeamsObservable);
+        } catch (IOException | ErrorException e) {
+            System.err.println("Failed to load players: " + e.getMessage());
+            otherTeamsTableView.setItems(FXCollections.observableArrayList());
+        }
+
+        this.validator = SoccerNowApp.getValidatorFactory().getValidator();
+    }
 
     @FXML
     private void onSaveClick() {
