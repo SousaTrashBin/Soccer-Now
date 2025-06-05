@@ -5,6 +5,7 @@ import com.soccernow.ui.soccernowui.dto.TeamDTO;
 import com.soccernow.ui.soccernowui.dto.user.PlayerInfoDTO;
 import com.soccernow.ui.soccernowui.dto.user.RefereeInfoDTO;
 import com.soccernow.ui.soccernowui.util.FXMLUtils;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -60,16 +61,19 @@ public class CreateGameController {
         teamOnePlayerComboBoxes = List.of(teamOneGoalieComboBox, teamOneSweeperComboBox, teamOneLeftWingerComboBox, teamOneRightWingerComboBox, teamOneForwardComboBox);
         teamTwoPlayerComboBoxes = List.of(teamTwoGoalieComboBox, teamTwoSweeperComboBox, teamTwoLeftWingerComboBox, teamTwoRightWingerComboBox, teamTwoForwardComboBox);
 
-        FXMLUtils.executeWithErrorHandling(TeamApiController.INSTANCE::getAllTeams)
-                .ifPresent(teams -> {
-                    this.allTeams = teams;
-                    teamOneComboBox.getItems().setAll(allTeams);
-                    teamTwoComboBox.getItems().setAll(allTeams);
-                });
+        availableTeamsForTeamOne = FXCollections.observableArrayList();
+        availableTeamsForTeamTwo = FXCollections.observableArrayList();
 
         teamOneComboBox.setItems(availableTeamsForTeamOne);
         teamTwoComboBox.setItems(availableTeamsForTeamTwo);
-        
+
+        FXMLUtils.executeWithErrorHandling(TeamApiController.INSTANCE::getAllTeams)
+                .ifPresent(teams -> {
+                    this.allTeams = teams;
+                    availableTeamsForTeamOne.setAll(new ArrayList<>(allTeams));
+                    availableTeamsForTeamTwo.setAll(new ArrayList<>(allTeams));
+                });
+
         teamOneComboBox.valueProperty().addListener((obs, oldTeam, newTeam) -> {
             updateAvailableTeams();
         });
