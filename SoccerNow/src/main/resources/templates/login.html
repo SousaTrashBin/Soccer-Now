@@ -36,7 +36,7 @@
     const username = document.getElementById("username").value.trim();
     const password = document.getElementById("password").value;
 
-    fetch("/api/credentials/login/", {
+    fetch("/api/credentials/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

@@ -90,7 +90,7 @@ public class ViewController {
     public String getChooseGameToRegisterResultPage(Model model) {
         List<Game> allNonClosedGames = gameService.findAllNotDeleted();
         List<GameDTO> allNonClosedGamesDTO = allNonClosedGames.stream()
-                                                              .filter(g -> !g.isClosed())
+                                                              .filter(Game::isOpened)
                                                               .map(gameMapper::toDTO)
                                                               .toList();
 
