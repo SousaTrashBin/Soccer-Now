@@ -12,6 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -61,7 +62,24 @@ public class RefereeListController {
     }
 
     @FXML
-    private void onEditClick(ActionEvent event) {}
+    private void onEditClick(ActionEvent event) {
+        RefereeDTO selectedReferee = refereeTableView.getSelectionModel().getSelectedItem();
+        if (selectedReferee == null) {
+            return;
+        }
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/soccernow/ui/soccernowui/fxml/referee/edit-referee.fxml"));
+            VBox editRefereeRoot = loader.load();
+
+            RefereeDetailsController controller = loader.getController();
+            controller.setRefereeDTO(selectedReferee);
+
+            Node source = (Node) event.getSource();
+            source.getScene().setRoot(editRefereeRoot);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     private void onRefreshClick(ActionEvent event) {
