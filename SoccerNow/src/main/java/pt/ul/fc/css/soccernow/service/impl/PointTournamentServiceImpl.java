@@ -158,7 +158,7 @@ public class PointTournamentServiceImpl implements PointTournamentService {
         if (!tournament.getStatus().equals(TournamentStatusEnum.IN_PROGRESS)) {
             throw new BadRequestException("Tournament is not in progress.");
         }
-        if(tournament.getGames().stream().noneMatch(game -> game.getStatus() == GameStatusEnum.OPENED)){
+        if(tournament.getGames().stream().anyMatch(game -> game.getStatus() == GameStatusEnum.OPENED)){
             throw new BadRequestException("A tournament with opened games cannot end, please cancel or finish pending games first.");
         };
         tournament.setStatus(TournamentStatusEnum.CLOSED);
