@@ -5,6 +5,7 @@ import com.soccernow.ui.soccernowui.dto.TeamDTO;
 import com.soccernow.ui.soccernowui.dto.user.PlayerInfoDTO;
 import com.soccernow.ui.soccernowui.dto.user.RefereeInfoDTO;
 import com.soccernow.ui.soccernowui.util.FXMLUtils;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -17,7 +18,9 @@ import java.util.stream.Collectors;
 
 public class CreateGameController {
 
-    private List<TeamDTO> allTeams = new ArrayList<>();
+    private List<TeamDTO> allTeams;
+    private ObservableList<TeamDTO> availableTeamsForTeamOne;
+    private ObservableList<TeamDTO> availableTeamsForTeamTwo;
 
     @FXML private ComboBox<TeamDTO> teamOneComboBox;
     @FXML private ComboBox<PlayerInfoDTO> teamOneGoalieComboBox;
@@ -64,23 +67,39 @@ public class CreateGameController {
                     teamTwoComboBox.getItems().setAll(allTeams);
                 });
 
-
+        teamOneComboBox.setItems(availableTeamsForTeamOne);
+        teamTwoComboBox.setItems(availableTeamsForTeamTwo);
+        
         teamOneComboBox.valueProperty().addListener((obs, oldTeam, newTeam) -> {
-            if (oldTeam != null) allTeams.add(oldTeam);
-            allTeams.remove(newTeam);
-            teamOneComboBox.getItems().setAll(new ArrayList<>(allTeams));
-            teamTwoComboBox.getItems().setAll(new ArrayList<>(allTeams));
+            updateAvailableTeams();
         });
 
         teamTwoComboBox.valueProperty().addListener((obs, oldTeam, newTeam) -> {
-            if (oldTeam != null) allTeams.add(oldTeam);
-            allTeams.remove(newTeam);
-            teamOneComboBox.getItems().setAll(new ArrayList<>(allTeams));
-            teamTwoComboBox.getItems().setAll(new ArrayList<>(allTeams));
+            updateAvailableTeams();
         });
 
-
         initializeTableColumns();
+    }
+
+    private void updateAvailableTeams() {
+        List<TeamDTO> currentAllTeams = new ArrayList<>(allTeams);
+
+        TeamDTO selectedTeamOne = teamOneComboBox.getSelectionModel().getSelectedItem();
+        TeamDTO selectedTeamTwo = teamTwoComboBox.getSelectionModel().getSelectedItem();
+
+        if (selectedTeamOne != null) {
+            currentAllTeams.remove(selectedTeamOne);
+        }
+
+        availableTeamsForTeamTwo.setAll(currentAllTeams);
+
+        currentAllTeams = new ArrayList<>(allTeams);
+
+        if (selectedTeamTwo != null) {
+            currentAllTeams.remove(selectedTeamTwo);
+        }
+
+        availableTeamsForTeamOne.setAll(currentAllTeams);
     }
 
 
