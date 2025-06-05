@@ -77,47 +77,35 @@ public class CreateGameController {
                 });
 
         teamOneComboBox.valueProperty().addListener((obs, oldTeam, newTeam) -> {
-            if (!updatingTeamOneComboBox) {
-                updateAvailableTeamsForTeamTwo();
-            }
+            updateTeamOnePlayers();
         });
 
         teamTwoComboBox.valueProperty().addListener((obs, oldTeam, newTeam) -> {
-            if (!updatingTeamTwoComboBox) {
-                updateAvailableTeamsForTeamOne();
-            }
+            updateTeamTwoPlayers();
         });
 
         initializeTableColumns();
     }
 
-    private void updateAvailableTeamsForTeamOne() {
-        updatingTeamOneComboBox = true;
+    private void updateTeamOnePlayers() {
+        TeamDTO selectedTeam = teamOneComboBox.getSelectionModel().getSelectedItem();
+        List<PlayerInfoDTO> players = (selectedTeam != null) ? selectedTeam.getPlayers().stream().toList() : new ArrayList<>();
 
-        List<TeamDTO> tempAvailableTeams = new ArrayList<>(allTeams);
-        TeamDTO selectedTeamTwo = teamTwoComboBox.getSelectionModel().getSelectedItem();
-
-        if (selectedTeamTwo != null) {
-            tempAvailableTeams.remove(selectedTeamTwo);
+        for (ComboBox<PlayerInfoDTO> playerComboBox : teamOnePlayerComboBoxes) {
+            playerComboBox.getItems().setAll(players);
+            playerComboBox.getSelectionModel().clearSelection();
         }
-        availableTeamsForTeamOne.setAll(tempAvailableTeams);
-
-        updatingTeamOneComboBox = false;
     }
 
-    private void updateAvailableTeamsForTeamTwo() {
-        updatingTeamTwoComboBox = true;
-        List<TeamDTO> tempAvailableTeams = new ArrayList<>(allTeams);
-        TeamDTO selectedTeamOne = teamOneComboBox.getSelectionModel().getSelectedItem();
+    private void updateTeamTwoPlayers() {
+        TeamDTO selectedTeam = teamTwoComboBox.getSelectionModel().getSelectedItem();
+        List<PlayerInfoDTO> players = (selectedTeam != null) ? selectedTeam.getPlayers().stream().toList() : new ArrayList<>();
 
-        if (selectedTeamOne != null) {
-            tempAvailableTeams.remove(selectedTeamOne);
+        for (ComboBox<PlayerInfoDTO> playerComboBox : teamTwoPlayerComboBoxes) {
+            playerComboBox.getItems().setAll(players);
+            playerComboBox.getSelectionModel().clearSelection();
         }
-        availableTeamsForTeamTwo.setAll(tempAvailableTeams);
-
-        updatingTeamTwoComboBox = false;
     }
-
 
 
     @FXML
