@@ -6,10 +6,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pt.ul.fc.css.soccernow.domain.dto.TeamDTO;
 import pt.ul.fc.css.soccernow.domain.dto.games.GameDTO;
+import pt.ul.fc.css.soccernow.domain.dto.games.AddressDTO;
 import pt.ul.fc.css.soccernow.domain.dto.games.GameInfoDTO;
 import pt.ul.fc.css.soccernow.domain.dto.tournament.TournamentDTO;
 import pt.ul.fc.css.soccernow.domain.dto.user.PlayerDTO;
 import pt.ul.fc.css.soccernow.domain.dto.user.RefereeDTO;
+import pt.ul.fc.css.soccernow.domain.entities.Address;
 import pt.ul.fc.css.soccernow.domain.entities.Team;
 import pt.ul.fc.css.soccernow.domain.entities.game.Game;
 import pt.ul.fc.css.soccernow.domain.entities.tournament.Tournament;
@@ -183,12 +185,18 @@ public class ViewController {
             @ModelAttribute GameSearchParams params,
             Model model
     ) {
+        Set<AddressDTO> addresses = new HashSet<>();
+        for (GameDTO gameDTO : gameService.findAllNotDeleted().stream().map(gameMapper::toDTO).toList()) {
+            addresses.add(gameDTO.getLocatedIn());
+        }
+
         List<Game> filteredGames = gameService.findAllNotDeleted(params);
         List<GameDTO> gamesDTO = filteredGames.stream()
                                               .map(gameMapper::toDTO)
                                               .collect(Collectors.toList());
 
         model.addAttribute("games", gamesDTO);
+        model.addAttribute("locations", addresses);
         return "games";
     }
 
