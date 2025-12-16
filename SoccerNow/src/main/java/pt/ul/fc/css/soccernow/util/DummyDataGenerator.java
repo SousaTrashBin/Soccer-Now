@@ -19,6 +19,7 @@ import pt.ul.fc.css.soccernow.service.TeamService;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.security.SecureRandom;
 
 @Component
 public class DummyDataGenerator {
@@ -28,6 +29,7 @@ public class DummyDataGenerator {
     private final RefereeService refereeService;
     private final TeamService teamService;
     private final CredentialsRepository credentialsRepository;
+    private static final SecureRandom random = new SecureRandom();
 
     private static final String[] PLAYERS_NAMES = {
         "Lucas",
@@ -109,7 +111,7 @@ public class DummyDataGenerator {
         address.setPostalCode("2612-234");
         game.setLocatedIn(address);
 
-        game.setPrimaryReferee(referees.get(new Random().nextInt(referees.size())));
+        game.setPrimaryReferee(referees.get(random.nextInt(referees.size())));
 
         GameTeam gameTeamOne = getGameTeam(aPlayers, firstTeam);
         game.setGameTeamOne(gameTeamOne);
@@ -138,7 +140,7 @@ public class DummyDataGenerator {
     private Referee createRefereeWithName(String name) {
         Referee referee = new Referee();
         referee.setName(name);
-        referee.setHasCertificate(new Random().nextBoolean());
+        referee.setHasCertificate(random.nextBoolean());
         return refereeService.add(referee);
     }
 
@@ -147,7 +149,7 @@ public class DummyDataGenerator {
         player.setName(name);
 
         FutsalPositionEnum[] vals = FutsalPositionEnum.values();
-        int index = ThreadLocalRandom.current().nextInt(vals.length);
+        int index = random.nextInt(vals.length);
         player.setPreferredPosition(vals[index]);
 
         Player saved = playerService.add(player);
