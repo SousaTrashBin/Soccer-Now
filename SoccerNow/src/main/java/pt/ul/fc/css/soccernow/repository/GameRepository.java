@@ -16,10 +16,13 @@ import pt.ul.fc.css.soccernow.util.TimeOfDay;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import static pt.ul.fc.css.soccernow.domain.entities.game.QGame.game;
 
 public interface GameRepository extends SoftDeletedRepository<Game> {
+
     default List<Game> findAllNotDeleted(GameSearchParams params) {
         List<BooleanExpression> conditions = new ArrayList<>();
 
