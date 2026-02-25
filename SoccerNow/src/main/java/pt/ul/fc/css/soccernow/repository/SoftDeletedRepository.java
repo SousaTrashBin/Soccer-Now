@@ -15,4 +15,6 @@ public interface SoftDeletedRepository<T extends SoftDeleteEntity> extends JpaRe
     default List<T> findAllNotDeleted() {
         return findByDeletedAtIsNull();
     }
+
+
 }
